@@ -13,7 +13,7 @@ C'est pourquoi nous avons utilisé :
 
 Arduino
 -------
-L'Arduino est sûrement la carte la plus interfaçable qui existe, et à un prix largement abordable. Néanmoins, étant limitée au niveau puissance, on a préféré l'utiliser uniquement pour prendre les mesures
+L'Arduino est une carte électronique très facilement interfaçable, et à un prix largement abordable. Néanmoins, étant limitée au niveau puissance, on a préféré l'utiliser uniquement pour prendre les mesures
 L'Arduino utilisée lors du développement est une Uno rev3.
 
 

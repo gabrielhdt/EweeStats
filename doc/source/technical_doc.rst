@@ -1,9 +1,14 @@
 Documentation technique python
 ==============================
 
-.. automodule:: pyfirmata.Arduino
+.. automodule:: util
 
-.. autoclass:: pyfirmata.Arduino
-    :members:
-    :private-members:
-    :special-members:
+.. automodule:: pyfirmata
+
+.. automodule:: boards
+
+.. automodule:: Adafruit_I2C
+
+.. automodule:: Adafruit_MCP230xx
+
+.. automodule:: Adafruit_CharLCDPlate
