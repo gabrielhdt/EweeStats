@@ -58,6 +58,12 @@ Présentation des mesures
 
     presenting
 
+Documentation technique
+^^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+    :maxdepth: 2
+
+    technical_doc
 
 Indices and tables
 ==================
