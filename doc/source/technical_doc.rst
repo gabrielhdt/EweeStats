@@ -1,9 +1,9 @@
 Documentation technique python
 ==============================
 
-.. automodule:: Arduino
+.. automodule:: pyfirmata.Arduino
 
-.. autoclass:: Arduino
+.. autoclass:: pyfirmata.Arduino
     :members:
     :private-members:
     :special-members:

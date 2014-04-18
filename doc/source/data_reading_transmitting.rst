@@ -16,4 +16,8 @@ pyFirmata a ensuite été utilisé pour utiliser les données transmises par USB
 
 .. py:function:: Arduino(string)
 
-    Ouvre la connection avec l'Arduino
+    Ouvre la connection avec l'Arduino. Prend en paramètre le nom que lui donne l'OS, ici '/dev/ttyACM0'
+
+.. py:function:: board.analog[int].enable_reporting()
+
+    Commence l'écoute du pin Analog 0 sur l'Arduino
