@@ -14,15 +14,24 @@ Transmission côté Raspberry Pi
 ------------------------------
 pyFirmata a ensuite été utilisé pour utiliser les données transmises par USB.
 
-.. py:function:: board = Arduino(string)
+.. py:function:: board = Arduino(id)
+
+    :param id: chaîne de caractère de l'identifiant de l'arduino dans le répertoire /dev
+    :type  id: string
 
     Crée la variable board de classe Arduino permettant d'opérer sur l'Arduino.
 
-.. py:function:: board.analog[int].enable_reporting()
+.. py:function:: board.analog[i].enable_reporting()
 
-    Commence l'écoute d'une entrée analogique sur l'Arduino. Prend en paramètre un entier désignant le numéro de l'entrée analogique.
+    :param i: numéro de l'entrée analogique
+    :type i: integer
 
-.. py:function:: board.analog[int].read()
+    Commence l'écoute d'une entrée analogique sur l'Arduino.
 
-    Renvoit une valeur entre 0 et 1 correspondant à la tension aux bornes d'une entrée analogique. Prend en paramètre un entier désignant le numéro de l'entrée analogique.
+.. py:function:: board.analog[i].read()
+
+    :param i: numéro de l'entrée analogique de l'Arduino
+    :type i: integer
+
+    Renvoit une valeur entre 0 et 1 correspondant à la tension aux bornes d'une entrée analogique.
 
