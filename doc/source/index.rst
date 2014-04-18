@@ -17,8 +17,7 @@ Sections
 
     stuff
     software
-    data_reading
-    data_transmitting
+    data_reading_transmitting
     data_processing
     saving
     presenting
@@ -38,18 +37,12 @@ Les solutions logicielles
 
     software
 
-Acquisition des mesures
-^^^^^^^^^^^^^^^^^^^^^^^
+Acquisition et transmission des mesures
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. toctree::
     :maxdepth: 2
 
-    data_reading
-
-Transmission des données
-^^^^^^^^^^^^^^^^^^^^^^^^
-.. toctree::
-    :maxdepth: 2
-    data_transmitting
+    data_reading_transmitting
 
 Traitement des données
 ^^^^^^^^^^^^^^^^^^^^^^
