@@ -1,2 +1,0 @@
-Présentation des données
-------------------------
