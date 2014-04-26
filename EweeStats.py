@@ -28,6 +28,7 @@ import pygal
 from pyfirmata import Arduino, util
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import EweeStats.graph
+import EweeStats.pinselection
 
 # Variables globales :
 # définissant le nombre de capteurs branchés en analogique
@@ -137,12 +138,14 @@ class AnalogGraphThreads():
         while lcd.buttonPressed(lcd.SELECT) != 1: # Continue tant qu'on appuie pas sur SELECT
 
             # Choix du pin a afficher selection avec les boutons
-            if lcd.buttonPressed(lcd.UP) == 1:      # si on appuie sur le bouton up, on affiche le pin A0
-                print('--UP PRESSED--')
-                displayPin = 0
-            elif lcd.buttonPressed(lcd.DOWN) == 1:  # si on appuie sur le bouton down, on affiche le pin A1
-                print('--DOWN PRESSED--')
-                displayPin = 1
+            #if lcd.buttonPressed(lcd.UP) == 1:      # si on appuie sur le bouton up, on affiche le pin A0
+                #print('--UP PRESSED--')
+                #displayPin = 0
+            #elif lcd.buttonPressed(lcd.DOWN) == 1:  # si on appuie sur le bouton down, on affiche le pin A1
+                #print('--DOWN PRESSED--')
+                #displayPin = 1
+                
+        EweeStats.pinselection.display_selection(analogSensors)
 
 
             #### INIT TIMESTAMP ####
