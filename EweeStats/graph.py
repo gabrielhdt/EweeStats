@@ -41,7 +41,7 @@ def create_graph(analogSensors, dataDir):
 
     dataList = []
     for i in range(analogSensors):
-        filePath = os.path.join(dataDir, "data_{i}".format(str(i)))
+        filePath = os.path.join(dataDir, "data_{i}".format(i = str(i)))
         with open(filePath, 'r') as di:
             dataList.append([line.rstrip() for line in di])
 
