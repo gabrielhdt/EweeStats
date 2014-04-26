@@ -42,9 +42,9 @@ def write_ods(dataDir, analogSensors):
             dataList.append([line.rstrip() for line in di])
             
     # formatage des listes
-    timestamp = map(int, timestamp)
+    timestamp = map(float, timestamp)
     for i, elt in enumerate(dataList):
-        dataList[i] = map(int, elt)
+        dataList[i] = map(float, elt)
         
     for i, elt in enumerate(timestamp):
         sheet['A{line}'.format(line = i + 1)].set_value(elt)
