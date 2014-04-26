@@ -24,7 +24,7 @@ import os
 import sys
 import time
 
-def display_selection(analogSensors, lcd, initSelectedPinDone, selectedPin):
+def display_selection(analogSensors, lcd, selectedPin):
     """
     :param analogSensors: nombre de capteurs
     :type analogSensors: integer
@@ -32,13 +32,13 @@ def display_selection(analogSensors, lcd, initSelectedPinDone, selectedPin):
     :param lcd: classe lcd
     :type lcd: Adafuit_CharLCDPlate()
     
+    :param selectedPin: sélection à la boucle d'avant
+    :type selectedPin: integer
+    
     :returns: numéro de l'entrée analogique à afficher
     :rtype: integer
     """
     
-    # initialiser selectedPin qu'une seule fois
-    #if initSelectedPinDone is False:
-     #   selectedPin = 0
     
     # activité des boutons
     if lcd.buttonPressed(lcd.UP):

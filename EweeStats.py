@@ -138,16 +138,9 @@ class AnalogGraphThreads():
         ###### FIN INIT ########################################################
 
         while lcd.buttonPressed(lcd.SELECT) != 1: # Continue tant qu'on appuie pas sur SELECT
-
-            # Choix du pin a afficher selection avec les boutons
-            #if lcd.buttonPressed(lcd.UP) == 1:      # si on appuie sur le bouton up, on affiche le pin A0
-                #print('--UP PRESSED--')
-                #displayPin = 0
-            #elif lcd.buttonPressed(lcd.DOWN) == 1:  # si on appuie sur le bouton down, on affiche le pin A1
-                #print('--DOWN PRESSED--')
-                #displayPin = 1
-                
-            displayPin = EweeStats.pinselection.display_selection(analogSensors, lcd, initDone, displayPin)
+            
+            displayPin = EweeStats.pinselection.display_selection(
+                analogSensors, lcd, displayPin)
 
 
             #### INIT TIMESTAMP ####
