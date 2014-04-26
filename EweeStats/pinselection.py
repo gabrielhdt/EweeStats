@@ -44,7 +44,7 @@ def display_selection(analogSensors, lcd):
         print('--DOWN PRESSED--')
         selectedPin -= 1
         
-    if displayPin > analogSensors:
+    if selectedPin > analogSensors:
         selectedPin = 0
         
     return selectedPin
