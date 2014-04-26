@@ -82,11 +82,13 @@ class AnalogGraphThreads():
         #################################
 
 
-        # Création d'un dossier pour les fichiers nommé data dans le répertoire courant
-        #currentDir  = os.getcwd()   # Chemin du dossier courant
-        #outDir      = "data"    # dossier contenant les fichiers
-        #newpath     = os.path.join(currentDir, outDir) # Creation du chemin
-        newpath = os.path.expanduser('~/ewee_data')
+        # création du dossier de sauvegarde
+        # répertoire racine
+        dataDir = '/home/pi'
+        # nom dossier sauvegarde
+        outDir = 'ewee_data'
+        # création du dossier
+        newpath = os.path.join(dataDir, outDir)
         # Si le dossier n'existe pas, le créer
         if not os.path.exists(newpath): os.makedirs(newpath)
 
