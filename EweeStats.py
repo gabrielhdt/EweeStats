@@ -27,6 +27,7 @@ import sys
 import pygal
 from pyfirmata import Arduino, util
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
+import EweeStats.graph
 
 # Variable globale définissant le nombre de capteurs branchés en analogique
 analogSensors = 2
@@ -213,42 +214,44 @@ class AnalogGraphThreads():
             self.transmit_is_ready = False
             #### OUVERTURE DES FICHIERS ET CREATION DES LISTES ####
             # Fichier timestamp
-            with open('data/timestamp', 'r') as t:               # Ouverture en lecture seule
-                timestamp = [line.rstrip() for line in t]   # remplissage des listes en enlevant le '\n'
-            dataList = []     # Création de la liste dataList contenant les listes de données de chaque fichier
-            for i in range(analogSensors):                          # boucle pour ouvrir chaque fichier
-                with open("data/data_%s"%str(i), 'r') as di:        # ouvre chaque fichier
-                    dataList.append([line.rstrip() for line in di])   # lit le fichier
-            # Formatage des listes
-            timestamp = map(str, timestamp)                     # passe timestamp en string
-            for i, elt in enumerate(dataList):
-                dataList[i] = map(float, elt)
-            # Fermeture des fichiers
-            t.close()
-            for i in range(analogSensors):
-                di.close
-
-
-            linechart                   = pygal.Line()                      # définition du type de graphique
-            linechart.x_label_rotation  = 20                                # rotation des graduations en abscisse
-            linechart.show_dots         = False                             # cache les points
-            linechart.human_readable    = True                              # affiche les valeurs plus clairement
-            linechart.title             = 'Tension en fonction du temps'    # titre du graphique
-            linechart.x_title           = 'Temps (s)'                       # Titre axe abscisse
-            linechart.x_labels          = timestamp                         # graduation en x
-            linechart.x_labels_major_count = 20                             # afficher 20 labels majeurs
-            linechart.show_minor_x_labels = False                           # caches les labels mineurs
-            #linechart.add('Pot 1', data_0)                                  # ordonnées des points
-            # Version générique
+            #with open('data/timestamp', 'r') as t:               # Ouverture en lecture seule
+                #timestamp = [line.rstrip() for line in t]   # remplissage des listes en enlevant le '\n'
+            #dataList = []     # Création de la liste dataList contenant les listes de données de chaque fichier
+            #for i in range(analogSensors):                          # boucle pour ouvrir chaque fichier
+                #with open("data/data_%s"%str(i), 'r') as di:        # ouvre chaque fichier
+                    #dataList.append([line.rstrip() for line in di])   # lit le fichier
+            ## Formatage des listes
+            #timestamp = map(str, timestamp)                     # passe timestamp en string
+            #for i, elt in enumerate(dataList):
+                #dataList[i] = map(float, elt)
+            ## Fermeture des fichiers
+            #t.close()
             #for i in range(analogSensors):
-            #    linechart.add("Pot %s"%str(i), data_i)
-            for i, elt in enumerate(dataList):
-                linechart.add('Pot %s'%str(i), elt)
-            linechart.render_to_file('linechart_temp.svg')                  # écriture de l'image temporaire
+                #di.close
 
-            # Création de l'image définitive
-            #os.remove('linechart.svg')                 # Inutile avec les systèmes UNIX =)
-            os.rename('linechart_temp.svg', 'linechart.svg')
+
+            #linechart                   = pygal.Line()                      # définition du type de graphique
+            #linechart.x_label_rotation  = 20                                # rotation des graduations en abscisse
+            #linechart.show_dots         = False                             # cache les points
+            #linechart.human_readable    = True                              # affiche les valeurs plus clairement
+            #linechart.title             = 'Tension en fonction du temps'    # titre du graphique
+            #linechart.x_title           = 'Temps (s)'                       # Titre axe abscisse
+            #linechart.x_labels          = timestamp                         # graduation en x
+            #linechart.x_labels_major_count = 20                             # afficher 20 labels majeurs
+            #linechart.show_minor_x_labels = False                           # caches les labels mineurs
+            ##linechart.add('Pot 1', data_0)                                  # ordonnées des points
+            ## Version générique
+            ##for i in range(analogSensors):
+            ##    linechart.add("Pot %s"%str(i), data_i)
+            #for i, elt in enumerate(dataList):
+                #linechart.add('Pot %s'%str(i), elt)
+            #linechart.render_to_file('linechart_temp.svg')                  # écriture de l'image temporaire
+
+            ## Création de l'image définitive
+            ##os.remove('linechart.svg')                 # Inutile avec les systèmes UNIX =)
+            #os.rename('linechart_temp.svg', 'linechart.svg')
+            
+            create_graph(analogSensors, newpath)
 
             # Tâche terminée, le thread 2 est prêt
             self.transmit_is_ready = True
