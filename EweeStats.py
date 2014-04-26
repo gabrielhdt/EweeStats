@@ -194,7 +194,7 @@ class AnalogGraphThreads():
         timeFile.close()
         lcd.clear()
         lcd.message("Extinction ...")
-        EweeStats.ods.write_ods(newpath)
+        EweeStats.ods.write_ods(newpath, analogSensors)
         time.sleep(1)
         lcd.clear()
         board.exit()

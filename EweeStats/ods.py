@@ -21,7 +21,7 @@
 import ezodf2
 import os
 
-def write_ods(dataDir):
+def write_ods(dataDir, analogSensors):
     
     # définit le chemin du fichier
     filename = os.path.join(dataDir, 'ewee_data.ods')
