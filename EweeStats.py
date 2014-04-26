@@ -29,6 +29,7 @@ from pyfirmata import Arduino, util
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import EweeStats.graph
 import EweeStats.pinselection
+import EweeStats.ods
 
 # Variables globales :
 # définissant le nombre de capteurs branchés en analogique
@@ -193,6 +194,7 @@ class AnalogGraphThreads():
         timeFile.close()
         lcd.clear()
         lcd.message("Extinction ...")
+        EweeStats.ods.write_ods(newpath)
         time.sleep(1)
         lcd.clear()
         board.exit()
