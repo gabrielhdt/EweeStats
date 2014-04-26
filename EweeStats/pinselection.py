@@ -37,8 +37,8 @@ def display_selection(analogSensors, lcd, initSelectedPinDone, selectedPin):
     """
     
     # initialiser selectedPin qu'une seule fois
-    if initSelectedPinDone is False:
-        selectedPin = 0
+    #if initSelectedPinDone is False:
+     #   selectedPin = 0
     
     # activité des boutons
     if lcd.buttonPressed(lcd.UP):
@@ -50,7 +50,7 @@ def display_selection(analogSensors, lcd, initSelectedPinDone, selectedPin):
         
     # Si on descend en dessous de 0, on remonte au max
     # et vice-versa
-    if selectedPin > analogSensors:
+    if selectedPin >= analogSensors:
         selectedPin = 0
     elif selectedPin < 0:
         # -1 car les pins commencent à 0

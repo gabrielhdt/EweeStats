@@ -131,8 +131,9 @@ class AnalogGraphThreads():
         lcd.clear()
         lcd.message("Debut des \nmesures")
 
-        displayPin = 0  # Initialisation de la variable pour le choix des pins
-        timeDisplay = 0 # Init variable pour le retardement de l'affichage
+        # initialisation de variables
+        displayPin = 0
+        timeDisplay = 0
 
         ###### FIN INIT ########################################################
 
