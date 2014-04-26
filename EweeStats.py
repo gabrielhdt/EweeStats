@@ -139,8 +139,10 @@ class AnalogGraphThreads():
 
         while lcd.buttonPressed(lcd.SELECT) != 1: # Continue tant qu'on appuie pas sur SELECT
             
-            displayPin = EweeStats.pinselection.display_selection(
-                analogSensors, lcd, displayPin)
+            timeLastDisplay = time.time() - timeDisplay
+            if timeLastDisplay >= 0.25:
+                displayPin = EweeStats.pinselection.display_selection(
+                    analogSensors, lcd, displayPin)
 
 
             #### INIT TIMESTAMP ####
@@ -172,7 +174,7 @@ class AnalogGraphThreads():
                 self.my_queue.put(1)        # s'il est prêt, on met 1 dans la queue
 
             #### AFFICHAGE DES VALEURS SUR LCD ####
-            timeLastDisplay = time.time() - timeDisplay     # Calcul du temps du dernier affichage
+            #timeLastDisplay = time.time() - timeDisplay     # Calcul du temps du dernier affichage
             if timeLastDisplay >= 0.25:                     # Si le temps excède les 250ms
                 lcd.clear()
                 lcd.message("Pot %s :\n"%(str(displayPin))) # Affiche le message
