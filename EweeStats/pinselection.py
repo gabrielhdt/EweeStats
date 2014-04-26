@@ -22,6 +22,7 @@
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import os
 import sys
+import time
 
 def display_selection(analogSensors, lcd, initSelectedPinDone):
     """
@@ -34,9 +35,12 @@ def display_selection(analogSensors, lcd, initSelectedPinDone):
     :returns: numéro de l'entrée analogique à afficher
     :rtype: integer
     """
+    print("Value\n")
+    print(initSelectedPinDone)
+    time.sleep(2)
     
     # initialiser selectedPin qu'une seule fois
-    if not initSelectedPinDone:
+    if initSelectedPinDone is False:
         selectedPin = 0
     
     # activité des boutons
