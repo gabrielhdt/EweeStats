@@ -146,7 +146,7 @@ class AnalogGraphThreads():
                 #print('--DOWN PRESSED--')
                 #displayPin = 1
                 
-            displayPin = EweeStats.pinselection.display_selection(analogSensors, lcd, initDone)
+            displayPin = EweeStats.pinselection.display_selection(analogSensors, lcd, initDone, displayPin)
 
 
             #### INIT TIMESTAMP ####

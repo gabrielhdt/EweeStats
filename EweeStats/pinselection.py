@@ -24,7 +24,7 @@ import os
 import sys
 import time
 
-def display_selection(analogSensors, lcd, initSelectedPinDone):
+def display_selection(analogSensors, lcd, initSelectedPinDone, selectedPin):
     """
     :param analogSensors: nombre de capteurs
     :type analogSensors: integer
