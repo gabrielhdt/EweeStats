@@ -27,8 +27,7 @@ def write_ods(dataDir, analogSensors):
     filename = os.path.join(dataDir, 'ewee_data.ods')
     ods = ezodf2.newdoc(doctype = 'ods', filename = '{f}'.format(f = filename))
     
-    sheet = ezodf2.Sheet('SHEET', size = (10, 10))
-    ods.sheets += sheet
+    
     
     #Ouverture des fichiers
     timePath = os.path.join(dataDir, 'timestamp')
@@ -45,6 +44,9 @@ def write_ods(dataDir, analogSensors):
     timestamp = map(float, timestamp)
     for i, elt in enumerate(dataList):
         dataList[i] = map(float, elt)
+        
+    sheet = ezodf2.Sheet('SHEET', size = (len(timestamp), analogSensors))
+    ods.sheets += sheet
         
     for i, elt in enumerate(timestamp):
         sheet['A{line}'.format(line = i + 1)].set_value(elt)
