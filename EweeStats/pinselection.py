@@ -35,16 +35,22 @@ def display_selection(analogSensors, lcd):
     :rtype: integer
     """
     
-    selectedPin = 0
+    # initialiser selectedPin qu'une seule fois
+    initSelectedPinDone = False
+    if not initSelectedPinDone:
+        selectedPin = 0
+        initSelectedPinDone = True
     
-    if lcd.buttonPressed(lcd.UP) == 1:
+    if lcd.buttonPressed(lcd.UP):
         print('--UP PRESSED--')
         selectedPin += 1
-    elif lcd.buttonPressed(lcd.DOWN) == 1:
+    elif lcd.buttonPressed(lcd.DOWN):
         print('--DOWN PRESSED--')
         selectedPin -= 1
         
     if selectedPin > analogSensors:
         selectedPin = 0
+    elif selectedPin < 0:
+        selectedPin = analogSensors
         
     return selectedPin
