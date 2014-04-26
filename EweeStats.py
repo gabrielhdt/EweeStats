@@ -205,8 +205,11 @@ class AnalogGraphThreads():
             crée le graph
         """
         global analogSensors
-        while(not self.stop):               # Tant que le thread 1 ne dit pas de s'arrêter on boucle
-            # gestion du démarrage du thread : attend jusqu'à ce que la queue se remplisse
+        # Tant que le thread 1 ne dit pas de s'arrêter on boucle
+        while(not self.stop):    
+            
+            # gestion du démarrage du thread
+            # attend jusqu'à ce que la queue se remplisse
             self.my_queue.get(True)
             # Quand la queue est remplie, le thread passe en état occupé
             self.transmit_is_ready = False
@@ -220,6 +223,7 @@ class AnalogGraphThreads():
             # création du dossier
             newpath = os.path.join(dataDir, outDir)
             
+            # Création du graph
             EweeStats.graph.create_graph(analogSensors, newpath)
 
             # Tâche terminée, le thread 2 est prêt

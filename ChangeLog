@@ -2,6 +2,8 @@
 
 	* added module graph.py
 	* changed path of saved datas, now in ~/ewee_data
+	* added module pinselection
+	* changed the manner of selecting pin to display
 
 2014-04-23 Gabriel Hondet <gabrielhondet@gmail.com>
 

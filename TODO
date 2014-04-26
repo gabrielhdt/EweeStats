@@ -1,1 +1,2 @@
-Changer le EweeStats.py en programme appelant le __main__.py dans EweeStats/
+Réduire le EweeStats.py et faire un fichier qu'avec la classe AnalogGraphThreads
+Intégrer les programmes de calibration
