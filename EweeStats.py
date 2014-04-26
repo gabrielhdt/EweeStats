@@ -29,8 +29,19 @@ from pyfirmata import Arduino, util
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import EweeStats.graph
 
-# Variable globale définissant le nombre de capteurs branchés en analogique
+# Variables globales :
+# définissant le nombre de capteurs branchés en analogique
 analogSensors = 2
+# définissant le répertoire de sortie
+# création du dossier de sauvegarde
+# répertoire racine
+dataDir = '/home/pi'
+# nom dossier sauvegarde
+outDir = 'ewee_data'
+# création du dossier
+newpath = os.path.join(dataDir, outDir)
+# Si le dossier n'existe pas, le créer
+if not os.path.exists(newpath): os.makedirs(newpath)
 
 class AnalogGraphThreads():
     """
@@ -81,17 +92,9 @@ class AnalogGraphThreads():
         #################################
         #   CREATION DES FICHIERS   #
         #################################
+        global newpath
 
-
-        # création du dossier de sauvegarde
-        # répertoire racine
-        dataDir = '/home/pi'
-        # nom dossier sauvegarde
-        outDir = 'ewee_data'
-        # création du dossier
-        newpath = os.path.join(dataDir, outDir)
-        # Si le dossier n'existe pas, le créer
-        if not os.path.exists(newpath): os.makedirs(newpath)
+        
 
 
         # Ouvre un fichier par pin analog en écriture nommé data_X 
@@ -250,6 +253,8 @@ class AnalogGraphThreads():
             ## Création de l'image définitive
             ##os.remove('linechart.svg')                 # Inutile avec les systèmes UNIX =)
             #os.rename('linechart_temp.svg', 'linechart.svg')
+            
+            global newpath
             
             EweeStats.graph.create_graph(analogSensors, newpath)
 
