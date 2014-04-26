@@ -35,6 +35,8 @@ def display_selection(analogSensors, lcd):
     :rtype: integer
     """
     
+    displayPin = 0
+    
     if lcd.buttonPressed(lcd.UP) == 1:
         print('--UP PRESSED--')
         displayPin += 1
