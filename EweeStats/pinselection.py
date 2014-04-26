@@ -35,16 +35,16 @@ def display_selection(analogSensors, lcd):
     :rtype: integer
     """
     
-    displayPin = 0
+    selectedPin = 0
     
     if lcd.buttonPressed(lcd.UP) == 1:
         print('--UP PRESSED--')
-        displayPin += 1
+        selectedPin += 1
     elif lcd.buttonPressed(lcd.DOWN) == 1:
         print('--DOWN PRESSED--')
-        displayPin -= 1
+        selectedPin -= 1
         
     if displayPin > analogSensors:
-        displayPin = 0
+        selectedPin = 0
         
     return displayPin
