@@ -23,7 +23,7 @@ from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import os
 import sys
 
-def display_selection(analogSensors, lcd):
+def display_selection(analogSensors, lcd, initSelectedPinDone):
     """
     :param analogSensors: nombre de capteurs
     :type analogSensors: integer
@@ -36,10 +36,8 @@ def display_selection(analogSensors, lcd):
     """
     
     # initialiser selectedPin qu'une seule fois
-    initSelectedPinDone = False
     if not initSelectedPinDone:
         selectedPin = 0
-        initSelectedPinDone = True
     
     # activité des boutons
     if lcd.buttonPressed(lcd.UP):

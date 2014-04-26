@@ -64,8 +64,9 @@ class AnalogGraphThreads():
 
         # Nombre de capteurs analogiques :
         global analogSensors
-        # Booléen indiquant l'état de l'initialisation de l'instant 0 pour l'horodatage
-        timestampInitDone = False
+        # Booléen indiquant l'état de l'initialisation
+        # pour l'horodatage et le pinselection
+        initDone = False
         # Liste des valeurs
         valueList = []                  # On crée une liste vide
         for i in range(analogSensors):
@@ -145,13 +146,13 @@ class AnalogGraphThreads():
                 #print('--DOWN PRESSED--')
                 #displayPin = 1
                 
-            displayPin = EweeStats.pinselection.display_selection(analogSensors, lcd)
+            displayPin = EweeStats.pinselection.display_selection(analogSensors, lcd, initDone)
 
 
             #### INIT TIMESTAMP ####
-            if timestampInitDone is False:      # Pour n'initialiser qu'une seule fois le timestamp
+            if initDone is False:      # Pour n'initialiser qu'une seule fois le timestamp
                 timestampInit = time.time()
-                timestampInitDone = True            # Booléen indiquant que timestampInit a été initialisé
+                initDone = True            # Booléen indiquant que timestampInit a été initialisé
             #### FIN INIT TIMESTAMP ####
 
             #### CREATION DU TIMESTAMP ####
