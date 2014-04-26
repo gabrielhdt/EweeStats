@@ -23,21 +23,26 @@ import pygal
 import os
 import sys
 
-def create_graph(analogSensors):
+def create_graph(analogSensors, dataDir):
     """
     Création du graphique à l'aide de pygal
     
     :param analogSensors: nombre de capteurs
     :type analogSensors: integer
+    
+    :param dataDir: dossier contenant les fichiers
+    :type dataDir: string
     """
 
     #Ouverture des fichiers
-    with open('data/timestamp') as t:
+    timePath = os.path.join(dataDir, 'timestamp')
+    with open(timePath, 'r') as t:
         timestamp = [line.rstrip() for line in t]
 
     dataList = []
     for i in range(analogSensors):
-        with open("data/data_%s"%str(i), 'r') as di:
+        filePath = os.path.join(dataDir, "data_{i}".format(str(i)))
+        with open(filePath, 'r') as di:
             dataList.append([line.rstrip() for line in di])
 
     # Formatage des listes

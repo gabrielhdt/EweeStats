@@ -215,24 +215,16 @@ class AnalogGraphThreads():
             # Fichier timestamp
             with open('data/timestamp', 'r') as t:               # Ouverture en lecture seule
                 timestamp = [line.rstrip() for line in t]   # remplissage des listes en enlevant le '\n'
-                # Fichier d0
-            #with open('data/data_0', 'r') as d0:
-            #    data_0 = [line.rstrip() for line in d0]        # voir au-dessus
-            # Version générique
             dataList = []     # Création de la liste dataList contenant les listes de données de chaque fichier
             for i in range(analogSensors):                          # boucle pour ouvrir chaque fichier
                 with open("data/data_%s"%str(i), 'r') as di:        # ouvre chaque fichier
                     dataList.append([line.rstrip() for line in di])   # lit le fichier
             # Formatage des listes
             timestamp = map(str, timestamp)                     # passe timestamp en string
-            #for i, elt in enumerate(data_0):
-            #    data_0[i] = float(elt)
-            # Version générique
             for i, elt in enumerate(dataList):
                 dataList[i] = map(float, elt)
             # Fermeture des fichiers
             t.close()
-            #d0.close()
             for i in range(analogSensors):
                 di.close
 
