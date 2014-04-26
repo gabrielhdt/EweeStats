@@ -25,10 +25,10 @@ def write_ods(dataDir):
     
     # définit le chemin du fichier
     filename = os.path.join(dataDir, 'ewee_data.ods')
-    ods = ezodf2.newdoc(doctype='ods', filename)
+    ods = ezodf2.newdoc(doctype = 'ods', filename = '{f}'.format(f = filename))
     
     sheet = ezodf2.Sheet('SHEET', size = (10, 10))
-    ods.sheet += sheet
+    ods.sheets += sheet
     
     #Ouverture des fichiers
     timePath = os.path.join(dataDir, 'timestamp')
