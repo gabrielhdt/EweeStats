@@ -103,7 +103,7 @@ class AnalogGraphThreads():
         fileList = []       # liste contenant tous les fichiers
         for i in range(analogSensors):
             # Création d'un nom de fichier avec indexe i (data_0, data_1 ...)
-            filename = "data_%s"%str(i)
+            filename = "data_{i}".format(i = str(i))
             # définition du chemin vers lequel les fichiers seront enregistrés
             filepath = os.path.join(newpath, filename)
             file = open(filepath, 'w+') # création de chaque fichier
@@ -125,9 +125,9 @@ class AnalogGraphThreads():
         # Wait for a valid value to avoid None
         start = time.time()
         while board.analog[0].read() is None:
-                print "nothing after {0}".format(time.time() - start)
+                print "nothing after {t}".format(t = time.time() - start)
 
-        print "first val after {0}".format(time.time() - start)
+        print "first val after {t}".format(t = time.time() - start)
         lcd.clear()
         lcd.message("Debut des \nmesures")
 
@@ -136,10 +136,15 @@ class AnalogGraphThreads():
         timeDisplay = 0
 
         ###### FIN INIT ########################################################
-
-        while lcd.buttonPressed(lcd.SELECT) != 1: # Continue tant qu'on appuie pas sur SELECT
+        
+        
+        # Boucle principale, continue tant qu'on appuie pas sur SELECT
+        while lcd.buttonPressed(lcd.SELECT) != 1:
             
+            # Calcul du dernier affichage
             timeLastDisplay = time.time() - timeDisplay
+            
+            # relève l'état des boutons
             if timeLastDisplay >= 0.25:
                 displayPin = EweeStats.pinselection.display_selection(
                     analogSensors, lcd, displayPin)
@@ -174,10 +179,9 @@ class AnalogGraphThreads():
                 self.my_queue.put(1)        # s'il est prêt, on met 1 dans la queue
 
             #### AFFICHAGE DES VALEURS SUR LCD ####
-            #timeLastDisplay = time.time() - timeDisplay     # Calcul du temps du dernier affichage
             if timeLastDisplay >= 0.25:                     # Si le temps excède les 250ms
                 lcd.clear()
-                lcd.message("Pot %s :\n"%(str(displayPin))) # Affiche le message
+                lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
                 lcd.message(valueList[displayPin] * 10)
                 timeDisplay = time.time()                   # Enregistre le moment d'affichage
 
