@@ -32,16 +32,7 @@ import EweeStats.graph
 # Variables globales :
 # définissant le nombre de capteurs branchés en analogique
 analogSensors = 2
-# définissant le répertoire de sortie
-# création du dossier de sauvegarde
-# répertoire racine
-dataDir = '/home/pi'
-# nom dossier sauvegarde
-outDir = 'ewee_data'
-# création du dossier
-newpath = os.path.join(dataDir, outDir)
-# Si le dossier n'existe pas, le créer
-if not os.path.exists(newpath): os.makedirs(newpath)
+
 
 class AnalogGraphThreads():
     """
@@ -92,7 +83,16 @@ class AnalogGraphThreads():
         #################################
         #   CREATION DES FICHIERS   #
         #################################
-        global newpath
+        # Répertoire de sortie
+        # création du dossier de sauvegarde
+        # répertoire racine
+        dataDir = '/home/pi'
+        # nom dossier sauvegarde
+        outDir = 'ewee_data'
+        # création du dossier
+        newpath = os.path.join(dataDir, outDir)
+        # Si le dossier n'existe pas, le créer
+        if not os.path.exists(newpath): os.makedirs(newpath)
 
         
 
@@ -158,17 +158,8 @@ class AnalogGraphThreads():
             timeFile.write('\n')
 
             #### TRAITEMENT DES DONNEES ####
-            # Version tout en une boucle
-            #for i, file in enumerate(fileList):
-                # Lecture de la valeur analogique
-                #value_a = board.analog[i].read()# Relève la mesure
-                #print(value_a * 10)
-                #file.write(str(timestamp)) # écrit le timestamp
-                #file.write('\t')                # tabulation pour séparer timestamp et val
-                #file.write(str(value_a))   # écrit les valeurs
-                #file.write("\n")       # saut de ligne
-
-            # Version en deux boucles : diminue le décalage de temps entre chaque lecture de données
+            # Version en deux boucles :
+            # diminue le décalage de temps entre chaque lecture de données
             for i, file in enumerate(fileList):         # boucle lecture
                 valueList[i] = board.analog[i].read()   # lecture et enregistrement dans la liste
 
@@ -216,7 +207,14 @@ class AnalogGraphThreads():
             # Quand la queue est remplie, le thread passe en état occupé
             self.transmit_is_ready = False
             
-            global newpath
+            # définissant le répertoire de sortie
+            # création du dossier de sauvegarde
+            # répertoire racine
+            dataDir = '/home/pi'
+            # nom dossier sauvegarde
+            outDir = 'ewee_data'
+            # création du dossier
+            newpath = os.path.join(dataDir, outDir)
             
             EweeStats.graph.create_graph(analogSensors, newpath)
 
