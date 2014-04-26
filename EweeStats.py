@@ -251,7 +251,7 @@ class AnalogGraphThreads():
             ##os.remove('linechart.svg')                 # Inutile avec les systèmes UNIX =)
             #os.rename('linechart_temp.svg', 'linechart.svg')
             
-            create_graph(analogSensors, newpath)
+            EweeStats.graph.create_graph(analogSensors, newpath)
 
             # Tâche terminée, le thread 2 est prêt
             self.transmit_is_ready = True
