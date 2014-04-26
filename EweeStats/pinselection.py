@@ -47,4 +47,4 @@ def display_selection(analogSensors, lcd):
     if displayPin > analogSensors:
         selectedPin = 0
         
-    return displayPin
+    return selectedPin
