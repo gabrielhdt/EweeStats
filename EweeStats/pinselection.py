@@ -19,7 +19,7 @@
 #
 #
 
-import Adafruit_CharLCDPlate
+from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import os
 import sys
 
