@@ -23,10 +23,13 @@ from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import os
 import sys
 
-def display_selection(analogSensors):
+def display_selection(analogSensors, lcd):
     """
     :param analogSensors: nombre de capteurs
     :type analogSensors: integer
+    
+    :param lcd: classe lcd
+    :type lcd: Adafuit_CharLCDPlate()
     
     :returns: numéro de l'entrée analogique à afficher
     :rtype: integer
