@@ -4,3 +4,5 @@ dist/
 EweeStats.egg-info/
 # ignore backup files
 *~
+# ignore pypi readme
+README
