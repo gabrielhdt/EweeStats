@@ -17,18 +17,19 @@ Material required
 -----------------
 
 This program is designed to work with :
-    * a portable computer (Raspberry Pi ideally, has to be embedded in the vehicle)
-    * an Arduino (embedded to)
-    * (optionnally) an Adafruit CharLCDPlate (you might want to change the code if you consider not using it)
-    * a LAN to view the graph
+
+* a portable computer (Raspberry Pi ideally, has to be embedded in the vehicle)
+* an Arduino (embedded to)
+* (optionnally) an Adafruit CharLCDPlate (you might want to change the code if you consider not using it)
+* a LAN to view the graph
 
 Dependencies
 ------------
 
-    * pygal
-    * pyfirmata
-    * pyserial
-    * smbus-cffi
+* pygal
+* pyfirmata
+* pyserial
+* smbus-cffi
 
 It will only work with Python 2.7.
 
