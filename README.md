@@ -38,7 +38,7 @@ Installation
 
 with pip :
 
-    `pip install EweeStats`
+`pip install EweeStats`
 
 or from source :
 
