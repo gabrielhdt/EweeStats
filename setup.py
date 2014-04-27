@@ -37,7 +37,7 @@ setup(
     description='Program to read, process, present and broadcast datas from sensors',
     author='Gabriel Hondet',
     author_email="gabrielhondet@gmail.com",
-    license='Apache License, Version 2.0',
+    license='GPL 3',
     url='https://pypi.python.org/pypi/EweeStats/',
     long_description=long_description + changes,
     platforms="GNU/Linux",
