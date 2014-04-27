@@ -33,7 +33,7 @@ with open('CHANGES') as c:
 
 setup(
     name='EweeStats',
-    version='0.0dev2',
+    version='0.0dev3',
     description='Program to read, process, present and broadcast datas from sensors',
     author='Gabriel Hondet',
     author_email="gabrielhondet@gmail.com",
@@ -46,6 +46,6 @@ setup(
     install_requires=['pyFirmata', 'pygal', 'pyserial', 'lxml'],
     extras_require = {
         'Excel': ['xlwt'],
-        'ODF': ['ezodf'],
+        'ODF': ['ezodf2'],
         }
     )
