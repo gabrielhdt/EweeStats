@@ -5,7 +5,7 @@ Abstract
 --------
 
 EweeStats is a program designed to collect as much informations as possible from a vehicle on which sensors have been put.
-It reads datas, processes it, diplays it and broadcasts it in a SVG pygal graph via http with lighttpd.
+It reads datas, processes it, diplays it and broadcasts it in a SVG [pygal](http://pygal.org) graph via http with [lighttpd](http://www.lighttpd.org).
 
 This is a developpement version, it is not intended to be used out of the box !
 
