@@ -1,8 +1,8 @@
 EweeStats - README
-******************
+==================
 
 Abstract
-========
+--------
 
 EweeStats is a program designed to collect as much informations as possible from a vehicle on which sensors have been put.
 It reads datas, processes it, diplays it and broadcasts it in a SVG pygal graph via http with lighttpd.
@@ -14,7 +14,7 @@ pygal: http://pygal.org/
 lighttpd: http://www.lighttpd.net/
 
 Material required
-=================
+-----------------
 
 This program is designed to work with :
     * a portable computer (Raspberry Pi ideally, has to be embedded in the vehicle)
@@ -23,7 +23,7 @@ This program is designed to work with :
     * a LAN to view the graph
 
 Dependencies
-============
+------------
 
     * pygal
     * pyfirmata
@@ -33,22 +33,24 @@ Dependencies
 It will only work with Python 2.7.
 
 Installation
-============
+------------
 
 with pip :
 
-    pip install EweeStats
+    `pip install EweeStats`
 
 or from source :
 
-    python setup.py install
+`git clone https://github.com/gabrielhdt/EweeStats.git`
+
+`python setup.py install`
 
 Documentation
-=============
+-------------
 
 http://pythonhosted.org/EweeStats
 
 History
-=======
+-------
 
 This program has been developped for the Baccalauréat exam.
