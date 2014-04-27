@@ -1,3 +1,7 @@
+2014-04-27 Gabriel Hondet <gabrielhondet@gmail.com>
+
+	* switched from svn to git for revisionning
+
 2014-04-26 Gabriel Hondet <gabrielhondet@gmail.com>
 
 	* added module graph.py
