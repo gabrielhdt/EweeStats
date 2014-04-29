@@ -28,7 +28,7 @@ import os
 import sys
 import pygal
 from pyfirmata import Arduino, util
-from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
+from EweeStats.Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import EweeStats.graph
 import EweeStats.pinselection
 import EweeStats.ods
@@ -99,7 +99,6 @@ class AnalogGraphThreads():
         # Si le dossier n'existe pas, le créer
         if not os.path.exists(newpath): os.makedirs(newpath)
 
-        
 
 
         # Ouvre un fichier par pin analog en écriture nommé data_X 
