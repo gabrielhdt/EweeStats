@@ -32,6 +32,7 @@ from EweeStats.Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import EweeStats.graph
 import EweeStats.pinselection
 import EweeStats.ods
+import EweeStats.convert_data
 
 # Variables globales :
 # définissant le nombre de capteurs branchés en analogique
@@ -71,9 +72,11 @@ class AnalogGraphThreads():
         # pour l'horodatage et le pinselection
         initDone = False
         # Liste des valeurs
-        valueList = []                  # On crée une liste vide
+        valueList = []
+        valueRealList = []
         for i in range(analogSensors):
-            valueList.append(0.000)     # On rajoute autant de 0 flottants qu'il y a de capteurs
+            valueList.append(0.0)
+            valueRealList.append(0.0)
 
         # Init Arduino et iterateur
         lcd.message("Connection de \nl'Arduino ...")
@@ -170,6 +173,9 @@ class AnalogGraphThreads():
             for i, file in enumerate(fileList):         # boucle lecture
                 valueList[i] = board.analog[i].read()   # lecture et enregistrement dans la liste
 
+            # Conversion des données
+            valueList = EweeStats.convert_data.convert(valueList)
+
             print(valueList)                            # affiche dans la console les valeurs
             for i, file in enumerate(fileList):         # boucle écriture
                 file.write(str(valueList[i]))              # écriture valeur
@@ -189,14 +195,12 @@ class AnalogGraphThreads():
 
         #### EXTINCTION ####
         self.stop = True                    # On dit au thread 2 de s'arrêter
-        lcd.message("Fermeture des \nlogs")
         for fi in fileList:
             fi.close()
         timeFile.close()
         lcd.clear()
-        lcd.message("Extinction ...")
+        lcd.message("Ecriture du\nfichier ODS")
         EweeStats.ods.write_ods(newpath, analogSensors)
-        time.sleep(1)
         lcd.clear()
         board.exit()
 

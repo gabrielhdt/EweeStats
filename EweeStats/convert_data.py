@@ -20,7 +20,29 @@
 #
 #
 
-def convert_pot(valueList, pinToPot):
-    
-    valueReal = valueList[pinToPot] * 5
+def convert(valueList):
+    """
+    :param valueList: liste des valeurs relevées
+    :type valueList: list
+
+    :returns: converted datas
+    :rtype: list
+    """
+
+    # Config : relie à chaque pin un appareil
+    sensorList = ['pot', 'pot']
+    valueReal = []
+    for i in valueList:
+        valueReal.append(0.0)
+
+    for i, elt in enumerate(sensorList):
+        if elt == 'pot':
+            convert_pot(i, valueList, valueReal)
+
+    return valueReal
+
+def convert_pot(pinToPot, valueList, valueReal):
+    valueReal[pinToPot] = valueList[pinToPot] * 5
+
+    return valueReal
 

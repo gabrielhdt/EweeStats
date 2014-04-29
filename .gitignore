@@ -6,3 +6,6 @@ EweeStats.egg-info/
 *~
 # ignore pypi readme
 README
+# Files created by program
+*.svg
+*.pyc
