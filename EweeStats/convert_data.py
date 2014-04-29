@@ -42,6 +42,19 @@ def convert(valueList):
     return valueReal
 
 def convert_pot(pinToPot, valueList, valueReal):
+    """
+    :param pinToPot: numéro du pin relié au potentiomètre
+    :type pinToPot: integer
+
+    :param valueList: valeurs non transformées
+    :type valueList: list
+
+    :param valueReal: liste devant acceuillir les valeurs transformées
+    :type valueReal: list
+
+    :returns: nombre converti à la case du numéro du pin
+    :rtype: integer
+    """
     valueReal[pinToPot] = valueList[pinToPot] * 5
 
     return valueReal
