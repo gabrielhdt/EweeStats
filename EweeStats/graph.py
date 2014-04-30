@@ -33,7 +33,13 @@ def create_graph(analogSensors, dataDir):
     
     :param dataDir: dossier contenant les fichiers
     :type dataDir: string
+
+    :returns: 0
     """
+
+    # Nom du fichier du graphique
+    graphName = 'EweeGraph.svg'
+    graphTempName = 'EweeGraph.svg.tmp'
 
     #Ouverture des fichiers
     timePath = os.path.join(dataDir, 'timestamp')
@@ -72,8 +78,8 @@ def create_graph(analogSensors, dataDir):
     
     # Création d'une image temporaire et d'un définitive
     # car l'image est réeffacée avant chaque création du graph
-    linechart.render_to_file('linechart_temp.svg')
+    linechart.render_to_file(os.path.join(dataDir, graphTempName))
     # image définitive
-    os.rename('linechart_temp.svg', 'linechart.svg')
+    os.rename(os.path.join(dataDir, graphTempName), os.path.join(dataDir, graphName))
     
     return 0
