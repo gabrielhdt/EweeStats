@@ -24,7 +24,7 @@ import pygal
 import os
 import sys
 
-def create_graph(analogSensors, dataDir):
+def create_graph(analogSensors, dataDir, graphName):
     """
     Création du graphique à l'aide de pygal
     
@@ -34,12 +34,14 @@ def create_graph(analogSensors, dataDir):
     :param dataDir: dossier contenant les fichiers
     :type dataDir: string
 
+    :param graphName: nom du fichier de graph
+    :type graphName: string
+
     :returns: 0
     """
 
     # Nom du fichier du graphique
-    graphName = 'EweeGraph.svg'
-    graphTempName = 'EweeGraph.svg.tmp'
+    graphTempName = graphName.replace('.svg', '.svg.tmp')
 
     #Ouverture des fichiers
     timePath = os.path.join(dataDir, 'timestamp')

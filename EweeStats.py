@@ -102,6 +102,14 @@ class AnalogGraphThreads():
         # Si le dossier n'existe pas, le créer
         if not os.path.exists(newpath): os.makedirs(newpath)
 
+        # Création fichier graph
+        graphName = 'EweeGraph.svg'
+        # Si le fichier à la racine web existe, on le supprime
+        if os.path.isfile(os.path.join('/var/www', graphName)):
+                os.remove(os.path.join('/var/www', graphName))
+        # Puis on crée le lien
+        os.symlink(os.path.join(newpath, graphName), os.path.join('/var/www', graphName))
+
 
 
         # Ouvre un fichier par pin analog en écriture nommé data_X 
@@ -229,9 +237,11 @@ class AnalogGraphThreads():
             outDir = 'ewee_data'
             # création du dossier
             newpath = os.path.join(dataDir, outDir)
+
+            graphName = 'EweeGraph.svg'
             
             # Création du graph
-            EweeStats.graph.create_graph(analogSensors, newpath)
+            EweeStats.graph.create_graph(analogSensors, newpath, graphName)
 
             # Tâche terminée, le thread 2 est prêt
             self.transmit_is_ready = True
