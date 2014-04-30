@@ -195,7 +195,7 @@ class AnalogGraphThreads():
             if timeLastDisplay >= 0.25:                     # Si le temps excède les 250ms
                 lcd.clear()
                 lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
-                lcd.message(valueList[displayPin] * 10)
+                lcd.message(valueList[displayPin])
                 timeDisplay = time.time()                   # Enregistre le moment d'affichage
 
         #### EXTINCTION ####
@@ -203,11 +203,11 @@ class AnalogGraphThreads():
         for fi in fileList:
             fi.close()
         timeFile.close()
+        board.exit()
         lcd.clear()
         lcd.message("Ecriture du\nfichier ODS")
         ods.write_ods(newpath, analogSensors)
         lcd.clear()
-        board.exit()
 
 
     def threadGraph(self):
