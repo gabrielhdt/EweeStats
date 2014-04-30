@@ -4,8 +4,6 @@ dist/
 EweeStats.egg-info/
 # ignore backup files
 *~
-# ignore pypi readme
-README
 # Files created by program
 *.svg
 *.pyc
