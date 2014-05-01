@@ -107,15 +107,15 @@ class AnalogGraphThreads(object):
 
 
 
-        # Ouvre un fichier par pin analog en écriture nommé data_X 
-        fileList = []       # liste contenant tous les fichiers
+        # Ouvre un fichier par pin analog en écriture nommé data_X
+        # fileList : liste contenant le nom des fichiers
+        # filepath : chemin des fichiers enregistrés
+        fileList = []
         for i in range(self.analogSensors):
-            # Création d'un nom de fichier avec indexe i (data_0, data_1 ...)
             filename = "data_{i}".format(i = str(i))
-            # définition du chemin vers lequel les fichiers seront enregistrés
             filepath = os.path.join(newpath, filename)
-            file = open(filepath, 'w+') # création de chaque fichier
-            fileList.append(file)   # On ajoute le fichier à la liste
+            file = open(filepath, 'w+')
+            fileList.append(file)
 
         filepath = os.path.join(newpath, "timestamp")   # refait le chemin
         timeFile = open(filepath, 'w+')                 # créé le fichier
@@ -165,8 +165,8 @@ class AnalogGraphThreads(object):
             #### FIN INIT TIMESTAMP ####
 
             #### CREATION DU TIMESTAMP ####
-            timestamp = time.time()             # Lecture du temps
-            timestamp = timestamp - timestampInit   # Différence entre le temps initial et le temps de la prise
+            timestamp = time.time()
+            timestamp = timestamp - timestampInit
             # horodatage en char pour le graph pygal
             self.timelist.append(str(round(timestamp, 4)))
 
@@ -198,6 +198,8 @@ class AnalogGraphThreads(object):
 
         #### EXTINCTION ####
         self.stop = True    # On dit au thread 2 de s'arrêter
+        board.exit()
+        lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # écriture fichier texte données
         for i, file in enumerate(fileList):
@@ -208,11 +210,10 @@ class AnalogGraphThreads(object):
         for i in self.timelist:
             timeFile.write(i)
             timeFile.write('\n')
-            
+
         for fi in fileList:
             fi.close()
         timeFile.close()
-        board.exit()
         lcd.clear()
         lcd.message("Ecriture du\nfichier ODS")
         ods.write_ods(newpath, self.analogSensors,
