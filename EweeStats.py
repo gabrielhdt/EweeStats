@@ -26,5 +26,6 @@ import EweeStats.AnalogGraphThreads
 
 
 if __name__ == '__main__':
-        data2Graph = EweeStats.AnalogGraphThreads.AnalogGraphThreads()
-        data2Graph.startThreads()
+    analogSensors = 2
+    data2Graph = EweeStats.AnalogGraphThreads.AnalogGraphThreads(analogSensors)
+    data2Graph.startThreads()

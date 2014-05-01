@@ -1,4 +1,3 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
 #  AnlogGraphThreads.py
@@ -34,24 +33,25 @@ import ods
 import convert_data
 
 
-analogSensors = 2
-
-class AnalogGraphThreads():
+class AnalogGraphThreads(object):
     """
         Classe destinée aux threads de lecture des valeurs analogiques
         et de création du graph
     """
 
-    def __init__(self):
+    def __init__(self, analogSensors):
         """
-            Constructeur de la classe : va créer transmit_is_ready
-            pour contrôler l'état des threads et créer une queue d'un
-            élément
+        Constructeur de la classe : va créer transmit_is_ready
+        pour contrôler l'état des threads et créer une queue d'un
+        élément
+        :param analogSensors: nombre de capteurs analogiques
+        :type analogSensors: integer
         """
 
         self.transmit_is_ready = True
         self.my_queue = Queue.Queue(maxsize=1)
         self.stop = False
+        self.analogSensors = analogSensors
 
     def threadAnalogData(self):
         """
@@ -63,15 +63,13 @@ class AnalogGraphThreads():
         lcd = Adafruit_CharLCDPlate()
         lcd.clear()
 
-        # Nombre de capteurs analogiques :
-        global analogSensors
         # Booléen indiquant l'état de l'initialisation
         # pour l'horodatage et le pinselection
         initDone = False
         # Liste des valeurs
         valueList = []
         valueRealList = []
-        for i in range(analogSensors):
+        for i in range(self.analogSensors):
             valueList.append(0.0)
             valueRealList.append(0.0)
 
@@ -111,7 +109,7 @@ class AnalogGraphThreads():
 
         # Ouvre un fichier par pin analog en écriture nommé data_X 
         fileList = []       # liste contenant tous les fichiers
-        for i in range(analogSensors):
+        for i in range(self.analogSensors):
             # Création d'un nom de fichier avec indexe i (data_0, data_1 ...)
             filename = "data_{i}".format(i = str(i))
             # définition du chemin vers lequel les fichiers seront enregistrés
@@ -128,7 +126,7 @@ class AnalogGraphThreads():
         #################################
 
         # Commence l'écoute des ports nécessaires
-        for i in range(analogSensors):
+        for i in range(self.analogSensors):
             board.analog[i].enable_reporting()
 
 
@@ -157,7 +155,7 @@ class AnalogGraphThreads():
             # relève l'état des boutons
             if timeLastDisplay >= 0.25:
                 displayPin = pinselection.display_selection(
-                    analogSensors, lcd, displayPin)
+                    self.analogSensors, lcd, displayPin)
 
 
             #### INIT TIMESTAMP ####
@@ -206,7 +204,7 @@ class AnalogGraphThreads():
         board.exit()
         lcd.clear()
         lcd.message("Ecriture du\nfichier ODS")
-        ods.write_ods(newpath, analogSensors)
+        ods.write_ods(newpath, self.analogSensors)
         lcd.clear()
 
 
@@ -216,7 +214,6 @@ class AnalogGraphThreads():
             lit les valeurs, les formate comme il faut, configure puis
             crée le graph
         """
-        global analogSensors
         # Tant que le thread 1 ne dit pas de s'arrêter on boucle
         while(not self.stop):    
             
@@ -238,7 +235,7 @@ class AnalogGraphThreads():
             graphName = 'EweeGraph.svg'
             
             # Création du graph
-            graph.create_graph(analogSensors, newpath, graphName)
+            graph.create_graph(self.analogSensors, newpath, graphName)
 
             # Tâche terminée, le thread 2 est prêt
             self.transmit_is_ready = True
