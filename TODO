@@ -1,4 +1,3 @@
-Réduire le EweeStats.py et faire un fichier qu'avec la classe AnalogGraphThreads
 Intégrer les programmes de calibration
 Transférer les listes via la mémoire plutôt que par la carte sd.
 Si la liste devient trop grande pour la mémoire, on attend que t % 10 == 0 pour

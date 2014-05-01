@@ -1,3 +1,16 @@
+2014-04-30 Gabriel Hondet <gabrielhondet@gmail.com>
+
+	* graph is now in /home/pi/ewee_data, renamed EweeGraph.svg
+	* symlink to web root now created
+	* AnalogGraphThreads now in a module, EweeStats.py only calls AnalogGraphThreads
+	* tagged version 0.0
+
+2014-04-29 Gabriel Hondet <gabrielhondet@gmail.com>
+
+	* added module to convert datas
+	* libraries are now in package EweeStats
+	* removed useless library Adafruit_MCP230xx
+
 2014-04-27 Gabriel Hondet <gabrielhondet@gmail.com>
 
 	* switched from svn to git for revisionning

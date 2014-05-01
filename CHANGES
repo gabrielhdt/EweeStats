@@ -1,6 +1,15 @@
 
 CHANGES
 =======
+
+Release 0.0 (30 April 2014)
+---------------------------
+
+	* major code enhancements
+	* licensed under GPL-3.0
+	* datas converted
+	* graph saved in dataDir
+
 Release 0.0dev3 (27 April 2014)
 -------------------------------
 
