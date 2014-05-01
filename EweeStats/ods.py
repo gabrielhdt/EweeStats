@@ -57,13 +57,13 @@ def write_ods(dataDir, analogSensors, listValueLists, timelist):
         sheet['A{line}'.format(line = i + 1)].set_value(float(elt))
         
     # écriture des données
-    for i in range(analogSensors):
-        dataListI = dataList[i]
-        for j, elt in enumerate(dataListI):
-            sheet['{letter}{line}'.format(
-                letter = string.uppercase[i + 1],
-                line = j + 1
-                )].set_value(elt)
+    #for i in range(analogSensors):
+    #    dataListI = dataList[i]
+    #    for j, elt in enumerate(dataListI):
+    #        sheet['{letter}{line}'.format(
+    #            letter = string.uppercase[i + 1],
+    #            line = j + 1
+    #            )].set_value(elt)
                 
     for i in range(analogSensors):
         for j, elt in enumerate(listValueLists[i]):
