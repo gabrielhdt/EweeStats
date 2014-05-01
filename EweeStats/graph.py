@@ -49,26 +49,6 @@ def create_graph(analogSensors, listValueLists, timelist, dataDir, graphName):
     # Nom du fichier du graphique
     graphTempName = graphName.replace('.svg', '.svg.tmp')
 
-    #Ouverture des fichiers
-    #timePath = os.path.join(dataDir, 'timestamp')
-    #with open(timePath, 'r') as t:
-        #timestamp = [line.rstrip() for line in t]
-
-    #dataList = []
-    #for i in range(analogSensors):
-        #filePath = os.path.join(dataDir, "data_{i}".format(i = str(i)))
-        #with open(filePath, 'r') as di:
-            #dataList.append([line.rstrip() for line in di])
-    
-    #for i, elt in enumerate(dataList):
-        #dataList[i] = map(float, elt)
-
-    # Fermeture des fichiers
-    #t.close()
-    #for i in range(analogSensors):
-        #di.close
-
-
     linechart                   = pygal.Line()
     linechart.x_label_rotation  = 20
     linechart.show_dots         = False
@@ -80,8 +60,6 @@ def create_graph(analogSensors, listValueLists, timelist, dataDir, graphName):
     linechart.show_minor_x_labels = False
     for i in range(analogSensors):
         linechart.add('Pin {p}'.format(p = i), listValueLists[i])
-    #for i, elt in enumerate(dataList):
-        #linechart.add('Pot %s'%str(i), elt)
     
     # Création d'une image temporaire et d'un définitive
     # car l'image est réeffacée avant chaque création du graph

@@ -167,8 +167,6 @@ class AnalogGraphThreads(object):
             #### CREATION DU TIMESTAMP ####
             timestamp = time.time()             # Lecture du temps
             timestamp = timestamp - timestampInit   # Différence entre le temps initial et le temps de la prise
-            #timeFile.write(str(round(timestamp, 4)))              # écriture dans le fichier de temps
-            #timeFile.write('\n')
             # horodatage en char pour le graph pygal
             self.timelist.append(str(round(timestamp, 4)))
 
@@ -184,10 +182,7 @@ class AnalogGraphThreads(object):
             for i in range(self.analogSensors):
                 self.listValueLists[i].append(round(valueList[i], 4))
 
-            print(valueList)    # affiche dans la console les valeurs
-            #for i, file in enumerate(fileList):         # boucle écriture
-                #file.write(str(valueList[i]))           # écriture valeur
-                #file.write('\n')
+            #print(valueList)    # affiche dans la console les valeurs
 
             #### GESTION DES THREADS ####
             # Regarde si le thread 2 est prêt
