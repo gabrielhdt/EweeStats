@@ -55,6 +55,7 @@ class AnalogGraphThreads(object):
         self.analogSensors = analogSensors
         
         self.listValueLists = [[] for i in range(analogSensors)]
+        self.timelist = []
 
     def threadAnalogData(self):
         """
@@ -71,7 +72,6 @@ class AnalogGraphThreads(object):
         initDone = False
         # Liste des valeurs
         valueList = [0.0 for i in range(self.analogSensors)]
-        valueRealList = [0.0 for i in range(self.analogSensors)]
 
         # Init Arduino et iterateur
         lcd.message("Connection de \nl'Arduino ...")
@@ -167,8 +167,10 @@ class AnalogGraphThreads(object):
             #### CREATION DU TIMESTAMP ####
             timestamp = time.time()             # Lecture du temps
             timestamp = timestamp - timestampInit   # Différence entre le temps initial et le temps de la prise
-            timeFile.write(str(round(timestamp, 4)))              # écriture dans le fichier de temps
-            timeFile.write('\n')
+            #timeFile.write(str(round(timestamp, 4)))              # écriture dans le fichier de temps
+            #timeFile.write('\n')
+            # horodatage en char pour le graph pygal
+            self.timeList.append(str(round(timestamp, 4)))
 
             #### TRAITEMENT DES DONNEES ####
             # Version en deux boucles :
@@ -183,9 +185,9 @@ class AnalogGraphThreads(object):
                 self.listValueLists[i].append(round(valueList[i], 4))
 
             print(valueList)    # affiche dans la console les valeurs
-            for i, file in enumerate(fileList):         # boucle écriture
-                file.write(str(valueList[i]))           # écriture valeur
-                file.write('\n')
+            #for i, file in enumerate(fileList):         # boucle écriture
+                #file.write(str(valueList[i]))           # écriture valeur
+                #file.write('\n')
 
             #### GESTION DES THREADS ####
             # Regarde si le thread 2 est prêt
@@ -200,7 +202,18 @@ class AnalogGraphThreads(object):
                 timeDisplay = time.time()                   # Enregistre le moment d'affichage
 
         #### EXTINCTION ####
-        self.stop = True                    # On dit au thread 2 de s'arrêter
+        self.stop = True    # On dit au thread 2 de s'arrêter
+        lcd.message('Ecriture des \nfichiers texte')
+        # écriture fichier texte données
+        for i, file in enumerate(fileList):
+            for j in self.listValueLists[i]:
+                file.write(str(j))
+                file.write('\n')
+        # écriture fichier texte horodatage
+        for i, elt in self.timelist:
+            timeFile.write(elt)
+            timeFile.write('\n')
+            
         for fi in fileList:
             fi.close()
         timeFile.close()
@@ -238,7 +251,8 @@ class AnalogGraphThreads(object):
             graphName = 'EweeGraph.svg'
             
             # Création du graph
-            graph.create_graph(self.analogSensors, newpath, graphName)
+            graph.create_graph(self.analogSensors, self.listValueLists,
+                self.timelist, newpath, graphName)
 
             # Tâche terminée, le thread 2 est prêt
             self.transmit_is_ready = True

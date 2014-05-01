@@ -24,12 +24,18 @@ import pygal
 import os
 import sys
 
-def create_graph(analogSensors, dataDir, graphName):
+def create_graph(analogSensors, listValueLists, timelist, dataDir, graphName):
     """
     Création du graphique à l'aide de pygal
     
     :param analogSensors: nombre de capteurs
     :type analogSensors: integer
+    
+    :param listValueLists: liste de listes des valeurs
+    :type listValueLists: list of lists
+    
+    :param timelist: horodatage
+    :type timelist: list of strings
     
     :param dataDir: dossier contenant les fichiers
     :type dataDir: string
@@ -44,26 +50,23 @@ def create_graph(analogSensors, dataDir, graphName):
     graphTempName = graphName.replace('.svg', '.svg.tmp')
 
     #Ouverture des fichiers
-    timePath = os.path.join(dataDir, 'timestamp')
-    with open(timePath, 'r') as t:
-        timestamp = [line.rstrip() for line in t]
+    #timePath = os.path.join(dataDir, 'timestamp')
+    #with open(timePath, 'r') as t:
+        #timestamp = [line.rstrip() for line in t]
 
-    dataList = []
-    for i in range(analogSensors):
-        filePath = os.path.join(dataDir, "data_{i}".format(i = str(i)))
-        with open(filePath, 'r') as di:
-            dataList.append([line.rstrip() for line in di])
-
-    # Formatage des listes
-    timestamp = map(str, timestamp)
+    #dataList = []
+    #for i in range(analogSensors):
+        #filePath = os.path.join(dataDir, "data_{i}".format(i = str(i)))
+        #with open(filePath, 'r') as di:
+            #dataList.append([line.rstrip() for line in di])
     
-    for i, elt in enumerate(dataList):
-        dataList[i] = map(float, elt)
+    #for i, elt in enumerate(dataList):
+        #dataList[i] = map(float, elt)
 
     # Fermeture des fichiers
-    t.close()
-    for i in range(analogSensors):
-        di.close
+    #t.close()
+    #for i in range(analogSensors):
+        #di.close
 
 
     linechart                   = pygal.Line()
@@ -72,11 +75,13 @@ def create_graph(analogSensors, dataDir, graphName):
     linechart.human_readable    = True
     linechart.title             = 'Tension en fonction du temps'
     linechart.x_title           = 'Temps (s)'
-    linechart.x_labels          = timestamp
+    linechart.x_labels          = timelist
     linechart.x_labels_major_count = 20
     linechart.show_minor_x_labels = False
-    for i, elt in enumerate(dataList):
-        linechart.add('Pot %s'%str(i), elt)
+    for i in range(analogSensors):
+        linechart.add('Pin {p}'.format(p = i), listValueLists[i])
+    #for i, elt in enumerate(dataList):
+        #linechart.add('Pot %s'%str(i), elt)
     
     # Création d'une image temporaire et d'un définitive
     # car l'image est réeffacée avant chaque création du graph
