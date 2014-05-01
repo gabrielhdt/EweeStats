@@ -170,7 +170,7 @@ class AnalogGraphThreads(object):
             #timeFile.write(str(round(timestamp, 4)))              # écriture dans le fichier de temps
             #timeFile.write('\n')
             # horodatage en char pour le graph pygal
-            self.timeList.append(str(round(timestamp, 4)))
+            self.timelist.append(str(round(timestamp, 4)))
 
             #### TRAITEMENT DES DONNEES ####
             # Version en deux boucles :
