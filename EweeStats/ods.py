@@ -25,7 +25,7 @@ import os
 import sys
 import string
 
-def write_ods(dataDir, analogSensors):
+def write_ods(dataDir, analogSensors, listValueLists, timelist):
     
     # définit le chemin du fichier
     filename = os.path.join(dataDir, 'ewee_data.ods')
@@ -34,32 +34,39 @@ def write_ods(dataDir, analogSensors):
     
     
     #Ouverture des fichiers
-    timePath = os.path.join(dataDir, 'timestamp')
-    with open(timePath, 'r') as t:
-        timestamp = [line.rstrip() for line in t]
+    #timePath = os.path.join(dataDir, 'timestamp')
+    #with open(timePath, 'r') as t:
+        #timestamp = [line.rstrip() for line in t]
 
-    dataList = []
-    for i in range(analogSensors):
-        filePath = os.path.join(dataDir, "data_{i}".format(i = str(i)))
-        with open(filePath, 'r') as di:
-            dataList.append([line.rstrip() for line in di])
+    #dataList = []
+    #for i in range(analogSensors):
+        #filePath = os.path.join(dataDir, "data_{i}".format(i = str(i)))
+        #with open(filePath, 'r') as di:
+            #dataList.append([line.rstrip() for line in di])
     
-    # formatage des listes
-    timestamp = map(float, timestamp)
-    for i, elt in enumerate(dataList):
-        dataList[i] = map(float, elt)
+    ## formatage des listes
+    #timestamp = map(float, timestamp)
+    #for i, elt in enumerate(dataList):
+        #dataList[i] = map(float, elt)
     
-    sheet = ezodf2.Sheet('SHEET', size = (len(timestamp), analogSensors + 1))
+    sheet = ezodf2.Sheet('SHEET', size = (len(timelist), analogSensors + 1))
     ods.sheets += sheet
     
     # écriture du timestamp
-    for i, elt in enumerate(timestamp):
-        sheet['A{line}'.format(line = i + 1)].set_value(elt)
+    for i, elt in enumerate(timelist):
+        sheet['A{line}'.format(line = i + 1)].set_value(float(elt))
         
     # écriture des données
     for i in range(analogSensors):
         dataListI = dataList[i]
         for j, elt in enumerate(dataListI):
+            sheet['{letter}{line}'.format(
+                letter = string.uppercase[i + 1],
+                line = j + 1
+                )].set_value(elt)
+                
+    for i in range(analogSensors):
+        for j, elt in enumerate(listValueLists[i]):
             sheet['{letter}{line}'.format(
                 letter = string.uppercase[i + 1],
                 line = j + 1
