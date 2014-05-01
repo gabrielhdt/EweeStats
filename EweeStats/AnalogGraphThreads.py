@@ -210,8 +210,8 @@ class AnalogGraphThreads(object):
                 file.write(str(j))
                 file.write('\n')
         # écriture fichier texte horodatage
-        for i, elt in self.timelist:
-            timeFile.write(elt)
+        for i in self.timelist:
+            timeFile.write(i)
             timeFile.write('\n')
             
         for fi in fileList:
