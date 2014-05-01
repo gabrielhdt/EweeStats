@@ -31,6 +31,7 @@ import graph
 import pinselection
 import ods
 import convert_data
+import itertools
 
 
 class AnalogGraphThreads(object):
@@ -52,6 +53,8 @@ class AnalogGraphThreads(object):
         self.my_queue = Queue.Queue(maxsize=1)
         self.stop = False
         self.analogSensors = analogSensors
+        
+        self.listValueLists = [[] for i in range(analogSensors)]
 
     def threadAnalogData(self):
         """
@@ -67,11 +70,8 @@ class AnalogGraphThreads(object):
         # pour l'horodatage et le pinselection
         initDone = False
         # Liste des valeurs
-        valueList = []
-        valueRealList = []
-        for i in range(self.analogSensors):
-            valueList.append(0.0)
-            valueRealList.append(0.0)
+        valueList = [0.0 for i in range(self.analogSensors)]
+        valueRealList = [0.0 for i in range(self.analogSensors)]
 
         # Init Arduino et iterateur
         lcd.message("Connection de \nl'Arduino ...")
@@ -178,6 +178,9 @@ class AnalogGraphThreads(object):
 
             # Conversion des données
             valueList = convert_data.convert(valueList)
+            # Stockage des données dans la liste
+            for i in range(self.analogSensors):
+                self.listValueLists[i].append(valueList[i])
 
             print(valueList)                            # affiche dans la console les valeurs
             for i, file in enumerate(fileList):         # boucle écriture
