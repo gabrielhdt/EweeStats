@@ -173,7 +173,7 @@ class AnalogGraphThreads(object):
             #### TRAITEMENT DES DONNEES ####
             # Version en deux boucles :
             # diminue le décalage de temps entre chaque lecture de données
-            for i in range(analogSensors):
+            for i in range(self.analogSensors):
                 valueList[i] = board.analog[i].read()   # lecture et enregistrement dans la liste
 
             # Conversion des données
@@ -182,9 +182,9 @@ class AnalogGraphThreads(object):
             for i in range(self.analogSensors):
                 self.listValueLists[i].append(round(valueList[i], 4))
 
-            print(valueList)                            # affiche dans la console les valeurs
+            print(valueList)    # affiche dans la console les valeurs
             for i, file in enumerate(fileList):         # boucle écriture
-                file.write(str(valueList[i]))              # écriture valeur
+                file.write(str(valueList[i]))           # écriture valeur
                 file.write('\n')
 
             #### GESTION DES THREADS ####
