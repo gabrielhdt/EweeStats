@@ -133,7 +133,7 @@ class AnalogGraphThreads(object):
 
     
         # Main loop
-        while lcd.buttonPressed(lcd.SELECT) != 1:
+        while not lcd.buttonPressed(lcd.SELECT):
             
             # Calcule last display time
             timeLastDisplay = time.time() - timeDisplay
@@ -144,7 +144,7 @@ class AnalogGraphThreads(object):
                     self.analogSensors, lcd, displayPin)
 
 
-            if initDone is False:
+            if not initDone:
                 timestampInit = time.time()
                 initDone = True
 
