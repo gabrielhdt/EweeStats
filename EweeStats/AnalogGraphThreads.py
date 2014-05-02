@@ -210,32 +210,26 @@ class AnalogGraphThreads(object):
             lit les valeurs, les formate comme il faut, configure puis
             crée le graph
         """
-        # Tant que le thread 1 ne dit pas de s'arrêter on boucle
+
         while(not self.stop):    
             
-            # gestion du démarrage du thread
-            # attend jusqu'à ce que la queue se remplisse
+            # waits until queue is full
             self.my_queue.get(True)
-            # Quand la queue est remplie, le thread passe en état occupé
             self.transmit_is_ready = False
             
-            # définissant le répertoire de sortie
-            # création du dossier de sauvegarde
-            # répertoire racine
+            # Defining save directory
             dataDir = '/home/pi'
-            # nom dossier sauvegarde
             outDir = 'ewee_data'
-            # création du dossier
             newpath = os.path.join(dataDir, outDir)
 
             graphName = 'EweeGraph.svg'
             
-            # Création du graph
+            # Graph creation
             graph.create_graph(
                 self.analogSensors, self.listValueLists,
                 self.timelist, newpath, graphName)
 
-            # Tâche terminée, le thread 2 est prêt
+            # Task finished, now ready
             self.transmit_is_ready = True
 
 
@@ -244,11 +238,11 @@ class AnalogGraphThreads(object):
         """
             Sert à lancer les threads : les crée puis les lance
         """
-        # Création des threads
+        # Threads creation
         self.at = threading.Thread(None, self.threadAnalogData, None)
         self.gt = threading.Thread(None, self.threadGraph, None)
 
-        # Lancement des threads
+        # Threads start
         self.at.start()
         self.gt.start()
 
