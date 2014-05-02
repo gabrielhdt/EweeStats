@@ -63,17 +63,16 @@ class AnalogGraphThreads(object):
             des fichiers et attent que le thread 2 soit prêt pour
             commencer le graph
         """
-        # Init affichage lcd
+        # Init lcd display
         lcd = Adafruit_CharLCDPlate()
         lcd.clear()
 
-        # Booléen indiquant l'état de l'initialisation
-        # pour l'horodatage et le pinselection
+        # Boolean indicating init state, for timestamp and pinselection
         initDone = False
-        # Liste des valeurs
+        # List of values
         valueList = [0.0 for i in range(self.analogSensors)]
 
-        # Init Arduino et iterateur
+        # Init Arduino and iterator
         lcd.message("Connection de \nl'Arduino ...")
         board = Arduino('/dev/ttyACM0')
         lcd.clear()
@@ -83,33 +82,23 @@ class AnalogGraphThreads(object):
         iter8 = util.Iterator(board)
         iter8.start()
 
-        #################################
-        #   CREATION DES FICHIERS   #
-        #################################
-        # Répertoire de sortie
-        # création du dossier de sauvegarde
-        # répertoire racine
+
+        # Creation of the data saving directory
         dataDir = '/home/pi'
-        # nom dossier sauvegarde
         outDir = 'ewee_data'
-        # création du dossier
         newpath = os.path.join(dataDir, outDir)
-        # Si le dossier n'existe pas, le créer
         if not os.path.exists(newpath): os.makedirs(newpath)
 
-        # Création fichier graph
+        # Create graph file and symlink
         graphName = 'EweeGraph.svg'
-        # Si le fichier à la racine web existe, on le supprime
         if os.path.isfile(os.path.join('/var/www', graphName)):
                 os.remove(os.path.join('/var/www', graphName))
-        # Puis on crée le lien
-        os.symlink(os.path.join(newpath, graphName), os.path.join('/var/www', graphName))
+        os.symlink(os.path.join(newpath, graphName),
+                   os.path.join('/var/www', graphName))
 
 
 
-        # Ouvre un fichier par pin analog en écriture nommé data_X
-        # fileList : liste contenant le nom des fichiers
-        # filepath : chemin des fichiers enregistrés
+        # Open one file per sensor
         fileList = []
         for i in range(self.analogSensors):
             filename = "data_{i}".format(i = str(i))
@@ -117,15 +106,14 @@ class AnalogGraphThreads(object):
             file = open(filepath, 'w+')
             fileList.append(file)
 
-        filepath = os.path.join(newpath, "timestamp")   # refait le chemin
-        timeFile = open(filepath, 'w+')                 # créé le fichier
+        filepath = os.path.join(newpath, "timestamp")
+        timeFile = open(filepath, 'w+')
         print(fileList)
         lcd.clear()
         lcd.message("fichiers ouvert")
 
-        #################################
 
-        # Commence l'écoute des ports nécessaires
+        # Start listening ports
         for i in range(self.analogSensors):
             board.analog[i].enable_reporting()
 
@@ -139,74 +127,68 @@ class AnalogGraphThreads(object):
         lcd.clear()
         lcd.message("Debut des \nmesures")
 
-        # initialisation de variables
+        # init some more variables
         displayPin = 0
         timeDisplay = 0
 
-        ###### FIN INIT ########################################################
-        
-        
-        # Boucle principale, continue tant qu'on appuie pas sur SELECT
+    
+        # Main loop
         while lcd.buttonPressed(lcd.SELECT) != 1:
             
-            # Calcul du dernier affichage
+            # Calcule last display time
             timeLastDisplay = time.time() - timeDisplay
             
-            # relève l'état des boutons
+            # Buttons activity
             if timeLastDisplay >= 0.25:
                 displayPin = pinselection.display_selection(
                     self.analogSensors, lcd, displayPin)
 
 
-            #### INIT TIMESTAMP ####
-            if initDone is False:      # Pour n'initialiser qu'une seule fois le timestamp
+            if initDone is False:
                 timestampInit = time.time()
-                initDone = True            # Booléen indiquant que timestampInit a été initialisé
-            #### FIN INIT TIMESTAMP ####
+                initDone = True
 
-            #### CREATION DU TIMESTAMP ####
+
+            # Timestamping
             timestamp = time.time()
             timestamp = timestamp - timestampInit
-            # horodatage en char pour le graph pygal
-            self.timelist.append(str(round(timestamp, 4)))
+            self.timelist.append(str(round(timestamp, 4))) # for pygal
 
-            #### TRAITEMENT DES DONNEES ####
-            # Version en deux boucles :
-            # diminue le décalage de temps entre chaque lecture de données
+            # Data reading
             for i in range(self.analogSensors):
-                valueList[i] = board.analog[i].read()   # lecture et enregistrement dans la liste
+                valueList[i] = board.analog[i].read()
 
-            # Conversion des données
+            # Data converting
             valueList = convert_data.convert(valueList)
-            # Stockage des données dans la liste
+            
+            # Data stocking
             for i in range(self.analogSensors):
                 self.listValueLists[i].append(round(valueList[i], 4))
 
             #print(valueList)    # affiche dans la console les valeurs
 
-            #### GESTION DES THREADS ####
-            # Regarde si le thread 2 est prêt
+            # Thread managing
             if self.transmit_is_ready == True:
-                self.my_queue.put(1)        # s'il est prêt, on met 1 dans la queue
+                self.my_queue.put(1)  # if ready, 1 in the queue
 
-            #### AFFICHAGE DES VALEURS SUR LCD ####
-            if timeLastDisplay >= 0.25:                     # Si le temps excède les 250ms
+            #LCD displaying every 250ms
+            if timeLastDisplay >= 0.25:
                 lcd.clear()
                 lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
                 lcd.message(valueList[displayPin])
-                timeDisplay = time.time()                   # Enregistre le moment d'affichage
+                timeDisplay = time.time() # for the lagging
 
-        #### EXTINCTION ####
-        self.stop = True    # On dit au thread 2 de s'arrêter
+        # Poweroff
+        self.stop = True
         board.exit()
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
-        # écriture fichier texte données
+        # writing text data files
         for i, file in enumerate(fileList):
             for j in self.listValueLists[i]:
                 file.write(str(j))
                 file.write('\n')
-        # écriture fichier texte horodatage
+        # writing timestamp file
         for i in self.timelist:
             timeFile.write(i)
             timeFile.write('\n')
@@ -216,7 +198,8 @@ class AnalogGraphThreads(object):
         timeFile.close()
         lcd.clear()
         lcd.message("Ecriture du\nfichier ODS")
-        ods.write_ods(newpath, self.analogSensors,
+        ods.write_ods(
+            newpath, self.analogSensors,
             self.listValueLists, self.timelist)
         lcd.clear()
 
@@ -248,7 +231,8 @@ class AnalogGraphThreads(object):
             graphName = 'EweeGraph.svg'
             
             # Création du graph
-            graph.create_graph(self.analogSensors, self.listValueLists,
+            graph.create_graph(
+                self.analogSensors, self.listValueLists,
                 self.timelist, newpath, graphName)
 
             # Tâche terminée, le thread 2 est prêt

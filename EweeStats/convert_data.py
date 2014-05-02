@@ -29,7 +29,7 @@ def convert(valueList):
     :rtype: list
     """
 
-    # Config : relie à chaque pin un appareil
+    # Config : links each pin to a sensor type
     sensorList = ['pot', 'pot']
     valueReal = []
     for i in valueList:

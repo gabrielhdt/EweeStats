@@ -24,7 +24,8 @@ import pygal
 import os
 import sys
 
-def create_graph(analogSensors, listValueLists, timelist, dataDir, graphName):
+def create_graph(
+    analogSensors, listValueLists, timelist, dataDir, graphName):
     """
     Création du graphique à l'aide de pygal
     
@@ -46,7 +47,7 @@ def create_graph(analogSensors, listValueLists, timelist, dataDir, graphName):
     :returns: 0
     """
 
-    # Nom du fichier du graphique
+    # Graph file name
     graphTempName = graphName.replace('.svg', '.svg.tmp')
 
     linechart                   = pygal.Line()
@@ -61,10 +62,11 @@ def create_graph(analogSensors, listValueLists, timelist, dataDir, graphName):
     for i in range(analogSensors):
         linechart.add('Pin {p}'.format(p = i), listValueLists[i])
     
-    # Création d'une image temporaire et d'un définitive
-    # car l'image est réeffacée avant chaque création du graph
+    # We're creating a temp graph because pygal removes it when graph
+    #   creation begins
     linechart.render_to_file(os.path.join(dataDir, graphTempName))
-    # image définitive
-    os.rename(os.path.join(dataDir, graphTempName), os.path.join(dataDir, graphName))
+    # Graph to be linked
+    os.rename(os.path.join(dataDir, graphTempName),
+              os.path.join(dataDir, graphName))
     
     return 0

@@ -27,17 +27,18 @@ import string
 
 def write_ods(dataDir, analogSensors, listValueLists, timelist):
     
-    # définit le chemin du fichier
+
     filename = os.path.join(dataDir, 'ewee_data.ods')
     ods = ezodf2.newdoc(doctype = 'ods', filename = '{f}'.format(f = filename))
 
     sheet = ezodf2.Sheet('SHEET', size = (len(timelist), analogSensors + 1))
     ods.sheets += sheet
     
-    # écriture du timestamp
+    # timestamp writing
     for i, elt in enumerate(timelist):
         sheet['A{line}'.format(line = i + 1)].set_value(float(elt))
-        
+    
+    # Data writing
     for i in range(analogSensors):
         for j, elt in enumerate(listValueLists[i]):
             sheet['{letter}{line}'.format(
