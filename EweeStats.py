@@ -25,15 +25,5 @@ import sys
 import EweeStats.__main__
 
 if __name__ == '__main__':
-    #analogSensors = 2
     
-    ## Directory in which we'll save datas
-    #datapath = os.path.join('/home/pi', 'ewee_data')
-    #if not os.path.isdir(datapath):
-        #os.makedirs(datapath)
-    
-    #data2Graph = EweeStats.AnalogGraphThreads.AnalogGraphThreads(
-        #analogSensors,
-        #datapath)
-    #data2Graph.startThreads()
     EweeStats.__main__.main()

@@ -24,7 +24,6 @@ import Queue
 import time
 import os
 import sys
-import pygal
 from pyfirmata import Arduino, util
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import graph
@@ -87,31 +86,7 @@ class AnalogGraphThreads(object):
         iter8 = util.Iterator(board)
         iter8.start()
 
-
-        # Create graph file and symlink
-        #graphName = 'EweeGraph.svg'
-        #if os.path.isfile(os.path.join('/var/www', graphName)):
-                #os.remove(os.path.join('/var/www', graphName))
-        #os.symlink(os.path.join(datapath, graphName),
-                   #os.path.join('/var/www', graphName))
-
-
-
-        ## Open one file per sensor
-        #file_list = []
-        #for i in range(self.analogSensors):
-            #filename = "data_{i}".format(i = str(i))
-            #filepath = os.path.join(datapath, filename)
-            #file = open(filepath, 'w+')
-            #file_list.append(file)
-
-        #filepath = os.path.join(datapath, "timestamp")
-        #timeFile = open(filepath, 'w+')
-        #print(self.file_list)
-        #lcd.clear()
-        #lcd.message("fichiers ouvert")
-
-
+        
         # Start listening ports
         for i in range(self.analogSensors):
             board.analog[i].enable_reporting()
