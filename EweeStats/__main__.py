@@ -37,7 +37,7 @@ def main():
         analogSensors, datapath)
 
     # Create threads
-    data2Graph = EweeStats.AnalogGraphThreads.AnalogGraphThreads(
+    data2Graph = AnalogGraphThreads.AnalogGraphThreads(
         analogSensors, file_list, time_file, graph_name, datapath)
     data2Graph.startThreads()
     

@@ -20,7 +20,8 @@
 #
 #
 
-
+import os
+import sys
 
 def create_files(datapath):
     """
@@ -65,8 +66,6 @@ def open_files(analogSensors, datapath):
     filepath = os.path.join(datapath, 'timestamp')
     time_file = open(filepath, 'w+')
     print(file_list)
-    lcd.clear()
-    lcd.message("fichiers ouverts")
     
     return file_list, time_file
 

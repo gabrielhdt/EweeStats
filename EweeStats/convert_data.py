@@ -30,12 +30,12 @@ def convert(value_list):
     """
 
     # Config : links each pin to a sensor type
-    sensorList = ['pot', 'pot']
-    valueReal = []
+    sensor_list = ['pot', 'pot']
+    value_real = []
     for i in value_list:
         value_real.append(0.0)
 
-    for i, elt in enumerate(sensorList):
+    for i, elt in enumerate(sensor_list):
         if elt == 'pot':
             convert_pot(i, value_list, value_real)
 

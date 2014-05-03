@@ -199,7 +199,7 @@ class AnalogGraphThreads(object):
         lcd.clear()
         lcd.message("Ecriture du\nfichier ODS")
         ods.write_ods(
-            datapath, self.analogSensors,
+            self.datapath, self.analogSensors,
             self.listValueLists, self.timelist)
         lcd.clear()
 

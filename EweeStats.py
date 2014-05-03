@@ -22,7 +22,7 @@
 
 import os
 import sys
-import EweeStats
+import EweeStats.__main__
 
 if __name__ == '__main__':
     #analogSensors = 2
@@ -36,4 +36,4 @@ if __name__ == '__main__':
         #analogSensors,
         #datapath)
     #data2Graph.startThreads()
-    EweeStats
+    EweeStats.__main__.main()
