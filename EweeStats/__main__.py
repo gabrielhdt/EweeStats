@@ -1,10 +1,10 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
-#  EweeStats.py
+#  __main__.py
 #  
 #  Copyright 2014 Gabriel Hondet <gabrielhondet@gmail.com>
-#
+#  
 #  This program is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -22,18 +22,28 @@
 
 import os
 import sys
-import EweeStats
+import create_files
+import AnalogGraphThreads
+
+
+def main():
+    
+    datapath = os.path.join('/home/pi', 'ewee_data')
+    
+    # Create files and open
+    analogSensors = 2
+    graph_name = create_files.create_files(datapath)
+    file_list, time_file = create_files.open_files(
+        analogSensors, datapath)
+
+    # Create threads
+    data2Graph = EweeStats.AnalogGraphThreads.AnalogGraphThreads(
+        analogSensors, file_list, time_file, graph_name, datapath)
+    data2Graph.startThreads()
+    
+    
+    return 0
 
 if __name__ == '__main__':
-    #analogSensors = 2
-    
-    ## Directory in which we'll save datas
-    #datapath = os.path.join('/home/pi', 'ewee_data')
-    #if not os.path.isdir(datapath):
-        #os.makedirs(datapath)
-    
-    #data2Graph = EweeStats.AnalogGraphThreads.AnalogGraphThreads(
-        #analogSensors,
-        #datapath)
-    #data2Graph.startThreads()
-    EweeStats
+    main()
+

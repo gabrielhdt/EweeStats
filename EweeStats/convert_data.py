@@ -20,10 +20,10 @@
 #
 #
 
-def convert(valueList):
+def convert(value_list):
     """
-    :param valueList: liste des valeurs relevées
-    :type valueList: list
+    :param value_list: liste des valeurs relevées
+    :type value_list: list
 
     :returns: converted datas
     :rtype: list
@@ -32,16 +32,16 @@ def convert(valueList):
     # Config : links each pin to a sensor type
     sensorList = ['pot', 'pot']
     valueReal = []
-    for i in valueList:
-        valueReal.append(0.0)
+    for i in value_list:
+        value_real.append(0.0)
 
     for i, elt in enumerate(sensorList):
         if elt == 'pot':
-            convert_pot(i, valueList, valueReal)
+            convert_pot(i, value_list, value_real)
 
-    return valueReal
+    return value_real
 
-def convert_pot(pinToPot, valueList, valueReal):
+def convert_pot(pinToPot, value_list, value_real):
     """
     :param pinToPot: numéro du pin relié au potentiomètre
     :type pinToPot: integer
@@ -55,7 +55,7 @@ def convert_pot(pinToPot, valueList, valueReal):
     :returns: nombre converti à la case du numéro du pin
     :rtype: integer
     """
-    valueReal[pinToPot] = valueList[pinToPot] * 5
+    value_real[pinToPot] = value_list[pinToPot] * 5
 
-    return valueReal
+    return value_real
 

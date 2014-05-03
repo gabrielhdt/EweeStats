@@ -31,7 +31,6 @@ import graph
 import pinselection
 import ods
 import convert_data
-import itertools
 
 
 class AnalogGraphThreads(object):
@@ -40,7 +39,9 @@ class AnalogGraphThreads(object):
         et de création du graph
     """
 
-    def __init__(self, analogSensors):
+    def __init__(
+        self, analogSensors, file_list, time_file, graph_name,
+        datapath):
         """
         Constructeur de la classe : va créer transmit_is_ready
         pour contrôler l'état des threads et créer une queue d'un
@@ -56,6 +57,10 @@ class AnalogGraphThreads(object):
         
         self.listValueLists = [[] for i in range(analogSensors)]
         self.timelist = []
+        self.file_list = file_list
+        self.time_file = time_file
+        self.graph_name = graph_name
+        self.datapath = datapath
 
     def threadAnalogData(self):
         """
@@ -70,7 +75,7 @@ class AnalogGraphThreads(object):
         # Boolean indicating init state, for timestamp and pinselection
         initDone = False
         # List of values
-        valueList = [0.0 for i in range(self.analogSensors)]
+        value_list = [0.0 for i in range(self.analogSensors)]
 
         # Init Arduino and iterator
         lcd.message("Connection de \nl'Arduino ...")
@@ -83,34 +88,28 @@ class AnalogGraphThreads(object):
         iter8.start()
 
 
-        # Creation of the data saving directory
-        dataDir = '/home/pi'
-        outDir = 'ewee_data'
-        newpath = os.path.join(dataDir, outDir)
-        if not os.path.exists(newpath): os.makedirs(newpath)
-
         # Create graph file and symlink
-        graphName = 'EweeGraph.svg'
-        if os.path.isfile(os.path.join('/var/www', graphName)):
-                os.remove(os.path.join('/var/www', graphName))
-        os.symlink(os.path.join(newpath, graphName),
-                   os.path.join('/var/www', graphName))
+        #graphName = 'EweeGraph.svg'
+        #if os.path.isfile(os.path.join('/var/www', graphName)):
+                #os.remove(os.path.join('/var/www', graphName))
+        #os.symlink(os.path.join(datapath, graphName),
+                   #os.path.join('/var/www', graphName))
 
 
 
-        # Open one file per sensor
-        fileList = []
-        for i in range(self.analogSensors):
-            filename = "data_{i}".format(i = str(i))
-            filepath = os.path.join(newpath, filename)
-            file = open(filepath, 'w+')
-            fileList.append(file)
+        ## Open one file per sensor
+        #file_list = []
+        #for i in range(self.analogSensors):
+            #filename = "data_{i}".format(i = str(i))
+            #filepath = os.path.join(datapath, filename)
+            #file = open(filepath, 'w+')
+            #file_list.append(file)
 
-        filepath = os.path.join(newpath, "timestamp")
-        timeFile = open(filepath, 'w+')
-        print(fileList)
-        lcd.clear()
-        lcd.message("fichiers ouvert")
+        #filepath = os.path.join(datapath, "timestamp")
+        #timeFile = open(filepath, 'w+')
+        #print(self.file_list)
+        #lcd.clear()
+        #lcd.message("fichiers ouvert")
 
 
         # Start listening ports
@@ -121,9 +120,10 @@ class AnalogGraphThreads(object):
         # Wait for a valid value to avoid None
         start = time.time()
         while board.analog[0].read() is None:
-                print "nothing after {t}".format(t = time.time() - start)
+                print("nothing after {t}".format(
+                    t = time.time() - start))
 
-        print "first val after {t}".format(t = time.time() - start)
+        print("first val after {t}".format(t = time.time() - start))
         lcd.clear()
         lcd.message("Debut des \nmesures")
 
@@ -156,16 +156,16 @@ class AnalogGraphThreads(object):
 
             # Data reading
             for i in range(self.analogSensors):
-                valueList[i] = board.analog[i].read()
+                value_list[i] = board.analog[i].read()
 
             # Data converting
-            valueList = convert_data.convert(valueList)
+            value_list = convert_data.convert(value_list)
             
             # Data stocking
             for i in range(self.analogSensors):
-                self.listValueLists[i].append(round(valueList[i], 4))
+                self.listValueLists[i].append(round(value_list[i], 4))
 
-            #print(valueList)    # affiche dans la console les valeurs
+            #print(value_list)    # affiche dans la console les valeurs
 
             # Thread managing
             if self.transmit_is_ready == True:
@@ -175,8 +175,8 @@ class AnalogGraphThreads(object):
             if timeLastDisplay >= 0.25:
                 lcd.clear()
                 lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
-                lcd.message(valueList[displayPin])
-                timeDisplay = time.time() # for the lagging
+                lcd.message(value_list[displayPin])
+                timeDisplay = time.time() # for lagging
 
         # Poweroff
         self.stop = True
@@ -184,22 +184,22 @@ class AnalogGraphThreads(object):
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
-        for i, file in enumerate(fileList):
+        for i, file in enumerate(self.file_list):
             for j in self.listValueLists[i]:
                 file.write(str(j))
                 file.write('\n')
         # writing timestamp file
         for i in self.timelist:
-            timeFile.write(i)
-            timeFile.write('\n')
+            self.time_file.write(i)
+            self.time_file.write('\n')
 
-        for fi in fileList:
-            fi.close()
-        timeFile.close()
+        for i in self.file_list:
+            i.close()
+        self.time_file.close()
         lcd.clear()
         lcd.message("Ecriture du\nfichier ODS")
         ods.write_ods(
-            newpath, self.analogSensors,
+            datapath, self.analogSensors,
             self.listValueLists, self.timelist)
         lcd.clear()
 
@@ -217,17 +217,10 @@ class AnalogGraphThreads(object):
             self.my_queue.get(True)
             self.transmit_is_ready = False
             
-            # Defining save directory
-            dataDir = '/home/pi'
-            outDir = 'ewee_data'
-            newpath = os.path.join(dataDir, outDir)
-
-            graphName = 'EweeGraph.svg'
-            
             # Graph creation
             graph.create_graph(
                 self.analogSensors, self.listValueLists,
-                self.timelist, newpath, graphName)
+                self.timelist, self.datapath, self.graph_name)
 
             # Task finished, now ready
             self.transmit_is_ready = True
