@@ -34,7 +34,7 @@ with open('CHANGES') as c:
 
 setup(
     name='EweeStats',
-    version='0.0-alpha1',
+    version='0.0-alpha.2',
     description='Program to read, process, present and broadcast datas from sensors',
     author='Gabriel Hondet',
     author_email="gabrielhondet@gmail.com",

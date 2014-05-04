@@ -12,7 +12,7 @@ import os
 import sys
 import imp
 
-__version__ = '0.0'
+__version__ = '0.0-alpha.2'
 
 #Check python version
 if sys.version_info[:2] < (2, 7):

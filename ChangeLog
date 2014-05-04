@@ -1,3 +1,14 @@
+2014-05-04 Gabriel Hondet <gabrielhondet@gmail.com>
+
+	* config file reading
+	* conf file in /etc/eweestats
+
+2014-05-01 Gabriel Hondet <gabrielhondet@gmail.com>
+
+	* performance enhancements
+	* dependance checking
+	* code cleaned, PEP 8 compliancy improve
+
 2014-04-30 Gabriel Hondet <gabrielhondet@gmail.com>
 
 	* graph is now in /home/pi/ewee_data, renamed EweeGraph.svg
