@@ -29,8 +29,7 @@ import readconfig
 
 def main():
     
-    analogSensors, sensor_dict, datapath, graph_name = 
-        readconfig.read_config()
+    analogSensors, sensor_dict, datapath, graph_name = readconfig.read_config()
     
     # Create files and open
     file_list, time_file = create_files.open_files(
