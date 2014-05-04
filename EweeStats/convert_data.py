@@ -30,7 +30,7 @@ def convert(value_list):
     """
 
     # Config : links each pin to a sensor type
-    sensor_list = ['pot', 'pot']
+    sensor_list = ['pot', 'coder']
     value_real = []
     for i in value_list:
         value_real.append(0.0)
@@ -38,6 +38,8 @@ def convert(value_list):
     for i, elt in enumerate(sensor_list):
         if elt == 'pot':
             convert_pot(i, value_list, value_real)
+        elif elt == 'coder':
+            convert_coder(i, value_list, value_real)
 
     return value_real
 
@@ -58,4 +60,10 @@ def convert_pot(pinToPot, value_list, value_real):
     value_real[pinToPot] = value_list[pinToPot] * 5
 
     return value_real
+
+def convert_coder(pin_to_code, value_list, value_real):
+    """
+    :returns: translational speed
+    :rtype: float
+    """
 
