@@ -46,6 +46,6 @@ setup(
     include_package_data=True,
     install_requires=['pyFirmata', 'pygal', 'pyserial', 'lxml', 'ezodf2'],
     scripts=['EweeStats.py'],
-    data_file=[('/etc/eweestats', ['cfg/eweestats.conf']),
-               ('/etc/init.d', ['eweestats']),
+    data_files=[('/etc/eweestats', ['cfg/eweestats.conf']),
+                ('/etc/init.d', ['eweestats'])],
     )
