@@ -29,10 +29,12 @@ def read_config():
     Reads configuration file to set up sensors
     """
     conf_file = os.path.join(
-        '/home/gabriel/.config/eweestats', 'eweestats.conf')
+        '/etc/eweestats', 'eweestats.conf')
     
     if not os.path.isfile(conf_file):
         raise NameError('no configuration file')
+        with open(conf_file, 'w+') as c:
+            
         sys.exit()
     
     sensor_dict = {}

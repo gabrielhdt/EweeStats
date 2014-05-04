@@ -34,15 +34,18 @@ with open('CHANGES') as c:
 
 setup(
     name='EweeStats',
-    version='0.0',
+    version='0.0-alpha1',
     description='Program to read, process, present and broadcast datas from sensors',
     author='Gabriel Hondet',
     author_email="gabrielhondet@gmail.com",
     license='GPL 3',
     url='https://github.com/gabrielhdt/github',
     long_description=long_description + changes,
-    platforms="GNU/Linux",
+    platforms='POSIX',
     packages=['EweeStats'],
     include_package_data=True,
     install_requires=['pyFirmata', 'pygal', 'pyserial', 'lxml', 'ezodf2'],
+    scripts=['EweeStats.py'],
+    data_file=[('/etc/eweestats', ['cfg/eweestats.conf']),
+               ('/etc/init.d', ['eweestats']),
     )
