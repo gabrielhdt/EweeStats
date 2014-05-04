@@ -52,7 +52,8 @@ def read_config():
                 save_dir = part[2]
             elif re.match(r'^graphname', part[0]) is not None:
                 graph_name = part[2]
-                
+    
+    graph_name = os.path.join(save_dir, graph_name)
     print(analogSensors)
     print(sensor_dict)
     print(save_dir)

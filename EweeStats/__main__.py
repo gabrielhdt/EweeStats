@@ -33,7 +33,6 @@ def main():
         readconfig.read_config()
     
     # Create files and open
-    graph_name = create_files.create_files(datapath)
     file_list, time_file = create_files.open_files(
         analogSensors, datapath)
 
