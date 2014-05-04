@@ -23,7 +23,7 @@
 import os
 import sys
 
-def create_files(datapath):
+def create_files(datapath, graph_name):
     """
     :returns: graphname
     :rtype: string
@@ -34,16 +34,12 @@ def create_files(datapath):
         os.makedirs(datapath)
     
     # Create graph symlink
-    graph_name = 'EweeGraph.svg'
     web_root = '/var/www'
     if os.path.isfile(os.path.join(web_root, graph_name)):
                 os.remove(os.path.join(web_root, graph_name))
     os.symlink(os.path.join(datapath, graph_name),
                os.path.join(web_root, graph_name))
 
-    
-    return graph_name
-    
 def open_files(analogSensors, datapath):
     """
     :param analogSensors: number of sensors wired

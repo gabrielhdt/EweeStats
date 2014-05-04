@@ -48,11 +48,17 @@ def read_config():
             elif re.match(r'^A[0-9]{1,2}$', part[0]) is not None:
                 pin_number = part[0].replace('A', '')
                 sensor_dict[pin_number] = part[2]
+            elif re.match(r'^savedir', part[0]) is not None:
+                save_dir = part[2]
+            elif re.match(r'^graphname', part[0]) is not None:
+                graph_name = part[2]
                 
     print(analogSensors)
     print(sensor_dict)
+    print(save_dir)
+    print(graph_name)
     
-    return analogSensors, sensor_dict
+    return analogSensors, sensor_dict, save_dir, graph_name
 
     
 if __name__ == '__main__':

@@ -29,8 +29,8 @@ import readconfig
 
 def main():
     
-    analogSensors, sensor_dict = readconfig.read_config()
-    datapath = os.path.join('/home/pi', 'ewee_data')
+    analogSensors, sensor_dict, datapath, graph_name = 
+        readconfig.read_config()
     
     # Create files and open
     graph_name = create_files.create_files(datapath)
