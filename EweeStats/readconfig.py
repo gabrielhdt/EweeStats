@@ -19,7 +19,43 @@
 #
 #
 
+import os
+import sys
+import re
+import shlex
+
 def read_config():
     """
     Reads configuration file to set up sensors
     """
+    conf_file = os.path.join(
+        '/home/gabriel/.config/eweestats', 'eweestats.conf')
+    
+    if not os.path.isfile(conf_file):
+        raise NameError('no configuration file')
+        sys.exit()
+    
+    sensor_dict = {}
+    
+    with open(conf_file, 'r') as c:
+        for line in c:
+            part = shlex.split(line, True)
+            if part == []:
+                continue
+            print(part)
+            if re.search(r'sensors', part[0]) is not None:
+                analogSensors = int(part[2])
+            elif re.match(r'^A[0-9]{1,2}$', part[0]) is not None:
+                pin_number = part[0].replace('A', '')
+                sensor_dict[pin_number] = part[2]
+                
+    print(analogSensors)
+    print(sensor_dict)
+    
+    return analogSensors, sensor_dict
+
+    
+if __name__ == '__main__':
+    read_config()
+
+    

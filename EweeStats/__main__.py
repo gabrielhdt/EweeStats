@@ -24,14 +24,15 @@ import os
 import sys
 import create_files
 import AnalogGraphThreads
+import readconfig
 
 
 def main():
     
+    analogSensors, sensor_dict = readconfig.read_config()
     datapath = os.path.join('/home/pi', 'ewee_data')
     
     # Create files and open
-    analogSensors = 2
     graph_name = create_files.create_files(datapath)
     file_list, time_file = create_files.open_files(
         analogSensors, datapath)
