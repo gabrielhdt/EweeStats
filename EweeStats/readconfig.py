@@ -33,8 +33,6 @@ def read_config():
     
     if not os.path.isfile(conf_file):
         raise NameError('no configuration file')
-        with open(conf_file, 'w+') as c:
-            
         sys.exit()
     
     sensor_dict = {}
