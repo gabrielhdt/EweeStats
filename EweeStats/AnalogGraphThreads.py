@@ -30,7 +30,7 @@ import graph
 import pinselection
 import ods
 import convert_data
-
+import clean_list
 
 class AnalogGraphThreads(object):
     """
@@ -60,6 +60,8 @@ class AnalogGraphThreads(object):
         self.time_file = time_file
         self.graph_name = graph_name
         self.datapath = datapath
+        # Count how many times memory has been cleaned
+        self.count_mem_clean = 0
 
     def threadAnalogData(self):
         """
@@ -152,6 +154,10 @@ class AnalogGraphThreads(object):
                 lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
                 lcd.message(value_list[displayPin])
                 timeDisplay = time.time() # for lagging
+            
+            # Clean memory, reset list if superior to 200MB
+            if sys.getsize(self.listValueLists) > 200e6:
+                clean_list.free_memory(self.listValueLists)
 
         # Poweroff
         self.stop = True
@@ -199,8 +205,17 @@ class AnalogGraphThreads(object):
 
             # Task finished, now ready
             self.transmit_is_ready = True
-
-
+    
+    def thread_clean_mem(self):
+        """
+        Clean memory if list too big
+        """
+        while not self.stop:
+            clean_list.free_memory(
+                self.listValueLists, self.timelist,
+                self.file_list, self.time_file)
+    
+    
 
     def startThreads(self):
         """
