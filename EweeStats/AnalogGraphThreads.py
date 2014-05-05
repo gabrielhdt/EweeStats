@@ -30,6 +30,7 @@ import graph
 import pinselection
 import ods
 import convert_data
+from PyMata.pymata import PyMata
 
 
 class AnalogGraphThreads(object):
@@ -78,23 +79,20 @@ class AnalogGraphThreads(object):
 
         # Init Arduino and iterator
         lcd.message("Connection de \nl'Arduino ...")
-        board = Arduino('/dev/ttyACM0')
+        board = PyMata('/dev/ttyACM0')
         lcd.clear()
         print('Arduino connected')
         lcd.message("Arduino connecte !")
-        # Création itérateur
-        iter8 = util.Iterator(board)
-        iter8.start()
 
         
         # Start listening ports
         for i in range(self.analogSensors):
-            board.analog[i].enable_reporting()
+            board.set_pin_mode(i, board.INPUT, board.ANALOG)
 
 
         # Wait for a valid value to avoid None
         start = time.time()
-        while board.analog[0].read() is None:
+        while board.analog_read(0) is None:
                 print("nothing after {t}".format(
                     t = time.time() - start))
 
@@ -131,7 +129,7 @@ class AnalogGraphThreads(object):
 
             # Data reading
             for i in range(self.analogSensors):
-                value_list[i] = board.analog[i].read()
+                value_list[i] = board.analog_read(i)
 
             # Data converting
             value_list = convert_data.convert(value_list)
