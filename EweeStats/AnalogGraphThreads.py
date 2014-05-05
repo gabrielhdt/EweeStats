@@ -153,7 +153,7 @@ class AnalogGraphThreads(object):
 
         # Poweroff
         self.stop = True
-        board.exit()
+        board.close()
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
