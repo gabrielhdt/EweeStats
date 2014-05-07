@@ -29,7 +29,7 @@ import readconfig
 
 def main():
     
-    analogSensors, sensor_dict, datapath, graph_name = readconfig.read_config()
+    analogSensors, sensor_id_list, datapath, graph_name = readconfig.read_config()
     
     # Create files and open
     file_list, time_file = create_files.open_files(
@@ -37,7 +37,8 @@ def main():
 
     # Create threads
     data2Graph = AnalogGraphThreads.AnalogGraphThreads(
-        analogSensors, file_list, time_file, graph_name, datapath)
+        analogSensors, file_list, time_file, graph_name, datapath,
+        sensor_id_list)
     data2Graph.startThreads()
     
     

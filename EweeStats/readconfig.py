@@ -35,7 +35,6 @@ def read_config():
         raise NameError('no configuration file')
         sys.exit()
     
-    sensor_dict = {}
     
     with open(conf_file, 'r') as c:
         for line in c:
@@ -45,9 +44,10 @@ def read_config():
             print(part)
             if re.search(r'sensors', part[0]) is not None:
                 analogSensors = int(part[2])
+                sensor_id_list = [0 for i in range(analogSensors)]
             elif re.match(r'^A[0-9]{1,2}$', part[0]) is not None:
-                pin_number = part[0].replace('A', '')
-                sensor_dict[pin_number] = part[2]
+                pin_number = int(part[0].replace('A', ''))
+                sensor_id_list[pin_number] = part[2]
             elif re.match(r'^savedir', part[0]) is not None:
                 save_dir = part[2]
             elif re.match(r'^graphname', part[0]) is not None:
@@ -55,11 +55,11 @@ def read_config():
     
     graph_name = os.path.join(save_dir, graph_name)
     print(analogSensors)
-    print(sensor_dict)
+    print(sensor_id_list)
     print(save_dir)
     print(graph_name)
     
-    return analogSensors, sensor_dict, save_dir, graph_name
+    return analogSensors, sensor_id_list, save_dir, graph_name
 
     
 if __name__ == '__main__':

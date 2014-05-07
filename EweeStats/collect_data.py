@@ -1,7 +1,6 @@
-#!/usr/bin/env python2
 # -*- coding: utf-8 -*-
 #
-#  convert_data.py
+#  collect_data.py
 #  
 #  Copyright 2014 Gabriel Hondet <gabrielhondet@gmail.com>
 #  
@@ -20,30 +19,37 @@
 #
 #
 
-def convert(value_list):
+def collecting(
+    board, sensor_id_list, analogSensors, value_list_instant):
     """
-    :param value_list: liste des valeurs relevées
-    :type value_list: list
-
-    :returns: converted datas
-    :rtype: list
+    :param board: object Arduino
+    :type board: Arduino class
+    
+    :param sensor_dict: dictionnary containing sensors type
+    :type sensor_dict: dict
     """
-
-    # Config : links each pin to a sensor type
-    sensor_list = ['pot', 'coder']
-    value_real = []
-    for i in value_list:
-        value_real.append(0.0)
-
-    for i, elt in enumerate(sensor_list):
+    value_list_instant = [0.0 for i in range(analogSensors)]
+    values_converted_instant = value_list_instant
+    
+    for i in range(analogSensors):
+        value_list_instant[i] = board.analog[i].read()
+    
+    for i, elt in sensor_id_list:
         if elt == 'pot':
-            convert_pot(i, value_list, value_real)
+            values_converted_instant[i] = pot(value_list_instant, i)
         elif elt == 'coder':
-            convert_coder(i, value_list, value_real)
+            pass
+        elif elt == 'accelerometer':
+            pass
+        elif elt == 'gyr':
+            pass
+        else:
+            values_converted_instant[i] = value_list_instant[i]
+    
+    return values_converted_instant
 
-    return value_real
 
-def convert_pot(pinToPot, value_list, value_real):
+def pot(value_list_instant, pin_to_pot):
     """
     :param pinToPot: numéro du pin relié au potentiomètre
     :type pinToPot: integer
@@ -57,9 +63,9 @@ def convert_pot(pinToPot, value_list, value_real):
     :returns: nombre converti à la case du numéro du pin
     :rtype: integer
     """
-    value_real[pinToPot] = value_list[pinToPot] * 5
+    value_converted = value_list_instant[pin_to_pot] * 5
 
-    return value_real
+    return value_converted
 
 def convert_coder(pin_to_code, value_list, value_real):
     """

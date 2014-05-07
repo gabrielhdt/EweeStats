@@ -29,7 +29,7 @@ from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import graph
 import pinselection
 import ods
-import convert_data
+import collect_data
 
 
 class AnalogGraphThreads(object):
@@ -40,7 +40,7 @@ class AnalogGraphThreads(object):
 
     def __init__(
         self, analogSensors, file_list, time_file, graph_name,
-        datapath):
+        datapath, sensor_id_list):
         """
         Constructeur de la classe : va créer transmit_is_ready
         pour contrôler l'état des threads et créer une queue d'un
@@ -54,12 +54,13 @@ class AnalogGraphThreads(object):
         self.stop = False
         self.analogSensors = analogSensors
         
-        self.listValueLists = [[] for i in range(analogSensors)]
+        self.all_values = [[] for i in range(analogSensors)]
         self.timelist = []
         self.file_list = file_list
         self.time_file = time_file
         self.graph_name = graph_name
         self.datapath = datapath
+        self.sensor_id_list = sensor_id_list
 
     def threadAnalogData(self):
         """
@@ -73,8 +74,6 @@ class AnalogGraphThreads(object):
 
         # Boolean indicating init state, for timestamp and pinselection
         initDone = False
-        # List of values
-        value_list = [0.0 for i in range(self.analogSensors)]
 
         # Init Arduino and iterator
         lcd.message("Connection de \nl'Arduino ...")
@@ -118,7 +117,7 @@ class AnalogGraphThreads(object):
                 displayPin = pinselection.display_selection(
                     self.analogSensors, lcd, displayPin)
 
-
+            # Executed once
             if not initDone:
                 timestampInit = time.time()
                 initDone = True
@@ -128,19 +127,17 @@ class AnalogGraphThreads(object):
             timestamp = time.time()
             timestamp = timestamp - timestampInit
             self.timelist.append(str(round(timestamp, 4))) # for pygal
-
-            # Data reading
-            for i in range(self.analogSensors):
-                value_list[i] = board.analog[i].read()
-
-            # Data converting
-            value_list = convert_data.convert(value_list)
+            
+            # Data reading and converting
+            values_converted_instant = collect_data.collecting(
+                board, self.sensor_id_list, self.analogSensors)
             
             # Data stocking
             for i in range(self.analogSensors):
-                self.listValueLists[i].append(round(value_list[i], 4))
+                self.all_values[i].append(
+                    round(values_converted_instant[i], 4))
 
-            #print(value_list)    # affiche dans la console les valeurs
+            #print(value_list_instant)    # affiche dans la console les valeurs
 
             # Thread managing
             if self.transmit_is_ready == True:
@@ -150,7 +147,7 @@ class AnalogGraphThreads(object):
             if timeLastDisplay >= 0.25:
                 lcd.clear()
                 lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
-                lcd.message(value_list[displayPin])
+                lcd.message(values_converted_instant[displayPin])
                 timeDisplay = time.time() # for lagging
 
         # Poweroff
@@ -160,7 +157,7 @@ class AnalogGraphThreads(object):
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
         for i, file in enumerate(self.file_list):
-            for j in self.listValueLists[i]:
+            for j in self.all_values[i]:
                 file.write(str(j))
                 file.write('\n')
         # writing timestamp file
@@ -182,9 +179,7 @@ class AnalogGraphThreads(object):
             lcd.message("Ecriture du\nfichier ODS")
             ods.write_ods(
                 self.datapath, self.analogSensors,
-                self.listValueLists, self.timelist)
-#        elif lcd.buttonPressed(lcd.RIGHT):
-#            pass
+                self.all_values, self.timelist)
         lcd.clear()
 
 
@@ -203,7 +198,7 @@ class AnalogGraphThreads(object):
             
             # Graph creation
             graph.create_graph(
-                self.analogSensors, self.listValueLists,
+                self.analogSensors, self.all_values,
                 self.timelist, self.datapath, self.graph_name)
 
             # Task finished, now ready
