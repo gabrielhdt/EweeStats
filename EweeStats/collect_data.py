@@ -20,7 +20,7 @@
 #
 
 def collecting(
-    board, sensor_id_list, analogSensors, value_list_instant):
+    board, sensor_id_list, analogSensors):
     """
     :param board: object Arduino
     :type board: Arduino class
@@ -34,7 +34,7 @@ def collecting(
     for i in range(analogSensors):
         value_list_instant[i] = board.analog[i].read()
     
-    for i, elt in sensor_id_list:
+    for i, elt in enumerate(sensor_id_list):
         if elt == 'pot':
             values_converted_instant[i] = pot(value_list_instant, i)
         elif elt == 'coder':
