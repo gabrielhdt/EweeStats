@@ -172,10 +172,14 @@ class AnalogGraphThreads(object):
             i.close()
         self.time_file.close()
         lcd.clear()
-        lcd.message("Ecriture du\nfichier ODS")
-        ods.write_ods(
-            self.datapath, self.analogSensors,
-            self.listValueLists, self.timelist)
+        lcd.message('Ecrire ODS ?')
+        lcd.clean()
+        lcd.message('\nOui          Non')
+        if lcd.buttonPressed(lcd.LEFT):
+            lcd.message("Ecriture du\nfichier ODS")
+            ods.write_ods(
+                self.datapath, self.analogSensors,
+                self.listValueLists, self.timelist)
         lcd.clear()
 
 
