@@ -222,7 +222,7 @@ class AnalogGraphThreads(object):
         while not self.stop:
             self.queue_clean.get(True)
             clean_list.free_memory(
-                self.listValueLists, self.timelist,
+                self.all_values, self.timelist,
                 self.file_list, self.time_file)
     
     
