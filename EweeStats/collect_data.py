@@ -49,7 +49,7 @@ def collecting(
     return values_converted_instant
 
 
-def pot(value_list_instant, pin_to_pot):
+def pot(value_list_instant, pin_pot):
     """
     :param pinToPot: numéro du pin relié au potentiomètre
     :type pinToPot: integer
@@ -63,13 +63,32 @@ def pot(value_list_instant, pin_to_pot):
     :returns: nombre converti à la case du numéro du pin
     :rtype: integer
     """
-    value_converted = value_list_instant[pin_to_pot] * 5
+    value_converted = value_list_instant[pin_pot] * 5
 
     return value_converted
 
-def convert_coder(pin_to_code, value_list, value_real):
+def coder(value_list_instant, pin_coder):
     """
     :returns: translational speed
     :rtype: float
     """
+    pass
+    
+def digital_through_analog(pin):
+    """
+    As digital read doesn't work, we need to use analogue pins
+    
+    :param pin: number of the pin reading
+    :type pin: integer
+    
+    :returns: bit
+    :rtype: boolean
+    """
+    if board.analog[pin].read() < 0.5:
+        return 0
+    elif board.analog[pin].read() >= 0.5:
+        return 1
+    else:
+        return 0
+
 
