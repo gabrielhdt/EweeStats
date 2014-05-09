@@ -1,0 +1,8 @@
+TODO
+====
+
+* Intégrer les programmes de calibration
+* Si la liste devient trop grande pour la mémoire on écrit les fichiers et on réinitialise les données. avec sys.getsizeof(liste)
+* Ajouter une option ou un fichier de conf pour définir où enregistrer les données.
+* Ajouter la possibilité de sauvegarder les données en les renommant data_0.log.0 par ex.
+* Gérer l'installation des scripts et autres avec le setup.py
