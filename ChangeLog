@@ -1,3 +1,12 @@
+2014-05-09 Gabriel Hondet <gabrielhondet@gmail.com>
+
+	* merged collect_data to master
+
+2014-05-07 Gabriel Hondet <gabrielhondet@gmail.com>
+
+    * choice to write or not the ods file
+    * datas read and converted in another program, clearer
+
 2014-05-04 Gabriel Hondet <gabrielhondet@gmail.com>
 
 	* config file reading
