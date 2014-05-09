@@ -51,6 +51,7 @@ class AnalogGraphThreads(object):
 
         self.transmit_is_ready = True
         self.my_queue = Queue.Queue(maxsize=1)
+        self.queue_clean = Queue.Queue(maxsize=1)
         self.stop = False
         self.analogSensors = analogSensors
         
@@ -156,8 +157,11 @@ class AnalogGraphThreads(object):
                 timeDisplay = time.time() # for lagging
             
             # Clean memory, reset list if superior to 200MB
-            if sys.getsize(self.listValueLists) > 200e6:
-                clean_list.free_memory(self.listValueLists)
+            #if sys.getsizeof(self.listValueLists) > 200e6:
+                #self.queue_clean.put(1)
+            # Clean memory every 2 min
+            if float(self.timelist[-1]) >= 120:
+                self.queue_clean.put(1)
 
         # Poweroff
         self.stop = True
@@ -211,6 +215,7 @@ class AnalogGraphThreads(object):
         Clean memory if list too big
         """
         while not self.stop:
+            self.queue_clean.get(True)
             clean_list.free_memory(
                 self.listValueLists, self.timelist,
                 self.file_list, self.time_file)
@@ -224,8 +229,10 @@ class AnalogGraphThreads(object):
         # Threads creation
         self.at = threading.Thread(None, self.threadAnalogData, None)
         self.gt = threading.Thread(None, self.threadGraph, None)
+        self.cmt = threading.Thread(None, self.thread_clean_mem, None)
 
         # Threads start
         self.at.start()
         self.gt.start()
+        self.cmt.start()
 
