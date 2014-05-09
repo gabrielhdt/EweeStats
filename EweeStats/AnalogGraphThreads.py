@@ -30,6 +30,7 @@ import graph
 import pinselection
 import ods
 import collect_data
+import clean_list
 
 
 class AnalogGraphThreads(object):
