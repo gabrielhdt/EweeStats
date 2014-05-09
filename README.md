@@ -19,7 +19,7 @@ Material required
 This program is designed to work with :
 
 * a portable computer (Raspberry Pi ideally, has to be embedded in the vehicle)
-* an Arduino (embedded to)
+* an Arduino (embedded too)
 * (optionnally) an Adafruit CharLCDPlate (you might want to change the code if you consider not using it)
 * a LAN to view the graph
 
