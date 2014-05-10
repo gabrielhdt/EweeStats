@@ -51,8 +51,9 @@ class AnalogGraphThreads(object):
         """
 
         self.transmit_is_ready = True
-        self.my_queue = Queue.Queue(maxsize=1)
+        self.queue_graph = Queue.Queue(maxsize=1)
         self.queue_clean = Queue.Queue(maxsize=1)
+        self.queue_clean_return = Queue.Queue(maxsize=1)
         self.stop = False
         self.analogSensors = analogSensors
         
@@ -145,7 +146,7 @@ class AnalogGraphThreads(object):
 
             # Thread managing
             if self.transmit_is_ready == True:
-                self.my_queue.put(1)  # if ready, 1 in the queue
+                self.queue_graph.put(1)  # if ready, 1 in the queue
 
             #LCD displaying every 250ms
             if timeLastDisplay >= 0.25:
@@ -154,12 +155,10 @@ class AnalogGraphThreads(object):
                 lcd.message(values_converted_instant[displayPin])
                 timeDisplay = time.time() # for lagging
             
-            # Clean memory, reset list if superior to 200MB
-            #if sys.getsizeof(self.listValueLists) > 200e6:
-                #self.queue_clean.put(1)
-            # Clean memory every 2 min
-            if float(self.timelist[-1]) >= 120:
+            # Clean memory every 2 min or if list too big
+            if float(self.timelist[-1]) >= 120 or sys.getsizeof(list_all_values) > 200e6:
                 self.queue_clean.put(1)
+                self.queue_clean_return.get(True)
 
         # Poweroff
         self.stop = True
@@ -204,7 +203,7 @@ class AnalogGraphThreads(object):
         while(not self.stop):    
             
             # waits until queue is full
-            self.my_queue.get(True)
+            self.queue_graph.get(True)
             self.transmit_is_ready = False
             
             # Graph creation
@@ -217,13 +216,19 @@ class AnalogGraphThreads(object):
     
     def thread_clean_mem(self):
         """
-        Clean memory if list too big
+        Clean memory if list too big : copy lists into new ones to write
+        them into a file then reset lists
         """
         while not self.stop:
             self.queue_clean.get(True)
-            clean_list.free_memory(
-                self.all_values, self.timelist,
-                self.file_list, self.time_file)
+            time_temp = self.timelist
+            values_temp = self.all_values
+            self.timelist = []
+            self.list_all_values = []
+            self.queue_clean_return.put(1)
+            
+            timelist, list_all_values = clean_list.free_memory(
+                values_temp, time_temp, self.file_list, self.time_file)
     
     
 

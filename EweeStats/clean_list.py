@@ -22,7 +22,7 @@
 import os
 import sys
 
-def free_memory(list_all_values, timelist, filelist, timefile):
+def free_memory(all_values, timelist, filelist, timefile):
     """
     :param list_all_values: list of all values
     :type list_all_values: list
@@ -36,7 +36,7 @@ def free_memory(list_all_values, timelist, filelist, timefile):
             #with open(fpath, 'w+') as f:
                 #f.write(str(j))
                 #f.write('\n')
-    print('memory cleant !')
+    print('memory cleaned !')
     
     return 0
 
