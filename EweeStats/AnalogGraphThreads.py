@@ -156,7 +156,7 @@ class AnalogGraphThreads(object):
                 timeDisplay = time.time() # for lagging
             
             # Clean memory every 2 min or if list too big
-            if float(self.timelist[-1]) >= 120 or sys.getsizeof(list_all_values) > 200e6:
+            if float(self.timelist[-1]) >= 120 or (sys.getsizeof(self.all_values) + sys.getsizeof(self.timelist)) > 400e6:
                 self.queue_clean.put(1)
                 self.queue_clean_return.get(True)
 
@@ -225,9 +225,10 @@ class AnalogGraphThreads(object):
             values_temp = self.all_values
             self.timelist = []
             self.list_all_values = []
+            print('Memory cleaned')
             self.queue_clean_return.put(1)
             
-            timelist, list_all_values = clean_list.free_memory(
+            clean_list.free_memory(
                 values_temp, time_temp, self.file_list, self.time_file)
     
     
