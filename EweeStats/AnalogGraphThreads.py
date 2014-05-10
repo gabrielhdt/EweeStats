@@ -66,6 +66,8 @@ class AnalogGraphThreads(object):
         self.sensor_id_list = sensor_id_list
         # Count how many times memory has been cleaned
         self.count_mem_clean = 0
+        # Boolean used to init timestamp
+        self.init_done = False
 
     def threadAnalogData(self):
         """
@@ -76,9 +78,6 @@ class AnalogGraphThreads(object):
         # Init lcd display
         lcd = Adafruit_CharLCDPlate()
         lcd.clear()
-
-        # Boolean indicating init state, for timestamp and pinselection
-        initDone = False
 
         # Init Arduino and iterator
         lcd.message("Connection de \nl'Arduino ...")
@@ -123,9 +122,9 @@ class AnalogGraphThreads(object):
                     self.analogSensors, lcd, displayPin)
 
             # Executed once
-            if not initDone:
+            if not self.init_done:
                 timestampInit = time.time()
-                initDone = True
+                self.init_done = True
 
 
             # Timestamping
@@ -154,9 +153,10 @@ class AnalogGraphThreads(object):
                 lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
                 lcd.message(values_converted_instant[displayPin])
                 timeDisplay = time.time() # for lagging
+            print(self.timelist[-1])
             
             # Clean memory every 2 min or if list too big
-            if float(self.timelist[-1]) >= 120 or (sys.getsizeof(self.all_values) + sys.getsizeof(self.timelist)) > 400e6:
+            if float(self.timelist[-1]) >= 120:
                 self.queue_clean.put(1)
                 self.queue_clean_return.get(True)
 
@@ -224,12 +224,15 @@ class AnalogGraphThreads(object):
             time_temp = self.timelist
             values_temp = self.all_values
             self.timelist = []
-            self.list_all_values = []
+            self.all_values = [[] for i in range(self.analogSensors)]
+            self.init_done = False
             print('Memory cleaned')
             self.queue_clean_return.put(1)
             
             clean_list.free_memory(
                 values_temp, time_temp, self.file_list, self.time_file)
+            del time_temp
+            del values_temp
     
     
 
