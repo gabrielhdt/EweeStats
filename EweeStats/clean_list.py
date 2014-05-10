@@ -22,21 +22,24 @@
 import os
 import sys
 
-def free_memory(all_values, timelist, filelist, timefile):
+def free_memory(all_values_temp, timelist_temp, filelist, timefile):
     """
     :param list_all_values: list of all values
     :type list_all_values: list
     
     :returns: 0
     """
-    #for i, elt in enumerate(list_all_values):
-        #for j in elt:
-            #fpath = self.file_list[i] + '.{c}'.format(
-                #c = self.count_mem_clean)
-            #with open(fpath, 'w+') as f:
-                #f.write(str(j))
-                #f.write('\n')
-    print('memory cleaned !')
+    for i, elt in enumerate(all_values):
+        for j in elt:
+            fpath = filelist[i]
+            with open(fpath, 'a') as f:
+                f.write(str(j))
+                f.write('\n')
+    
+    with open(timefile, 'a') as t:
+        for i in timelist_temp:
+            t.write(str(i))
+            t.write('\n')
     
     return 0
 

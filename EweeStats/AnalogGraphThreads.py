@@ -65,7 +65,7 @@ class AnalogGraphThreads(object):
         self.datapath = datapath
         self.sensor_id_list = sensor_id_list
         # Count how many times memory has been cleaned
-        self.count_mem_clean = 0
+        self.count_mem_clean = 1
         # Boolean used to init timestamp
         self.init_done = False
 
@@ -156,7 +156,7 @@ class AnalogGraphThreads(object):
             print(self.timelist[-1])
             
             # Clean memory every 2 min or if list too big
-            if float(self.timelist[-1]) >= 120:
+            if float(self.timelist[-1]) >= 120*self.count_mem_clean:
                 self.queue_clean.put(1)
                 self.queue_clean_return.get(True)
 
@@ -225,7 +225,8 @@ class AnalogGraphThreads(object):
             values_temp = self.all_values
             self.timelist = []
             self.all_values = [[] for i in range(self.analogSensors)]
-            self.init_done = False
+            self.count_mem_clean += 1
+            #self.init_done = False
             print('Memory cleaned')
             self.queue_clean_return.put(1)
             
