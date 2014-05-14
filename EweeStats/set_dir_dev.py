@@ -26,22 +26,27 @@ from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 from pyfirmata import Arduino, util
 import time
 
-def create_files(save_dir, graph_name):
+def create_files(save_dir, graph_path):
     """
     :returns: graphname
     :rtype: string
     """
     
+    print(save_dir)
+    print(graph_path)
+    print(type(save_dir))
+    print(type(graph_path))
+
     # Create directory to save datas
     if not os.path.isdir(save_dir):
         os.makedirs(save_dir)
     
     # Create graph symlink
     web_root = '/var/www'
-    if os.path.isfile(os.path.join(web_root, graph_name)):
-                os.remove(os.path.join(web_root, graph_name))
-    os.symlink(os.path.join(save_dir, graph_name),
-               os.path.join(web_root, graph_name))
+    #if os.path.isfile(os.path.join(web_root, graph_path)):
+    #            os.remove(os.path.join(web_root, graph_path))
+    #os.symlink(graph_path,
+    #           os.path.join(web_root, graph_path))
 
 def open_files(config):
     """
@@ -89,8 +94,9 @@ def open_dev():
     iter8 = util.Iterator(board)
     iter8.start()
     
-    dev = (lcd, board, it,)
+    dev = (lcd, board, iter8,)
     return dev
+
 def set_arduino(number_sensors, board, iter8):
     """Set arduino to use"""
     # Start listening ports
@@ -103,8 +109,6 @@ def set_arduino(number_sensors, board, iter8):
             print("nothing after {t}".format(t = time.time() - start))
 
     print("first val after {t}".format(t = time.time() - start))
-    lcd.clear()
-    lcd.message("Debut des \nmesures")
     
     return 0
 
