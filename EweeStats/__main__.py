@@ -39,7 +39,7 @@ def main():
     data2Graph = AnalogGraphThreads.AnalogGraphThreads(
         analogSensors, file_list, time_file, graph_name, datapath,
         sensor_id_list)
-    data2Graph.startThreads()
+    data2Graph.startThreads(analogSensors)
     
     
     return 0

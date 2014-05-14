@@ -237,13 +237,13 @@ class AnalogGraphThreads(object):
     
     
 
-    def startThreads(self):
+    def startThreads(self, analogSensors):
         """
             Sert à lancer les threads : les crée puis les lance
         """
         # Threads creation
         self.at = threading.Thread(None, self.threadAnalogData, None)
-        self.gt = threading.Thread(None, self.threadGraph, None)
+        self.gt = threading.Thread(target=threadGraph, args=(analogSensors))
         self.cmt = threading.Thread(None, self.thread_clean_mem, None)
 
         # Threads start
