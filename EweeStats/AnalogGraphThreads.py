@@ -84,6 +84,9 @@ class AnalogGraphThreads(object):
         #print("first val after {t}".format(t = time.time() - start))
         #lcd.clear()
         #lcd.message("Debut des \nmesures")
+        lcd = dev[0]
+        board = dev[1]
+        iter8 = dev[2]
 
         # init some more variables
         displayPin = 0
@@ -98,7 +101,7 @@ class AnalogGraphThreads(object):
             # Buttons activity
             if time_last_display >= 0.25:
                 display_pin = pinselection.display_selection(
-                    number_sensors, lcd, displayPin)
+                    number_sensors, lcd, display_pin)
 
             # Executed once
             if not self.init_done:
@@ -113,7 +116,7 @@ class AnalogGraphThreads(object):
             
             # Data reading and converting
             values_converted_instant = collect_data.collecting(
-                board, self.sensor_id_list, self.analogSensors)
+                dev[1], config[1], config[0])
             
             # Data stocking
             for i in range(self.analogSensors):
@@ -127,11 +130,11 @@ class AnalogGraphThreads(object):
                 self.queue_graph.put(1)  # if ready, 1 in the queue
 
             #LCD displaying every 250ms
-            if timeLastDisplay >= 0.25:
+            if time_last_display >= 0.25:
                 lcd.clear()
-                lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
-                lcd.message(values_converted_instant[displayPin])
-                timeDisplay = time.time() # for lagging
+                lcd.message("Pot {dp} :\n".format(dp = str(display_pin)))
+                lcd.message(values_converted_instant[display_pin])
+                time_display = time.time() # for lagging
             print(self.timelist[-1])
             
             # Clean memory every 2 min or if list too big
@@ -187,8 +190,8 @@ class AnalogGraphThreads(object):
             
             # Graph creation
             graph.create_graph(
-                analogSensors, self.all_values,
-                self.timelist, self.datapath, self.graph_name)
+                config[0], self.all_values,
+                self.timelist, config[2], config[3])
 
             # Task finished, now ready
             self.transmit_is_ready = True
@@ -216,18 +219,20 @@ class AnalogGraphThreads(object):
     
     
 
-    def startThreads(self, analogSensors):
+    def startThreads(self, config, dev):
         """
             Sert à lancer les threads : les crée puis les lance
         """
         # Threads creation
-<<<<<<< HEAD
-        self.at = threading.Thread(target = )
-        self.gt = threading.Thread(target = self.threadGraph, args=analogSensors)
-=======
-        self.at = threading.Thread(None, self.threadAnalogData, None)
-        self.gt = threading.Thread(target=self.threadGraph, args=analogSensors)
->>>>>>> b25a7330ceb238be8bcbbdedaa647287b830b06b
+
+        self.at = threading.Thread(
+            target = self.threadAnalogData,
+            args = (config, dev,))
+        
+        self.gt = threading.Thread(
+            target=self.threadGraph,
+            args=config)
+        
         self.cmt = threading.Thread(None, self.thread_clean_mem, None)
 
         # Threads start
