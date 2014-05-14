@@ -22,18 +22,24 @@
 
 import os
 import sys
-import create_files
+import set_dir_dev
 import AnalogGraphThreads
 import readconfig
 
 
 def main():
     
-    analogSensors, sensor_id_list, datapath, graph_name = readconfig.read_config()
+    config = readconfig.read_config()
+    # config contains : number_sensors, sen_id, save_dir, graph_name
     
-    # Create files and open
-    file_list, time_file = create_files.open_files(
-        analogSensors, datapath)
+    # Create files
+    set_dir_dev.create_files(config[2], config[3])
+    # Opens them
+    file_list, time_file = set_dir_dev.open_files(config)
+    # Opens devices
+    dev = set_dir_dev.open_dev()
+    # dev contains : lcd, board, iter8
+    set_dir_dev.set_arduino(config[0], dev[1], dev[2])
 
     # Create threads
     data2Graph = AnalogGraphThreads.AnalogGraphThreads(

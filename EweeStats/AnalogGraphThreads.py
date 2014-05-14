@@ -55,71 +55,50 @@ class AnalogGraphThreads(object):
         self.queue_clean = Queue.Queue(maxsize=1)
         self.queue_clean_return = Queue.Queue(maxsize=1)
         self.stop = False
-        self.analogSensors = analogSensors
         
         self.all_values = [[] for i in range(analogSensors)]
         self.timelist = []
-        self.file_list = file_list
-        self.time_file = time_file
-        self.graph_name = graph_name
-        self.datapath = datapath
-        self.sensor_id_list = sensor_id_list
         # Count how many times memory has been cleaned
         self.count_mem_clean = 1
         # Boolean used to init timestamp
         self.init_done = False
 
-    def threadAnalogData(self):
+    def threadAnalogData(
+        self, lcd, board, time_file, file_list, datapath):
         """
             Ce thread relève les valeurs analogiques, les stocke dans
             des fichiers et attent que le thread 2 soit prêt pour
             commencer le graph
         """
-        # Init lcd display
-        lcd = Adafruit_CharLCDPlate()
-        lcd.clear()
-
-        # Init Arduino and iterator
-        lcd.message("Connection de \nl'Arduino ...")
-        board = Arduino('/dev/ttyACM0')
-        lcd.clear()
-        print('Arduino connected')
-        lcd.message("Arduino connecte !")
-        # Création itérateur
-        iter8 = util.Iterator(board)
-        iter8.start()
-
-        
-        # Start listening ports
-        for i in range(self.analogSensors):
-            board.analog[i].enable_reporting()
+        ## Start listening ports
+        #for i in range(self.analogSensors):
+            #board.analog[i].enable_reporting()
 
 
-        # Wait for a valid value to avoid None
-        start = time.time()
-        while board.analog[0].read() is None:
-                print("nothing after {t}".format(
-                    t = time.time() - start))
+        ## Wait for a valid value to avoid None
+        #start = time.time()
+        #while board.analog[0].read() is None:
+                #print("nothing after {t}".format(
+                    #t = time.time() - start))
 
-        print("first val after {t}".format(t = time.time() - start))
-        lcd.clear()
-        lcd.message("Debut des \nmesures")
+        #print("first val after {t}".format(t = time.time() - start))
+        #lcd.clear()
+        #lcd.message("Debut des \nmesures")
 
         # init some more variables
         displayPin = 0
         timeDisplay = 0
-
     
         # Main loop
         while not lcd.buttonPressed(lcd.SELECT):
             
             # Calcule last display time
-            timeLastDisplay = time.time() - timeDisplay
+            time_last_display = time.time() - time_display
             
             # Buttons activity
-            if timeLastDisplay >= 0.25:
-                displayPin = pinselection.display_selection(
-                    self.analogSensors, lcd, displayPin)
+            if time_last_display >= 0.25:
+                display_pin = pinselection.display_selection(
+                    number_sensors, lcd, displayPin)
 
             # Executed once
             if not self.init_done:
@@ -242,8 +221,8 @@ class AnalogGraphThreads(object):
             Sert à lancer les threads : les crée puis les lance
         """
         # Threads creation
-        self.at = threading.Thread(None, self.threadAnalogData, None)
-        self.gt = threading.Thread(target=threadGraph, args=(analogSensors))
+        self.at = threading.Thread(target = )
+        self.gt = threading.Thread(target = self.threadGraph, args=analogSensors)
         self.cmt = threading.Thread(None, self.thread_clean_mem, None)
 
         # Threads start
