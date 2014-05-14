@@ -48,7 +48,7 @@ def read_config():
             print(part)
             if re.search(r'sensors', part[0]) is not None:
                 number_sensors = int(part[2])
-                sensor_id_list = [0 for i in range(number_sensors)]
+                sensors_id = [0 for i in range(number_sensors)]
             elif re.match(r'^A[0-9]{1,2}$', part[0]) is not None:
                 pin_number = int(part[0].replace('A', ''))
                 sensors_id[pin_number] = part[2]
@@ -58,8 +58,8 @@ def read_config():
                 graph_name = part[2]
     
     graph_name = os.path.join(save_dir, graph_name)
-    print(analogSensors)
-    print(sensor_id_list)
+    print(number_sensors)
+    print(sensors_id)
     print(save_dir)
     print(graph_name)
     

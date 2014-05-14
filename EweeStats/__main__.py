@@ -31,7 +31,6 @@ def main():
     
     config = readconfig.read_config()
     # config contains : number_sensors, sen_id, save_dir, graph_name
-    analog_tuple = (analogSensors,)
     
     # Create files
     set_dir_dev.create_files(config[2], config[3])
