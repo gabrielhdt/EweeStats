@@ -21,25 +21,27 @@
 
 import os
 import sys
+import time
 
-def free_memory(all_values_temp, timelist_temp, filelist, timefile):
+def free_memory(all_values_temp, timelist_temp, file_list, timefile):
     """
     :param list_all_values: list of all values
     :type list_all_values: list
     
     :returns: 0
     """
-    for i, elt in enumerate(all_values):
+    time.sleep(1)
+    print(type(file_list[0]))
+    time.sleep(1)
+    for i, elt in enumerate(all_values_temp):
+        fpath = file_list[i]
         for j in elt:
-            fpath = filelist[i]
-            with open(fpath, 'a') as f:
-                f.write(str(j))
-                f.write('\n')
+            fpath.write(str(j))
+            fpath.write('\n')
     
-    with open(timefile, 'a') as t:
-        for i in timelist_temp:
-            t.write(str(i))
-            t.write('\n')
+    for i in timelist_temp:
+        timefile.write(str(i))
+        timefile.write('\n')
     
     return 0
 

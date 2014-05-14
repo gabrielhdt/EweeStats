@@ -25,8 +25,8 @@ def collecting(
     :param board: object Arduino
     :type board: Arduino class
     
-    :param sensor_dict: dictionnary containing sensors type
-    :type sensor_dict: dict
+    :param sensor_id_list: list containing sensors type
+    :type sensor_id_list: list
     """
     value_list_instant = [0.0 for i in range(analogSensors)]
     values_converted_instant = value_list_instant
@@ -36,59 +36,56 @@ def collecting(
     
     for i, elt in enumerate(sensor_id_list):
         if elt == 'pot':
-            values_converted_instant[i] = pot(value_list_instant, i)
+            values_converted_instant[i] = pot(value_list_instant[i])
         elif elt == 'coder':
             pass
         elif elt == 'accelerometer':
             pass
         elif elt == 'gyr':
             pass
+        elif elt == 'voltage':
+            values_converted_instant[i] = voltage(value_list_instant[i])
+        elif elt == 'compass':
+            values_converted_instant[i] = compass(value_list_instant[i])
         else:
             values_converted_instant[i] = value_list_instant[i]
     
     return values_converted_instant
 
 
-def pot(value_list_instant, pin_pot):
+def pot(value_instant):
     """
-    :param pinToPot: numéro du pin relié au potentiomètre
-    :type pinToPot: integer
+    :param pin_pot: numéro du pin relié au potentiomètre
+    :type pin_pot: integer
 
-    :param valueList: valeurs non transformées
-    :type valueList: list
+    :param value_list_instant: valeurs non transformées
+    :type value_list_instant: list
 
-    :param valueReal: liste devant acceuillir les valeurs transformées
-    :type valueReal: list
-
-    :returns: nombre converti à la case du numéro du pin
+    :returns: converted value of voltage
     :rtype: integer
     """
-    value_converted = value_list_instant[pin_pot] * 5
+    value_converted = value_instant*5
 
     return value_converted
 
-def coder(value_list_instant, pin_coder):
+def coder(value_instant):
     """
     :returns: translational speed
     :rtype: float
     """
     pass
     
-def digital_through_analog(pin):
+def voltage(value_instant):
     """
-    As digital read doesn't work, we need to use analogue pins
-    
-    :param pin: number of the pin reading
-    :type pin: integer
-    
-    :returns: bit
-    :rtype: boolean
-    """
-    if board.analog[pin].read() < 0.5:
-        return 0
-    elif board.analog[pin].read() >= 0.5:
-        return 1
-    else:
-        return 0
+    :param value_instant: value measured
+    :type value_instant: list
 
+    :param pin_voltage: pin on which is wired the sensor
+    :type pin_voltage: integer
+
+    :returns: voltage
+    :rtype: float
+    """
+    voltage = 0.0933*pow(value_instant, 0.961)
+    return voltage
 
