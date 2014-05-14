@@ -6,3 +6,5 @@ TODO
 * Gérer l'installation des scripts et autres avec le setup.py
 * Corriger bogue d'extinction du programme
 * écrire la documentation
+* compléter docstrings
+* reprogrammer la création du lien symbolique
