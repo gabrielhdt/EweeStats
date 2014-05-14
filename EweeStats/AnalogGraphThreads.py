@@ -172,7 +172,7 @@ class AnalogGraphThreads(object):
         lcd.clear()
 
 
-    def threadGraph(self):
+    def threadGraph(self, analogSensors):
         """
             Thread construisant le graph :
             lit les valeurs, les formate comme il faut, configure puis
@@ -187,7 +187,7 @@ class AnalogGraphThreads(object):
             
             # Graph creation
             graph.create_graph(
-                self.analogSensors, self.all_values,
+                analogSensors, self.all_values,
                 self.timelist, self.datapath, self.graph_name)
 
             # Task finished, now ready
@@ -198,7 +198,7 @@ class AnalogGraphThreads(object):
         Clean memory if list too big : copy lists into new ones to write
         them into a file then reset lists
         """
-        while not self.stop:
+        while(not self.stop):
             self.queue_clean.get(True)
             time_temp = self.timelist
             values_temp = self.all_values
@@ -221,8 +221,13 @@ class AnalogGraphThreads(object):
             Sert à lancer les threads : les crée puis les lance
         """
         # Threads creation
+<<<<<<< HEAD
         self.at = threading.Thread(target = )
         self.gt = threading.Thread(target = self.threadGraph, args=analogSensors)
+=======
+        self.at = threading.Thread(None, self.threadAnalogData, None)
+        self.gt = threading.Thread(target=self.threadGraph, args=analogSensors)
+>>>>>>> b25a7330ceb238be8bcbbdedaa647287b830b06b
         self.cmt = threading.Thread(None, self.thread_clean_mem, None)
 
         # Threads start

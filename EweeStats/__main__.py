@@ -29,8 +29,14 @@ import readconfig
 
 def main():
     
+<<<<<<< HEAD
     config = readconfig.read_config()
     # config contains : number_sensors, sen_id, save_dir, graph_name
+=======
+    analogSensors, sensor_id_list, datapath, graph_name = readconfig.read_config()
+
+    analog_tuple = (analogSensors,)
+>>>>>>> b25a7330ceb238be8bcbbdedaa647287b830b06b
     
     # Create files
     set_dir_dev.create_files(config[2], config[3])
@@ -45,7 +51,7 @@ def main():
     data2Graph = AnalogGraphThreads.AnalogGraphThreads(
         analogSensors, file_list, time_file, graph_name, datapath,
         sensor_id_list)
-    data2Graph.startThreads(analogSensors)
+    data2Graph.startThreads(analog_tuple)
     
     
     return 0
