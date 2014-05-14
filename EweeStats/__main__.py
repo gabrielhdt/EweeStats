@@ -42,10 +42,8 @@ def main():
     set_dir_dev.set_arduino(config[0], dev[1], dev[2])
 
     # Create threads
-    data2Graph = AnalogGraphThreads.AnalogGraphThreads(
-        analogSensors, file_list, time_file, graph_name, datapath,
-        sensor_id_list)
-    data2Graph.startThreads(analog_tuple)
+    data2Graph = AnalogGraphThreads.AnalogGraphThreads(config[0])
+    data2Graph.startThreads(config, dev)
     
     
     return 0

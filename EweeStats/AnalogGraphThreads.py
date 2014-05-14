@@ -39,9 +39,7 @@ class AnalogGraphThreads(object):
         et de création du graph
     """
 
-    def __init__(
-        self, analogSensors, file_list, time_file, graph_name,
-        datapath, sensor_id_list):
+    def __init__(self, number_sensors):
         """
         Constructeur de la classe : va créer transmit_is_ready
         pour contrôler l'état des threads et créer une queue d'un
@@ -56,7 +54,7 @@ class AnalogGraphThreads(object):
         self.queue_clean_return = Queue.Queue(maxsize=1)
         self.stop = False
         
-        self.all_values = [[] for i in range(analogSensors)]
+        self.all_values = [[] for i in range(number_sensors)]
         self.timelist = []
         # Count how many times memory has been cleaned
         self.count_mem_clean = 1
@@ -64,7 +62,7 @@ class AnalogGraphThreads(object):
         self.init_done = False
 
     def threadAnalogData(
-        self, lcd, board, time_file, file_list, datapath):
+        self, config, dev, file_list, time_file):
         """
             Ce thread relève les valeurs analogiques, les stocke dans
             des fichiers et attent que le thread 2 soit prêt pour
@@ -116,7 +114,7 @@ class AnalogGraphThreads(object):
             
             # Data reading and converting
             values_converted_instant = collect_data.collecting(
-                dev[1], config[1], config[0])
+                board, config[1], config[0])
             
             # Data stocking
             for i in range(self.analogSensors):
@@ -148,18 +146,18 @@ class AnalogGraphThreads(object):
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
-        for i, file in enumerate(self.file_list):
+        for i, file in enumerate(file_list):
             for j in self.all_values[i]:
                 file.write(str(j))
                 file.write('\n')
         # writing timestamp file
         for i in self.timelist:
-            self.time_file.write(i)
-            self.time_file.write('\n')
+            time_file.write(i)
+            time_file.write('\n')
 
-        for i in self.file_list:
+        for i in file_list:
             i.close()
-        self.time_file.close()
+        time_file.close()
         lcd.clear()
         lcd.message('Ecrire ODS ?')
         lcd.clear()
@@ -206,7 +204,7 @@ class AnalogGraphThreads(object):
             time_temp = self.timelist
             values_temp = self.all_values
             self.timelist = []
-            self.all_values = [[] for i in range(self.analogSensors)]
+            self.all_values = [[] for i in range(number_sensors)]
             self.count_mem_clean += 1
             #self.init_done = False
             print('Memory cleaned')
@@ -231,9 +229,11 @@ class AnalogGraphThreads(object):
         
         self.gt = threading.Thread(
             target=self.threadGraph,
-            args=config)
+            args = config)
         
-        self.cmt = threading.Thread(None, self.thread_clean_mem, None)
+        self.cmt = threading.Thread(
+            target = self.thread_clean_mem,
+            args = (config[0],))
 
         # Threads start
         self.at.start()
