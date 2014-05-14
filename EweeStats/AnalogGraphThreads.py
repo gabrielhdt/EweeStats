@@ -24,8 +24,6 @@ import Queue
 import time
 import os
 import sys
-from pyfirmata import Arduino, util
-from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import graph
 import pinselection
 import ods
@@ -68,27 +66,13 @@ class AnalogGraphThreads(object):
             des fichiers et attent que le thread 2 soit prêt pour
             commencer le graph
         """
-        ## Start listening ports
-        #for i in range(self.analogSensors):
-            #board.analog[i].enable_reporting()
-
-
-        ## Wait for a valid value to avoid None
-        #start = time.time()
-        #while board.analog[0].read() is None:
-                #print("nothing after {t}".format(
-                    #t = time.time() - start))
-
-        #print("first val after {t}".format(t = time.time() - start))
-        #lcd.clear()
-        #lcd.message("Debut des \nmesures")
         lcd = dev[0]
         board = dev[1]
         iter8 = dev[2]
 
         # init some more variables
-        displayPin = 0
-        timeDisplay = 0
+        display_pin = 0
+        time_display = 0
     
         # Main loop
         while not lcd.buttonPressed(lcd.SELECT):
@@ -99,7 +83,7 @@ class AnalogGraphThreads(object):
             # Buttons activity
             if time_last_display >= 0.25:
                 display_pin = pinselection.display_selection(
-                    number_sensors, lcd, display_pin)
+                    config[0], lcd, display_pin)
 
             # Executed once
             if not self.init_done:
@@ -117,7 +101,7 @@ class AnalogGraphThreads(object):
                 board, config[1], config[0])
             
             # Data stocking
-            for i in range(self.analogSensors):
+            for i in range(config[0]):
                 self.all_values[i].append(
                     round(values_converted_instant[i], 4))
 
@@ -162,13 +146,14 @@ class AnalogGraphThreads(object):
         lcd.message('Ecrire ODS ?')
         lcd.clear()
         lcd.message('\nOui          Non')
+        # Wait for entry
         while not (lcd.buttonPressed(lcd.LEFT) or lcd.buttonPressed(lcd.RIGHT)):
             pass
         if lcd.buttonPressed(lcd.LEFT):
             lcd.clear()
             lcd.message("Ecriture du\nfichier ODS")
             ods.write_ods(
-                self.datapath, self.analogSensors,
+                config[2], config[0],
                 self.all_values, self.timelist)
         lcd.clear()
 
