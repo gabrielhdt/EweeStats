@@ -29,7 +29,6 @@ import readconfig
 
 def main():
     
-<<<<<<< HEAD
     config = readconfig.read_config()
     # config contains : number_sensors, sen_id, save_dir, graph_name
     analog_tuple = (analogSensors,)
