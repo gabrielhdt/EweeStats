@@ -43,7 +43,7 @@ def main():
 
     # Create threads
     data2Graph = AnalogGraphThreads.AnalogGraphThreads(config[0])
-    data2Graph.startThreads(config, dev)
+    data2Graph.startThreads(config, dev, file_list, time_file)
     
     
     return 0
