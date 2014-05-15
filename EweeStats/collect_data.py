@@ -56,7 +56,7 @@ def collecting(
         else:
             values_converted_instant[i] = value_list_instant[i]
     
-    return values_converted_instant, additional_values
+    return values_converted_instant
 
 
 def pot(value_instant):
