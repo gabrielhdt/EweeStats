@@ -25,7 +25,8 @@ import os
 import sys
 
 def create_graph(
-    analogSensors, listValueLists, timelist, dataDir, graphName):
+    number_sensors, listValueLists, timelist, save_dir, graphName,
+    data_to_graph):
     """
     Création du graphique à l'aide de pygal
     
@@ -59,14 +60,14 @@ def create_graph(
     linechart.x_labels          = timelist
     linechart.x_labels_major_count = 20
     linechart.show_minor_x_labels = False
-    for i in range(analogSensors):
+    for i in data_to_graph:
         linechart.add('Pin {p}'.format(p = i), listValueLists[i])
     
     # We're creating a temp graph because pygal removes it when graph
     #   creation begins
-    linechart.render_to_file(os.path.join(dataDir, graphTempName))
+    linechart.render_to_file(os.path.join(save_dir, graphTempName))
     # Graph to be linked
-    os.rename(os.path.join(dataDir, graphTempName),
-              os.path.join(dataDir, graphName))
+    os.rename(os.path.join(save_dir, graphTempName),
+              os.path.join(save_dir, graphName))
     
     return 0

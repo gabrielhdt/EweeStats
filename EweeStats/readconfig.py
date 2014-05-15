@@ -39,7 +39,7 @@ def read_config():
         raise NameError('no configuration file')
         sys.exit()
     
-    
+    data_to_graph = []
     with open(conf_file, 'r') as c:
         for line in c:
             part = shlex.split(line, True)
@@ -56,12 +56,19 @@ def read_config():
                 save_dir = part[2]
             elif re.match(r'^graphname', part[0]) is not None:
                 graph_name = part[2]
+            elif re.search(r'graph', part[0]) is not None:
+                data_to_graph.append(part[2])
     
     graph_name = os.path.join(save_dir, graph_name)
     print(number_sensors)
     print(sensors_id)
     print(save_dir)
     print(graph_name)
+    print(data_to_graph)
     
-    config = (number_sensors, sensors_id, save_dir, graph_name,)
+    config = (number_sensors, sensors_id, save_dir, graph_name,
+              data_to_graph,)
     return config
+    
+if __name__ == '__main__':
+    read_config()

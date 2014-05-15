@@ -66,6 +66,7 @@ class AnalogGraphThreads(object):
             des fichiers et attent que le thread 2 soit prêt pour
             commencer le graph
         """
+        # Some shortcuts
         lcd = dev[0]
         board = dev[1]
         iter8 = dev[2]
@@ -77,7 +78,7 @@ class AnalogGraphThreads(object):
         # Main loop
         while not lcd.buttonPressed(lcd.SELECT):
             
-            # Calcule last display time
+            # Calculates last display time
             time_last_display = time.time() - time_display
             
             # Buttons activity
@@ -85,11 +86,10 @@ class AnalogGraphThreads(object):
                 display_pin = pinselection.display_selection(
                     config[0], lcd, display_pin)
 
-            # Executed once
+            # Timestamp init
             if not self.init_done:
                 timestampInit = time.time()
                 self.init_done = True
-
 
             # Timestamping
             timestamp = time.time()
@@ -97,7 +97,7 @@ class AnalogGraphThreads(object):
             self.timelist.append(str(round(timestamp, 4))) # for pygal
             
             # Data reading and converting
-            values_converted_instant = collect_data.collecting(
+            values_converted_instant, additional_values = collect_data.collecting(
                 board, config[1], config[0])
             
             # Data stocking

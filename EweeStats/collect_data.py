@@ -30,20 +30,24 @@ def collecting(
     """
     value_list_instant = [0.0 for i in range(analogSensors)]
     values_converted_instant = value_list_instant
+    additional_values = []
     
     for i in range(analogSensors):
         value_list_instant[i] = board.analog[i].read()
-    
+    # Loop to launch the right program to convert data
     for i, elt in enumerate(sensor_id_list):
         if elt == 'pot':
             values_converted_instant[i] = pot(value_list_instant[i])
         elif elt == 'coder':
             pass
         elif elt == 'accelerometer_x':
+            accelerometer = True
             values_converted_instant[i] = accelerometer_x(value_list_instant[i])
         elif elt == 'accelerometer_y':
+            accelerometer = True
             values_converted_instant[i] = accelerometer_y(value_list_instant[i])
         elif elt == 'accelerometer_z':
+            accelerometer = True
             values_converted_instant[i] = accelerometer_z(value_list_instant[i])
         elif elt == 'gyr':
             pass
@@ -55,6 +59,9 @@ def collecting(
             pass
         else:
             values_converted_instant[i] = value_list_instant[i]
+    
+    if accelerometer:
+        additional_values.append(accel_norme)
     
     return values_converted_instant
 
@@ -72,7 +79,7 @@ def pot(value_instant):
     """
     value_converted = value_instant*5
 
-    return value_converted
+    return value_converted, additional_values
 
 def coder(value_instant):
     """
@@ -120,3 +127,9 @@ def accelerometer_y(y_raw):
 def accelerometer_z(z_raw):
     z_accel = (z_raw - 0.3646)*130.106
     return z_accel
+
+def accel_norme(x_accel, y_accel, z_accel):
+    norme = math.sqrt(
+        pow(x_accel, 2) + pow(y_accel, 2) + pow(z_accel, 2)
+        )
+    return norme
