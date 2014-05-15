@@ -25,8 +25,15 @@ import time
 
 def free_memory(all_values_temp, timelist_temp, file_list, timefile):
     """
-    :param list_all_values: list of all values
-    :type list_all_values: list
+    frees the memory to avoid list to be too big
+    :param all_values_temp: copy of list of all values
+    :type all_values_temp: list of float
+    
+    :param timelist_temp: timestamps
+    :type timelist_temp: list of float
+    
+    :param file_list: list of files to write datas
+    :type timefile: file
     
     :returns: 0
     """

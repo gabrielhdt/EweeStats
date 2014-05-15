@@ -28,6 +28,13 @@ import time
 
 def create_files(save_dir, graph_path):
     """
+    Creates files and symlinks
+    :param save_dir: dir path where is saved all files
+    :type save_dir: string
+    
+    :param graph_path: path of graph
+    :type graph_path: string
+    
     :returns: graphname
     :rtype: string
     """
@@ -54,6 +61,7 @@ def open_files(config):
                     1 - sensors id
                     2 - save_dir
                     3 - graph_name
+                    4 - datas not graphed
     :type config: tuple
     
     :returns: list of opened files
@@ -98,7 +106,19 @@ def open_dev():
     return dev
 
 def set_arduino(number_sensors, board, iter8):
-    """Set arduino to use"""
+    """
+    Set arduino to use
+    :param number_sensors: number of analogue sensors wired
+    :type number_sensors: integer
+    
+    :param board: object to control Arduino
+    :type board: arduino class
+    
+    :param iter8: iterator to avoid buffer overflow of arduino
+    :type iter8: I don't know
+    
+    :returns: 0
+    """
     # Start listening ports
     for i in range(number_sensors):
         board.analog[i].enable_reporting()

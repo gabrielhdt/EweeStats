@@ -39,35 +39,41 @@ def read_config():
         raise NameError('no configuration file')
         sys.exit()
     
-    data_to_graph = []
+    pin_to_graph = [] # List to indicate if values shouldn't be graphed
     with open(conf_file, 'r') as c:
         for line in c:
             part = shlex.split(line, True)
             if part == []:
                 continue
             print(part)
+            # Number of sensors
             if re.search(r'sensors', part[0]) is not None:
                 number_sensors = int(part[2])
                 sensors_id = [0 for i in range(number_sensors)]
+            # Type of sensors
             elif re.match(r'^A[0-9]{1,2}$', part[0]) is not None:
+                # Searche for A and one or two numbers
                 pin_number = int(part[0].replace('A', ''))
                 sensors_id[pin_number] = part[2]
+            # Save directory
             elif re.match(r'^savedir', part[0]) is not None:
                 save_dir = part[2]
+            # Name of graph
             elif re.match(r'^graphname', part[0]) is not None:
                 graph_name = part[2]
-            elif re.search(r'graph', part[0]) is not None:
-                data_to_graph.append(part[2])
+            # Datas to graph
+            elif re.search(r'pin_to_graph', part[0]) is not None:
+                pin_to_graph.append(part[2])
     
     graph_name = os.path.join(save_dir, graph_name)
     print(number_sensors)
     print(sensors_id)
     print(save_dir)
     print(graph_name)
-    print(data_to_graph)
+    print(pin_to_graph)
     
     config = (number_sensors, sensors_id, save_dir, graph_name,
-              data_to_graph,)
+              pin_to_graph,)
     return config
     
 if __name__ == '__main__':

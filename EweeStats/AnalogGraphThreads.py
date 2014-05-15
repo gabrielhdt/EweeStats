@@ -62,9 +62,27 @@ class AnalogGraphThreads(object):
     def threadAnalogData(
         self, config, dev, file_list, time_file):
         """
-            Ce thread relève les valeurs analogiques, les stocke dans
-            des fichiers et attent que le thread 2 soit prêt pour
-            commencer le graph
+        Main thread : loop reading and launches others threads to graph
+        or clean mem
+        :param config: tuple containing :
+                        0 : number of analogue sensors
+                        1 : sensors id
+                        2 : save_dir
+                        3 : graph_name
+                        4 : pins to graph
+        :type config: tuple
+        
+        :param dev: tuple containing devices classes:
+                        0 : lcd
+                        1 : board (arduino)
+                        2 : iter8
+        :type dev: tuple
+        
+        :param file_list: list of files in which we write
+        :type file_list: list of files
+        
+        :param time_file: file to write timestamp
+        :type time_file: file
         """
         # Some shortcuts
         lcd = dev[0]
@@ -172,9 +190,7 @@ class AnalogGraphThreads(object):
             self.transmit_is_ready = False
             
             # Graph creation
-            graph.create_graph(
-                config[0], self.all_values,
-                self.timelist, config[2], config[3])
+            graph.create_graph(config, self.all_values, self.timelist)
 
             # Task finished, now ready
             self.transmit_is_ready = True

@@ -25,6 +25,12 @@ def collecting(
     :param board: object Arduino
     :type board: Arduino class
     
+    :param sensor_id_list: names of sensors
+    :type sensor_id_list: list
+    
+    :param number_sensors: number of analog sensors
+    :type number_sensors: int
+    
     :param sensor_id_list: list containing sensors type
     :type sensor_id_list: list
     """
@@ -34,6 +40,7 @@ def collecting(
     
     for i in range(analogSensors):
         value_list_instant[i] = board.analog[i].read()
+    
     # Loop to launch the right program to convert data
     for i, elt in enumerate(sensor_id_list):
         if elt == 'pot':
@@ -117,6 +124,13 @@ def tilt(s1, s2):
     return pos
     
 def accelerometer_x(x_raw):
+    """
+    :param x_raw: value from arduino
+    :type x_raw: float
+    
+    :returns: acceleration on x axis
+    :rtype: float
+    """
     x_accel = (x_raw - 0.3646)*130.106
     return x_accel
 

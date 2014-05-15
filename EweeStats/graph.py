@@ -24,32 +24,28 @@ import pygal
 import os
 import sys
 
-def create_graph(
-    number_sensors, listValueLists, timelist, save_dir, graphName,
-    data_to_graph):
+def create_graph(config, all_values, timelist):
     """
-    Création du graphique à l'aide de pygal
+    Creates graph thanks to pygal
+    :param config: tuple containing :
+                        0 : number of analogue sensors (integer)
+                        1 : sensors id (list)
+                        2 : save_dir (string)
+                        3 : graph_name (string)
+                        4 : sensors to graph (list)
+    :type config: tuple
     
-    :param analogSensors: nombre de capteurs
-    :type analogSensors: integer
+    :param all_values: all values
+    :type all_values: list of lists of floats
     
-    :param listValueLists: liste de listes des valeurs
-    :type listValueLists: list of lists
-    
-    :param timelist: horodatage
+    :param timelist: timestamp
     :type timelist: list of strings
-    
-    :param dataDir: dossier contenant les fichiers
-    :type dataDir: string
-
-    :param graphName: nom du fichier de graph
-    :type graphName: string
 
     :returns: 0
     """
 
     # Graph file name
-    graphTempName = graphName.replace('.svg', '.svg.tmp')
+    graphTempName = config[3].replace('.svg', '.svg.tmp')
 
     linechart                   = pygal.Line()
     linechart.x_label_rotation  = 20
@@ -60,8 +56,8 @@ def create_graph(
     linechart.x_labels          = timelist
     linechart.x_labels_major_count = 20
     linechart.show_minor_x_labels = False
-    for i in data_to_graph:
-        linechart.add('Pin {p}'.format(p = i), listValueLists[i])
+    for i in range(config[4]):
+        linechart.add('Pin {p}'.format(p = i), all_values[i])
     
     # We're creating a temp graph because pygal removes it when graph
     #   creation begins
