@@ -39,8 +39,12 @@ def collecting(
             values_converted_instant[i] = pot(value_list_instant[i])
         elif elt == 'coder':
             pass
-        elif elt == 'accelerometer':
-            pass
+        elif elt == 'accelerometer_x':
+            values_converted_instant[i] = accelerometer_x(value_list_instant[i])
+        elif elt == 'accelerometer_y':
+            values_converted_instant[i] = accelerometer_y(value_list_instant[i])
+        elif elt == 'accelerometer_z':
+            values_converted_instant[i] = accelerometer_z(value_list_instant[i])
         elif elt == 'gyr':
             pass
         elif elt == 'voltage':
@@ -52,7 +56,7 @@ def collecting(
         else:
             values_converted_instant[i] = value_list_instant[i]
     
-    return values_converted_instant
+    return values_converted_instant, additional_values
 
 
 def pot(value_instant):
@@ -104,3 +108,15 @@ def tilt(s1, s2):
     """
     pos = (s1 << 1) | s2
     return pos
+    
+def accelerometer_x(x_raw):
+    x_accel = (x_raw - 0.3646)*130.106
+    return x_accel
+
+def accelerometer_y(y_raw):
+    y_accel = (y_raw - 0.3646)*130.106
+    return y_accel
+    
+def accelerometer_z(z_raw):
+    z_accel = (z_raw - 0.3646)*130.106
+    return z_accel
