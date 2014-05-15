@@ -47,6 +47,8 @@ def collecting(
             values_converted_instant[i] = voltage(value_list_instant[i])
         elif elt == 'compass':
             values_converted_instant[i] = compass(value_list_instant[i])
+        elif elt == 'tilt':
+            pass
         else:
             values_converted_instant[i] = value_list_instant[i]
     
@@ -89,3 +91,16 @@ def voltage(value_instant):
     voltage = 0.0933*pow(value_instant, 0.961)
     return voltage
 
+def tilt(s1, s2):
+    """
+    :param s1: value of first pin
+    :type s1: boolean
+
+    :param s2: value of second
+    :type s2: boolean
+
+    :returns: position 0, 1, 2 or 3
+    :rtype: int
+    """
+    pos = (s1 << 1) | s2
+    return pos
