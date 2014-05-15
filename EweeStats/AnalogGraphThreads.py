@@ -24,8 +24,6 @@ import Queue
 import time
 import os
 import sys
-from pyfirmata import Arduino, util
-from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import graph
 import pinselection
 import ods
@@ -39,9 +37,7 @@ class AnalogGraphThreads(object):
         et de création du graph
     """
 
-    def __init__(
-        self, analogSensors, file_list, time_file, graph_name,
-        datapath, sensor_id_list):
+    def __init__(self, number_sensors):
         """
         Constructeur de la classe : va créer transmit_is_ready
         pour contrôler l'état des threads et créer une queue d'un
@@ -55,71 +51,39 @@ class AnalogGraphThreads(object):
         self.queue_clean = Queue.Queue(maxsize=1)
         self.queue_clean_return = Queue.Queue(maxsize=1)
         self.stop = False
-        self.analogSensors = analogSensors
         
-        self.all_values = [[] for i in range(analogSensors)]
+        self.all_values = [[] for i in range(number_sensors)]
         self.timelist = []
-        self.file_list = file_list
-        self.time_file = time_file
-        self.graph_name = graph_name
-        self.datapath = datapath
-        self.sensor_id_list = sensor_id_list
         # Count how many times memory has been cleaned
         self.count_mem_clean = 1
         # Boolean used to init timestamp
         self.init_done = False
 
-    def threadAnalogData(self):
+    def threadAnalogData(
+        self, config, dev, file_list, time_file):
         """
             Ce thread relève les valeurs analogiques, les stocke dans
             des fichiers et attent que le thread 2 soit prêt pour
             commencer le graph
         """
-        # Init lcd display
-        lcd = Adafruit_CharLCDPlate()
-        lcd.clear()
-
-        # Init Arduino and iterator
-        lcd.message("Connection de \nl'Arduino ...")
-        board = Arduino('/dev/ttyACM0')
-        lcd.clear()
-        print('Arduino connected')
-        lcd.message("Arduino connecte !")
-        # Création itérateur
-        iter8 = util.Iterator(board)
-        iter8.start()
-
-        
-        # Start listening ports
-        for i in range(self.analogSensors):
-            board.analog[i].enable_reporting()
-
-
-        # Wait for a valid value to avoid None
-        start = time.time()
-        while board.analog[0].read() is None:
-                print("nothing after {t}".format(
-                    t = time.time() - start))
-
-        print("first val after {t}".format(t = time.time() - start))
-        lcd.clear()
-        lcd.message("Debut des \nmesures")
+        lcd = dev[0]
+        board = dev[1]
+        iter8 = dev[2]
 
         # init some more variables
-        displayPin = 0
-        timeDisplay = 0
-
+        display_pin = 0
+        time_display = 0
     
         # Main loop
         while not lcd.buttonPressed(lcd.SELECT):
             
             # Calcule last display time
-            timeLastDisplay = time.time() - timeDisplay
+            time_last_display = time.time() - time_display
             
             # Buttons activity
-            if timeLastDisplay >= 0.25:
-                displayPin = pinselection.display_selection(
-                    self.analogSensors, lcd, displayPin)
+            if time_last_display >= 0.25:
+                display_pin = pinselection.display_selection(
+                    config[0], lcd, display_pin)
 
             # Executed once
             if not self.init_done:
@@ -134,10 +98,10 @@ class AnalogGraphThreads(object):
             
             # Data reading and converting
             values_converted_instant = collect_data.collecting(
-                board, self.sensor_id_list, self.analogSensors)
+                board, config[1], config[0])
             
             # Data stocking
-            for i in range(self.analogSensors):
+            for i in range(config[0]):
                 self.all_values[i].append(
                     round(values_converted_instant[i], 4))
 
@@ -148,11 +112,11 @@ class AnalogGraphThreads(object):
                 self.queue_graph.put(1)  # if ready, 1 in the queue
 
             #LCD displaying every 250ms
-            if timeLastDisplay >= 0.25:
+            if time_last_display >= 0.25:
                 lcd.clear()
-                lcd.message("Pot {dp} :\n".format(dp = str(displayPin)))
-                lcd.message(values_converted_instant[displayPin])
-                timeDisplay = time.time() # for lagging
+                lcd.message("Pot {dp} :\n".format(dp = str(display_pin)))
+                lcd.message(values_converted_instant[display_pin])
+                time_display = time.time() # for lagging
             print(self.timelist[-1])
             
             # Clean memory every 2 min or if list too big
@@ -166,34 +130,35 @@ class AnalogGraphThreads(object):
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
-        for i, file in enumerate(self.file_list):
+        for i, file in enumerate(file_list):
             for j in self.all_values[i]:
                 file.write(str(j))
                 file.write('\n')
         # writing timestamp file
         for i in self.timelist:
-            self.time_file.write(i)
-            self.time_file.write('\n')
+            time_file.write(i)
+            time_file.write('\n')
 
-        for i in self.file_list:
+        for i in file_list:
             i.close()
-        self.time_file.close()
+        time_file.close()
         lcd.clear()
         lcd.message('Ecrire ODS ?')
         lcd.clear()
         lcd.message('\nOui          Non')
+        # Wait for entry
         while not (lcd.buttonPressed(lcd.LEFT) or lcd.buttonPressed(lcd.RIGHT)):
             pass
         if lcd.buttonPressed(lcd.LEFT):
             lcd.clear()
             lcd.message("Ecriture du\nfichier ODS")
             ods.write_ods(
-                self.datapath, self.analogSensors,
+                config[2], config[0],
                 self.all_values, self.timelist)
         lcd.clear()
 
 
-    def threadGraph(self):
+    def threadGraph(self, config):
         """
             Thread construisant le graph :
             lit les valeurs, les formate comme il faut, configure puis
@@ -208,23 +173,23 @@ class AnalogGraphThreads(object):
             
             # Graph creation
             graph.create_graph(
-                self.analogSensors, self.all_values,
-                self.timelist, self.datapath, self.graph_name)
+                config[0], self.all_values,
+                self.timelist, config[2], config[3])
 
             # Task finished, now ready
             self.transmit_is_ready = True
     
-    def thread_clean_mem(self):
+    def thread_clean_mem(self, number_sensors):
         """
         Clean memory if list too big : copy lists into new ones to write
         them into a file then reset lists
         """
-        while not self.stop:
+        while(not self.stop):
             self.queue_clean.get(True)
             time_temp = self.timelist
             values_temp = self.all_values
             self.timelist = []
-            self.all_values = [[] for i in range(self.analogSensors)]
+            self.all_values = [[] for i in range(number_sensors)]
             self.count_mem_clean += 1
             #self.init_done = False
             print('Memory cleaned')
@@ -237,14 +202,23 @@ class AnalogGraphThreads(object):
     
     
 
-    def startThreads(self):
+    def startThreads(self, config, dev, file_list, time_file):
         """
             Sert à lancer les threads : les crée puis les lance
         """
         # Threads creation
-        self.at = threading.Thread(None, self.threadAnalogData, None)
-        self.gt = threading.Thread(None, self.threadGraph, None)
-        self.cmt = threading.Thread(None, self.thread_clean_mem, None)
+
+        self.at = threading.Thread(
+            target = self.threadAnalogData,
+            args = (config, dev, file_list, time_file))
+        
+        self.gt = threading.Thread(
+            target=self.threadGraph,
+            args = (config,))
+        
+        self.cmt = threading.Thread(
+            target = self.thread_clean_mem,
+            args = (config[0],))
 
         # Threads start
         self.at.start()
