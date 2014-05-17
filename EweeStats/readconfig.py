@@ -23,13 +23,20 @@ import os
 import sys
 import re
 import shlex
+import math
 
 def read_config():
     """
     Reads configuration file to set up sensors
     
-    :returns: number of sensors, id of sensors, path to save dir,
-    graph name
+    :returns: tuple containing :
+                0 - number of sensors
+                1 - list id of sensors (indice is pin and name is type)
+                2 - save directory
+                3 - name of the graph
+                4 - pins to be graphed
+                5 - list of additional values id
+                6 - number of additional_values
     :rtype: tuple
     """
     conf_file = os.path.join(
@@ -40,6 +47,8 @@ def read_config():
         sys.exit()
     
     pin_to_graph = [] # List to indicate if values shouldn't be graphed
+    add_values_id = [] # List for id of additional values
+    number_add_values = 0 # Number of additional values
     with open(conf_file, 'r') as c:
         for line in c:
             part = shlex.split(line, True)
@@ -65,15 +74,35 @@ def read_config():
             elif re.search(r'pin_to_graph', part[0]) is not None:
                 pin_to_graph.append(int(part[2]))
     
+    # Check if there is an analogue accelerometer
+    for elt in sensors_id:
+        if re.search(r'accel', elt) is not None:
+            is_accel = [False, False, False] # Booleans to check axis
+    # When axis is found, it is marked as existant
+    for elt in sensors_id:
+        if elt == 'accelerometer_x':
+            is_accel[0] = True
+        elif elt == 'accelerometer_y':
+            is_accel[1] = True
+        elif elt == 'accelerometer_z':
+            is_accel[2] = True
+    # If there are 3 axis, we can calculate norm
+    if is_accel == [True, True, True]:
+        add_values_id.append('accel_norm')
+        number_add_values += 1
+    
     graph_name = os.path.join(save_dir, graph_name)
     print(number_sensors)
     print(sensors_id)
     print(save_dir)
     print(graph_name)
     print(pin_to_graph)
+    print(add_values_id)
+    print(is_accel)
+    print(number_add_values)
     
     config = (number_sensors, sensors_id, save_dir, graph_name,
-              pin_to_graph,)
+              pin_to_graph, add_values_id, number_add_values)
     return config
     
 if __name__ == '__main__':

@@ -20,7 +20,7 @@
 #
 
 def collecting(
-    board, sensor_id_list, number_analog_sensors):
+    board, sensor_id_list, number_analog_sensors, add_values_id):
     """
     :param board: object Arduino
     :type board: Arduino class
@@ -34,28 +34,32 @@ def collecting(
     :param sensor_id_list: list containing sensors type
     :type sensor_id_list: list
     """
+    # Creating 2 lists : values raw and values converted
     value_list_instant = [0.0 for i in range(number_analog_sensors)]
     values_converted_instant = value_list_instant
-    additional_values = []
+    # Creating additional values list
+    add_values_instant = [0. for i in range(len(add_values_id))
     
     for i in range(number_analog_sensors):
         value_list_instant[i] = board.analog[i].read()
     
-    # Loop to launch the right program to convert data
+    # Loop to launch the right program to convert data for analog pins
     for i, elt in enumerate(sensor_id_list):
         if elt == 'pot':
             values_converted_instant[i] = pot(value_list_instant[i])
         elif elt == 'coder':
             pass
         elif elt == 'accelerometer_x':
-            accelerometer = True
             values_converted_instant[i] = accelerometer_x(value_list_instant[i])
+            # Number of the pin used to calculate norm
+            x_pin = i
         elif elt == 'accelerometer_y':
-            accelerometer = True
             values_converted_instant[i] = accelerometer_y(value_list_instant[i])
+            # Number of pin for norm
+            y_pin = i
         elif elt == 'accelerometer_z':
-            accelerometer = True
             values_converted_instant[i] = accelerometer_z(value_list_instant[i])
+            z_pin = i
         elif elt == 'gyr':
             pass
         elif elt == 'voltage':
@@ -67,10 +71,14 @@ def collecting(
         else:
             values_converted_instant[i] = value_list_instant[i]
     
-    if accelerometer:
-        additional_values.append(accel_norme)
+    for i, elt in enumerate(add_values_id):
+        if elt == 'accel_norm':
+            add_values_instant[i] = accel_norm(
+                values_converted_instant[x_pin],
+                values_converted_instant[y_pin],
+                values_converted_instant[x_pin],)
     
-    return values_converted_instant
+    return values_converted_instant, add_values_instant
 
 
 def pot(value_instant):
@@ -142,8 +150,8 @@ def accelerometer_z(z_raw):
     z_accel = (z_raw - 0.3646)*130.106
     return z_accel
 
-def accel_norme(x_accel, y_accel, z_accel):
-    norme = math.sqrt(
+def accel_norm(x_accel, y_accel, z_accel):
+    norm = math.sqrt(
         pow(x_accel, 2) + pow(y_accel, 2) + pow(z_accel, 2)
         )
-    return norme
+    return norm

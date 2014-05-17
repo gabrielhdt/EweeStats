@@ -62,6 +62,8 @@ def open_files(config):
                     2 - save_dir
                     3 - graph_name
                     4 - datas not graphed
+                    5 - list of additionzl values id
+                    6 - number of additional values
     :type config: tuple
     
     :returns: list of opened files
@@ -79,7 +81,15 @@ def open_files(config):
     time_file = open(filepath_tmp, 'w+')
     print(file_list)
     
-    return file_list, time_file
+    additinal_files = []
+    add_values_id = config[5] # Shortcut to avoid list in tuple
+    for i in range(config[6]):
+        filename_tmp = add_values_id[i]
+        filepath_tmp = os.path.join(config[2], filename_tmp)
+        add_file_tmp = open(filepath_tmp, 'w+')
+        additional_files.append(add_file_tmp)
+    
+    return file_list, time_file, additional_files
     
 def open_dev():
     """

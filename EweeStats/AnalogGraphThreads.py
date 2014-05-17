@@ -37,7 +37,7 @@ class AnalogGraphThreads(object):
         et de création du graph
     """
 
-    def __init__(self, number_sensors):
+    def __init__(self, number_sensors, number_add_values):
         """
         Constructeur de la classe : va créer transmit_is_ready
         pour contrôler l'état des threads et créer une queue d'un
@@ -53,6 +53,7 @@ class AnalogGraphThreads(object):
         self.stop = False
         
         self.all_values = [[] for i in range(number_sensors)]
+        self.all_add_values = [[] for i in range(number_add_values)]
         self.timelist = []
         # Count how many times memory has been cleaned
         self.count_mem_clean = 1
@@ -60,7 +61,7 @@ class AnalogGraphThreads(object):
         self.init_done = False
 
     def threadAnalogData(
-        self, config, dev, file_list, time_file):
+        self, config, dev, file_list, time_file, additional_files):
         """
         Main thread : loop reading and launches others threads to graph
         or clean mem
@@ -70,6 +71,7 @@ class AnalogGraphThreads(object):
                         2 : save_dir
                         3 : graph_name
                         4 : pins to graph
+                        5 : list of additional values id
         :type config: tuple
         
         :param dev: tuple containing devices classes:
@@ -83,6 +85,9 @@ class AnalogGraphThreads(object):
         
         :param time_file: file to write timestamp
         :type time_file: file
+        
+        :param additional_files: files for additional_values
+        :type additional_files: file
         """
         # Some shortcuts
         lcd = dev[0]
@@ -115,13 +120,16 @@ class AnalogGraphThreads(object):
             self.timelist.append(str(round(timestamp, 4))) # for pygal
             
             # Data reading and converting
-            values_converted_instant = collect_data.collecting(
-                board, config[1], config[0])
+            values_converted_instant, add_values_instant = collect_data.collecting(
+                board, config[1], config[0], config[5])
             
             # Data stocking
             for i in range(config[0]):
                 self.all_values[i].append(
                     round(values_converted_instant[i], 4))
+            for i in range(config[6]):
+                self.all_add_values[i].append(
+                    round(add_values_instant[i], 4))
 
             #print(value_list_instant)    # affiche dans la console les valeurs
 
@@ -151,6 +159,10 @@ class AnalogGraphThreads(object):
             for j in self.all_values[i]:
                 file.write(str(j))
                 file.write('\n')
+        for i, elt in enumerate(additional_fles):
+            for j in self.all_add_values[i]:
+                elt.write(str(j))
+                elt.write('\n')
         # writing timestamp file
         for i in self.timelist:
             time_file.write(i)
@@ -194,7 +206,7 @@ class AnalogGraphThreads(object):
             # Task finished, now ready
             self.transmit_is_ready = True
     
-    def thread_clean_mem(self, number_sensors):
+    def thread_clean_mem(self, number_sensors, number_add_sensors, file_list, time_file, additional_files):
         """
         Clean memory if list too big : copy lists into new ones to write
         them into a file then reset lists
@@ -203,21 +215,25 @@ class AnalogGraphThreads(object):
             self.queue_clean.get(True)
             time_temp = self.timelist
             values_temp = self.all_values
+            add_values_temp = self.all_add_values
             self.timelist = []
             self.all_values = [[] for i in range(number_sensors)]
+            self.all_add_values = [[] for i in range(number_add_sensors)]
             self.count_mem_clean += 1
             #self.init_done = False
             print('Memory cleaned')
             self.queue_clean_return.put(1)
             
             clean_list.free_memory(
-                values_temp, time_temp, self.file_list, self.time_file)
+                values_temp, time_temp, add_values_temp, file_list,
+                time_file, additional_files)
             del time_temp
             del values_temp
+            del add_values_temp
     
     
 
-    def startThreads(self, config, dev, file_list, time_file):
+    def startThreads(self, config, dev, file_list, time_file, additional_files):
         """
             Sert à lancer les threads : les crée puis les lance
         """
@@ -225,7 +241,7 @@ class AnalogGraphThreads(object):
 
         self.at = threading.Thread(
             target = self.threadAnalogData,
-            args = (config, dev, file_list, time_file))
+            args = (config, dev, file_list, time_file, additional_files))
         
         self.gt = threading.Thread(
             target=self.threadGraph,
@@ -233,7 +249,7 @@ class AnalogGraphThreads(object):
         
         self.cmt = threading.Thread(
             target = self.thread_clean_mem,
-            args = (config[0],))
+            args = (config[0], config[6], file_list, time_file, additional_files))
 
         # Threads start
         self.at.start()
