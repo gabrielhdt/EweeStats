@@ -56,14 +56,14 @@ def create_graph(config, all_values, timelist):
     linechart.x_labels          = timelist
     linechart.x_labels_major_count = 20
     linechart.show_minor_x_labels = False
-    for i in range(config[4]):
+    for i in config[4]:
         linechart.add('Pin {p}'.format(p = i), all_values[i])
     
     # We're creating a temp graph because pygal removes it when graph
     #   creation begins
-    linechart.render_to_file(os.path.join(save_dir, graphTempName))
+    linechart.render_to_file(os.path.join(config[2], graphTempName))
     # Graph to be linked
-    os.rename(os.path.join(save_dir, graphTempName),
-              os.path.join(save_dir, graphName))
+    os.rename(os.path.join(config[2], graphTempName),
+              os.path.join(config[2], config[3]))
     
     return 0

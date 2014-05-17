@@ -115,7 +115,7 @@ class AnalogGraphThreads(object):
             self.timelist.append(str(round(timestamp, 4))) # for pygal
             
             # Data reading and converting
-            values_converted_instant, additional_values = collect_data.collecting(
+            values_converted_instant = collect_data.collecting(
                 board, config[1], config[0])
             
             # Data stocking
@@ -135,7 +135,6 @@ class AnalogGraphThreads(object):
                 lcd.message("Pot {dp} :\n".format(dp = str(display_pin)))
                 lcd.message(values_converted_instant[display_pin])
                 time_display = time.time() # for lagging
-            print(self.timelist[-1])
             
             # Clean memory every 2 min or if list too big
             if float(self.timelist[-1]) >= 120*self.count_mem_clean:

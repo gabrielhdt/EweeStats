@@ -34,11 +34,11 @@ def collecting(
     :param sensor_id_list: list containing sensors type
     :type sensor_id_list: list
     """
-    value_list_instant = [0.0 for i in range(analogSensors)]
+    value_list_instant = [0.0 for i in range(number_analog_sensors)]
     values_converted_instant = value_list_instant
     additional_values = []
     
-    for i in range(analogSensors):
+    for i in range(number_analog_sensors):
         value_list_instant[i] = board.analog[i].read()
     
     # Loop to launch the right program to convert data

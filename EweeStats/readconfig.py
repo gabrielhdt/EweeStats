@@ -63,7 +63,7 @@ def read_config():
                 graph_name = part[2]
             # Datas to graph
             elif re.search(r'pin_to_graph', part[0]) is not None:
-                pin_to_graph.append(part[2])
+                pin_to_graph.append(int(part[2]))
     
     graph_name = os.path.join(save_dir, graph_name)
     print(number_sensors)
