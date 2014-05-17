@@ -201,7 +201,7 @@ class AnalogGraphThreads(object):
             self.transmit_is_ready = False
             
             # Graph creation
-            graph.create_graph(config, self.all_values, self.timelist)
+            graph.create_graph(config, self.all_values,self.all_add_values, self.timelist)
 
             # Task finished, now ready
             self.transmit_is_ready = True
