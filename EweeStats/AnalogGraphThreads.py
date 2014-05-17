@@ -159,7 +159,7 @@ class AnalogGraphThreads(object):
             for j in self.all_values[i]:
                 file.write(str(j))
                 file.write('\n')
-        for i, elt in enumerate(additional_fles):
+        for i, elt in enumerate(additional_files):
             for j in self.all_add_values[i]:
                 elt.write(str(j))
                 elt.write('\n')
