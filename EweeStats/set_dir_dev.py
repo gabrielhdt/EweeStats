@@ -81,7 +81,7 @@ def open_files(config):
     time_file = open(filepath_tmp, 'w+')
     print(file_list)
     
-    additinal_files = []
+    additional_files = []
     add_values_id = config[5] # Shortcut to avoid list in tuple
     for i in range(config[6]):
         filename_tmp = add_values_id[i]

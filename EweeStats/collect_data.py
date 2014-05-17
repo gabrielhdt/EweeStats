@@ -19,6 +19,10 @@
 #
 #
 
+import os
+import sys
+import math
+
 def collecting(
     board, sensor_id_list, number_analog_sensors, add_values_id):
     """
@@ -38,7 +42,7 @@ def collecting(
     value_list_instant = [0.0 for i in range(number_analog_sensors)]
     values_converted_instant = value_list_instant
     # Creating additional values list
-    add_values_instant = [0. for i in range(len(add_values_id))
+    add_values_instant = [0. for i in range(len(add_values_id))]
     
     for i in range(number_analog_sensors):
         value_list_instant[i] = board.analog[i].read()
