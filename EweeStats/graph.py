@@ -67,7 +67,7 @@ def create_graph(config, all_values, all_add_values, timelist):
         linechart.add('Pin {p}'.format(p = i), all_values[i])
     # Add calculated values
     for i in config[6]:
-        linechart.add('{id} {p}'.format(id = add_values_id[i]), all_add_values[i])
+        linechart.add('{id} {p}'.format(id = 'id'), all_add_values[i])
     
     # We're creating a temp graph because pygal removes it when graph
     #   creation begins
