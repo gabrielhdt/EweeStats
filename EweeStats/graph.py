@@ -24,7 +24,7 @@ import pygal
 import os
 import sys
 
-def create_graph(config, all_values, timelist):
+def create_graph(config, all_values, all_add_values, timelist):
     """
     Creates graph thanks to pygal
     :param config: tuple containing :
@@ -33,7 +33,12 @@ def create_graph(config, all_values, timelist):
                         2 : save_dir (string)
                         3 : graph_name (string)
                         4 : sensors to graph (list)
+                        5 : additional values id
+                        6 : number of additional_values
     :type config: tuple
+    
+    :param all_add_values: all calculated values
+    :type all_add_values: list of floats
     
     :param all_values: all values
     :type all_values: list of lists of floats
@@ -43,7 +48,8 @@ def create_graph(config, all_values, timelist):
 
     :returns: 0
     """
-
+    # Shortcuts
+    add_values_id = config[5]
     # Graph file name
     graphTempName = config[3].replace('.svg', '.svg.tmp')
 
@@ -56,8 +62,12 @@ def create_graph(config, all_values, timelist):
     linechart.x_labels          = timelist
     linechart.x_labels_major_count = 20
     linechart.show_minor_x_labels = False
+    # Add values from analogue pins
     for i in config[4]:
         linechart.add('Pin {p}'.format(p = i), all_values[i])
+    # Add calculated values
+    for i in config[6]:
+        linechart.add('{id} {p}'.format(id = add_values_id[i]), all_add_values[i])
     
     # We're creating a temp graph because pygal removes it when graph
     #   creation begins
