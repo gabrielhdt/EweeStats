@@ -72,6 +72,7 @@ class AnalogGraphThreads(object):
                         3 : graph_name
                         4 : pins to graph
                         5 : list of additional values id
+                        6 : number of additional values
         :type config: tuple
         
         :param dev: tuple containing devices classes:
@@ -95,7 +96,7 @@ class AnalogGraphThreads(object):
         iter8 = dev[2]
 
         # init some more variables
-        display_pin = 0
+        display_pin = [0, 0] # 1st for type and 2nd for value
         time_display = 0
     
         # Main loop
@@ -107,7 +108,7 @@ class AnalogGraphThreads(object):
             # Buttons activity
             if time_last_display >= 0.25:
                 display_pin = pinselection.display_selection(
-                    config[0], lcd, display_pin)
+                    config[0], config[6], lcd, display_pin)
 
             # Timestamp init
             if not self.init_done:
@@ -140,8 +141,12 @@ class AnalogGraphThreads(object):
             #LCD displaying every 250ms
             if time_last_display >= 0.25:
                 lcd.clear()
-                lcd.message("Pot {dp} :\n".format(dp = str(display_pin)))
-                lcd.message(values_converted_instant[display_pin])
+                if display_pin[0] == 0:
+                    lcd.message("Analogue : {dp} :\n".format(dp = str(display_pin[1])))
+                    lcd.message(values_converted_instant[display_pin[1]])
+                elif display_pin[0] == 1:
+                    lcd.message('Calculated : {dp} :\n'.format(dp = str(display_pin[1])))
+                    lcd.message(add_values[display_pin[1]])
                 time_display = time.time() # for lagging
             
             # Clean memory every 2 min or if list too big

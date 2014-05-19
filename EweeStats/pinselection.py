@@ -25,34 +25,42 @@ import os
 import sys
 import time
 
-def display_selection(analogSensors, lcd, selectedPin):
+def display_selection(number_analog_sensors, number_add_values, lcd, selected_pin):
     """
-    :param analogSensors: nombre de capteurs
-    :type analogSensors: integer
+    :param number_analog_sensors: nombre de capteurs
+    :type number_analog_sensors: integer
     
     :param lcd: classe lcd
     :type lcd: Adafuit_CharLCDPlate()
     
-    :param selectedPin: sélection à la boucle d'avant
-    :type selectedPin: integer
+    :param selected_pin: sélection à la boucle d'avant
+    :type selected_pin: integer
     
-    :returns: numéro de l'entrée analogique à afficher
-    :rtype: integer
+    :returns: what to display
+    :rtype: list of 2 integers
     """
     
     
     # Read buttons activity
     if lcd.buttonPressed(lcd.UP):
         print('--UP PRESSED--')
-        selectedPin += 1
+        selected_pin += 1
     elif lcd.buttonPressed(lcd.DOWN):
         print('--DOWN PRESSED--')
-        selectedPin -= 1
+        selected_pin -= 1
+    elif lcd.buttonPressed(lcd.LEFT):
+        selected_array += 1
+    elif lcd.buttonPressed(lcd.LEFT):
+        selected_array -= 1
     
     # If we go inferior than 0, go back to max, and the opposite
-    if selectedPin >= analogSensors:
-        selectedPin = 0
-    elif selectedPin < 0:
-        selectedPin = analogSensors - 1  # -1 because pins start to 0
+    if selected_pin >= number_analog_sensors and selected_array == 0:
+        selected_pin = 0
+    elif selected_pin < 0 and selected_array == 0:
+        selected_pin = number_analog_sensors - 1  # -1 because pins start to 0
+    elif selected_array == 1 and selected_pin >= number_add_values:
+        selected_pin = 0
+    elif selected_array == 1 and selected_pin <:
+        selected_pin = number_add_values - 1
         
-    return selectedPin
+    return [selected_pin, selected_array]

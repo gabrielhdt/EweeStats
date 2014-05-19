@@ -8,3 +8,4 @@ TODO
 * écrire la documentation
 * compléter docstrings
 * reprogrammer la création du lien symbolique
+* modifier programm sélection affichage et graph
