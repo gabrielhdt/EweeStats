@@ -52,7 +52,7 @@ class AnalogGraphThreads(object):
         self.transmit_is_ready = True
         self.queue_graph = Queue.Queue(maxsize=1)
         self.queue_clean = Queue.Queue(maxsize=1)
-        self.queue_clean_return = Queue.Queue(maxsize=1)
+        self.memory_busy = False
         self.stop = False
         
         self.all_values = [[] for i in range(number_sensors)]
@@ -76,6 +76,7 @@ class AnalogGraphThreads(object):
                         4 : pins to graph
                         5 : list of additional values id
                         6 : number of additional values
+                        7 : encoder_pins
         :type config: tuple
         
         :param dev: tuple containing devices classes:
@@ -155,7 +156,8 @@ class AnalogGraphThreads(object):
             # Clean memory every 2 min or if list too big
             if float(self.timelist[-1]) >= 120*self.count_mem_clean:
                 self.queue_clean.put(1)
-                self.queue_clean_return.get(True)
+            while self.memory_busy:
+                continue
 
         # Poweroff
         self.stop = True
@@ -223,6 +225,7 @@ class AnalogGraphThreads(object):
         """
         while(not self.stop):
             self.queue_clean.get(True)
+            self.memory_busy = True
             time_temp = self.timelist
             values_temp = self.all_values
             add_values_temp = self.all_add_values
@@ -232,7 +235,7 @@ class AnalogGraphThreads(object):
             self.count_mem_clean += 1
             #self.init_done = False
             print('Memory cleaned')
-            self.queue_clean_return.put(1)
+            self.memory_busy = False
             
             clean_list.free_memory(
                 values_temp, time_temp, add_values_temp, file_list,
