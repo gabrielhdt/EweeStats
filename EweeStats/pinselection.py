@@ -25,16 +25,23 @@ import os
 import sys
 import time
 
-def display_selection(number_analog_sensors, number_add_values, lcd, selected_pin):
+def display_selection(number_analog_sensors, number_add_values, lcd, selected_value):
     """
     :param number_analog_sensors: nombre de capteurs
     :type number_analog_sensors: integer
+
+    :param number_add_values: number of additional values
+    :type number_add_values: integer
     
     :param lcd: classe lcd
     :type lcd: Adafuit_CharLCDPlate()
     
     :param selected_pin: sélection à la boucle d'avant
     :type selected_pin: integer
+
+    :param selected_value:  0 - selected_array (calculated values or analogue)
+                            1 - selected value in the array
+    :type selected_values: list of 2 integers
     
     :returns: what to display
     :rtype: list of 2 integers
@@ -44,23 +51,23 @@ def display_selection(number_analog_sensors, number_add_values, lcd, selected_pi
     # Read buttons activity
     if lcd.buttonPressed(lcd.UP):
         print('--UP PRESSED--')
-        selected_pin += 1
+        selected_value[1] += 1
     elif lcd.buttonPressed(lcd.DOWN):
         print('--DOWN PRESSED--')
-        selected_pin -= 1
+        selected_value[1] -= 1
+    elif lcd.buttonPressed(lcd.RIGHT):
+        selected_value[0] += 1
     elif lcd.buttonPressed(lcd.LEFT):
-        selected_array += 1
-    elif lcd.buttonPressed(lcd.LEFT):
-        selected_array -= 1
+        selected_value[0] -= 1
     
     # If we go inferior than 0, go back to max, and the opposite
-    if selected_pin >= number_analog_sensors and selected_array == 0:
-        selected_pin = 0
-    elif selected_pin < 0 and selected_array == 0:
-        selected_pin = number_analog_sensors - 1  # -1 because pins start to 0
-    elif selected_array == 1 and selected_pin >= number_add_values:
-        selected_pin = 0
-    elif selected_array == 1 and selected_pin <:
-        selected_pin = number_add_values - 1
+    if selected_value[0] == 0 and selected_value[1] >= number_analog_sensors:
+        selected_value[1] = 0
+    elif selected_value[0] == 0 and selected_value[1] < 0:
+        selected_value[1] = number_analog_sensors - 1  # -1 because pins start to 0
+    elif selected_value[0] == 1 and selected_value[1] >= number_add_values:
+        selected_value[1] = 0
+    elif selected_value[0] == 1 and selected_value[1] < 0:
+        selected_value[1] = number_add_values - 1
         
-    return [selected_pin, selected_array]
+    return selected_value
