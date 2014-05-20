@@ -32,18 +32,20 @@ import clean_list
 
 
 class AnalogGraphThreads(object):
-    """
-        Classe destinée aux threads de lecture des valeurs analogiques
-        et de création du graph
-    """
+    '''
+    Main class, creating the graph
+    '''
 
     def __init__(self, number_sensors, number_add_values):
         """
         Constructeur de la classe : va créer transmit_is_ready
         pour contrôler l'état des threads et créer une queue d'un
         élément
-        :param analogSensors: nombre de capteurs analogiques
-        :type analogSensors: integer
+        :param number_sensors: nombre de capteurs analogiques
+        :type number_sensors: integer
+        
+        :param number_add_values: number of calculated variables
+        :type number_add_values: integer
         """
 
         self.transmit_is_ready = True
@@ -72,6 +74,7 @@ class AnalogGraphThreads(object):
                         3 : graph_name
                         4 : pins to graph
                         5 : list of additional values id
+                        6 : number_add_values
         :type config: tuple
         
         :param dev: tuple containing devices classes:
@@ -206,7 +209,9 @@ class AnalogGraphThreads(object):
             # Task finished, now ready
             self.transmit_is_ready = True
     
-    def thread_clean_mem(self, number_sensors, number_add_sensors, file_list, time_file, additional_files):
+    def thread_clean_mem(
+        self, number_sensors, number_add_sensors, file_list, time_file,
+        additional_files):
         """
         Clean memory if list too big : copy lists into new ones to write
         them into a file then reset lists
@@ -233,7 +238,8 @@ class AnalogGraphThreads(object):
     
     
 
-    def startThreads(self, config, dev, file_list, time_file, additional_files):
+    def startThreads(
+        self, config, dev, file_list, time_file, additional_files):
         """
             Sert à lancer les threads : les crée puis les lance
         """
