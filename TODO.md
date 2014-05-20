@@ -9,3 +9,4 @@ TODO
 * compléter docstrings
 * reprogrammer la création du lien symbolique
 * modifier programm sélection affichage et graph
+* utiliser une variable self.memory_cleaned au lieu de la queue (pourrait réparer iss #3)
