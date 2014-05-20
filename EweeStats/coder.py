@@ -35,7 +35,7 @@ def coder(circonference):
     :returns: ewee's speed in km/h
     :rtype: float
     '''
-    speed = 3.2*globvar.encoder_value*circonference/96
+    speed = 3.6*10*0.22222222*globvar.encoder_value*circonference/96
     globvar.encoder_value = 0
     return round(speed, 4)
 
@@ -43,8 +43,8 @@ def update_encoder(channel):
     '''
     Executed each change of value on coder pins
     '''
-    MSB = GPIO.input(encoder_pins[0])
-    LSB = GPIO.input(encoder_pins[1])
+    MSB = GPIO.input(globvar.encoder_pins[0])
+    LSB = GPIO.input(globvar.encoder_pins[1])
 
     encoded = (MSB << 1) |LSB
     sum = (globvar.last_encoded << 2) | encoded

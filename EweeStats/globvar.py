@@ -21,3 +21,4 @@
 
 last_encoded = 0
 encoder_value = 0
+encoder_pins = [23, 24]

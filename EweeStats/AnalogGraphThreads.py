@@ -30,6 +30,7 @@ import ods
 import collect_data
 import clean_list
 import coder
+import RPi.GPIO as GPIO
 
 class AnalogGraphThreads(object):
     '''
@@ -240,7 +241,7 @@ class AnalogGraphThreads(object):
             del values_temp
             del add_values_temp
     
-    def thread_coder(encoder_pins):
+    def thread_coder(self, encoder_pins):
         '''
         Thread for coder using interrupts and all that mess
         :returns: ewee's speed in km/h
@@ -254,9 +255,9 @@ class AnalogGraphThreads(object):
         
         while not self.stop:
             coder_counter = time.time() - coder_time
-            if coder_counter >= 0.25:
+            if coder_counter >= 0.1:
                 speed = coder.coder(circonference)
-                coder_time = 0
+                coder_time = time.time()
                 print(speed)
     
 
