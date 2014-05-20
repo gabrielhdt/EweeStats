@@ -147,15 +147,37 @@ def accelerometer_x(x_raw):
     return x_accel
 
 def accelerometer_y(y_raw):
+    '''
+    :param y_raw: raw input of the accelerometer
+    :type y_raw: float
+    
+    :returns: acceleration in m/s^2
+    :rtype: float
+    '''
     y_accel = (y_raw - 0.3372)*132.032
     return y_accel
     
 def accelerometer_z(z_raw):
+    '''
+    :param z_raw: raw input of the accelerometer
+    :type z_raw: float
+    
+    :returns: acceleration of z axis in m/s^2
+    :rtype: float
+    '''
     z_accel = (z_raw - 0.3372)*132.032
     return z_accel
 
 def accel_norm(x_accel, y_accel, z_accel):
+    '''
+    :param x_accel: acceleration on x axis in m/s^2
+    :param y_accel: acceleration on y axis in m/s^2
+    :param z_accel: acceleration on z axis in m/s^2
+    
+    :returns: norm of the acceleration, excluding gravity
+    :rtype: float
+    '''
     norm = math.sqrt(
         pow(x_accel, 2) + pow(y_accel, 2) + pow(z_accel, 2)
-        )
+        ) - 9.81
     return norm
