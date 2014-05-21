@@ -37,6 +37,7 @@ def read_config():
                 4 - pins to be graphed
                 5 - list of additional values id
                 6 - number of additional_values
+                7 - list of two pins for encoder
     :rtype: tuple
     """
     conf_file = os.path.join(
@@ -49,6 +50,9 @@ def read_config():
     pin_to_graph = [] # List to indicate if values shouldn't be graphed
     add_values_id = [] # List for id of additional values
     number_add_values = 0 # Number of additional values
+    encoder_pins = [0, 0] # List for two pins of encoder
+    
+    # Reads the file
     with open(conf_file, 'r') as c:
         for line in c:
             part = shlex.split(line, True)
@@ -73,8 +77,13 @@ def read_config():
             # Datas to graph
             elif re.search(r'pin_to_graph', part[0]) is not None:
                 pin_to_graph.append(int(part[2]))
+            # Digital sensors
+            elif re.search(r'e1', part[0]) is not None:
+                encoder_pins[0] = int(part[2])
+            elif re.search(r'e2', part[0]) is not None:
+                encoder_pins[1] = int(part[2])
     
-    # Check if there is an analogue accelerometer
+    # Check sensors for additional datas
     for elt in sensors_id:
         if re.search(r'accel', elt) is not None:
             is_accel = [False, False, False] # Booleans to check axis
@@ -100,9 +109,11 @@ def read_config():
     print(add_values_id)
     print(is_accel)
     print(number_add_values)
+    print(encoder_pins)
     
-    config = (number_sensors, sensors_id, save_dir, graph_name,
-              pin_to_graph, add_values_id, number_add_values)
+    config = (
+        number_sensors, sensors_id, save_dir, graph_name,pin_to_graph,
+        add_values_id, number_add_values, encoder_pins)
     return config
     
 if __name__ == '__main__':

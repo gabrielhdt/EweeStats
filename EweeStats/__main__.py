@@ -37,14 +37,15 @@ def main():
     # Opens them
     file_list, time_file, additional_files = set_dir_dev.open_files(config)
     # Opens devices
-    dev = set_dir_dev.open_dev()
+    dev = set_dir_dev.open_dev(config[7])
     # dev contains : lcd, board, iter8
     set_dir_dev.set_arduino(config[0], dev[1], dev[2])
 
     # Create threads
     data2Graph = AnalogGraphThreads.AnalogGraphThreads(config[0],
                                                        config[6])
-    data2Graph.startThreads(config, dev, file_list, time_file, additional_files)
+    data2Graph.startThreads(
+        config, dev, file_list, time_file, additional_files)
     
     
     return 0

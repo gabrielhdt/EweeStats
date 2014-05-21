@@ -25,6 +25,8 @@ import sys
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 from pyfirmata import Arduino, util
 import time
+import RPi.GPIO as GPIO
+import coder
 
 def create_files(save_dir, graph_path):
     """
@@ -91,15 +93,23 @@ def open_files(config):
     
     return file_list, time_file, additional_files
     
-def open_dev():
-    """
-    Opens communication with Arduino and lcd
+def open_dev(encoder_pins):
+    '''
+    Opens communication with Arduino, GPIO and lcd
+    :param encoder_pins: contains the GPIO pins to the encoder
+    :type encoder_pins: list of integer
+    
     :returns: lcd object, arduino object and iterator
     :rtype: tuple
-    """
+    '''
     # LCD
     lcd = Adafruit_CharLCDPlate()
     lcd.clear()
+    
+    # GPIO
+    GPIO.setmode(GPIO.BCM)
+    GPIO.setup(encoder_pins[0], GPIO.IN, pull_up_down=GPIO.PUD_UP)
+    GPIO.setup(encoder_pins[1], GPIO.IN, pull_up_down=GPIO.PUD_UP)
     
     # Arduino
     # Init Arduino and iterator

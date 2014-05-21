@@ -29,7 +29,7 @@ import pinselection
 import ods
 import collect_data
 import clean_list
-
+import coder
 
 class AnalogGraphThreads(object):
     '''
@@ -240,6 +240,24 @@ class AnalogGraphThreads(object):
             del values_temp
             del add_values_temp
     
+    def thread_coder(encoder_pins):
+        '''
+        Thread for coder using interrupts and all that mess
+        :returns: ewee's speed in km/h
+        :rtype: float
+        '''
+        GPIO.add_event_detect(encoder_pins[0], GPIO.RISING, callback=coder.update_encoder)
+        GPIO.add_event_detect(encoder_pins[1], GPIO.RISING, callback=coder.update_encoder)
+        
+        coder_time = time.time()
+        circonference = 0.6283
+        
+        while not self.stop:
+            coder_counter = time.time() - coder_time
+            if coder_counter >= 0.25:
+                speed = coder.coder(circonference)
+                coder_time = 0
+                print(speed)
     
 
     def startThreads(
@@ -251,18 +269,29 @@ class AnalogGraphThreads(object):
 
         self.at = threading.Thread(
             target = self.threadAnalogData,
-            args = (config, dev, file_list, time_file, additional_files))
+            args = (config, dev, file_list, time_file,
+                    additional_files)
+            )
         
         self.gt = threading.Thread(
             target=self.threadGraph,
-            args = (config,))
+            args = (config,)
+            )
         
         self.cmt = threading.Thread(
             target = self.thread_clean_mem,
-            args = (config[0], config[6], file_list, time_file, additional_files))
+            args = (config[0], config[6], file_list, time_file,
+                    additional_files)
+            )
+            
+        self.ct = threading.Thread(
+            target = self.thread_coder,
+            args = (config[7],)
+            )
 
         # Threads start
         self.at.start()
         self.gt.start()
         self.cmt.start()
+        self.ct.start()
 

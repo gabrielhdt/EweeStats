@@ -21,17 +21,13 @@
 
 import os
 import sys
-import shlex
-import re
 import time
 import RPi.GPIO as GPIO
+import globvar
 
-last_encoded = 0
-encoder_value = 0
-
-def coder():
+def coder(circonference):
     '''
-    Speed calculating :
+    Calculates speed
     3.2 comes from 3.6 * 4 * 0.22222222222
     3.6 : m/s to km/h
     4 : one value each quarter of second
@@ -39,56 +35,26 @@ def coder():
     :returns: ewee's speed in km/h
     :rtype: float
     '''
-    encoder_pin_1 = 23
-    encoder_pin_2 = 24
-    
-    GPIO.setmode(GPIO.BCM)
-    GPIO.setup(encoder_pin_1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-    GPIO.setup(encoder_pin_2, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-    temps = 0
-    vitesse = 0
-    last_encoded = 0
-    MSB = 0
-    LSB = 0
-    circonference = 0.6283
-
-    global encoder_value
-    GPIO.add_event_detect(encoder_pin_1, GPIO.RISING, callback=update_encoder)
-    GPIO.add_event_detect(encoder_pin_2, GPIO.RISING, callback=update_encoder)
-    temps = time.time()
-
-
-
-    while True:
-        try:
-            compteur = (time.time() - temps)
-
-            if compteur >= 0.25:
-                vitesse = 3.6*4*0.2222222*encoder_value*circonference/96
-                encoder_value = 0
-                temps = time.time()
-
-                print(round(vitesse, 4))
-
-        except KeyboardInterrupt:
-            sys.exit()
+    speed = 3.2*globvar.encoder_value*circonference/96
+    globvar.encoder_value = 0
+    return round(speed, 4)
 
 def update_encoder(channel):
-    global encoder_value
-    global last_encoded
-    MSB = GPIO.input(encoder_pin_1)
-    LSB = GPIO.input(encoder_pin_2)
+    '''
+    Executed each change of value on coder pins
+    '''
+    MSB = GPIO.input(encoder_pins[0])
+    LSB = GPIO.input(encoder_pins[1])
 
     encoded = (MSB << 1) |LSB
-    sum = (last_encoded << 2) | encoded
+    sum = (globvar.last_encoded << 2) | encoded
 
     if (sum == 0b1101 or sum == 0b0100 or sum == 0b0010 or sum == 0b1011):
-        encoder_value +=1
+        globvar.encoder_value +=1
     if (sum == 0b1110 or sum == 0b0111 or sum == 0b0001 or sum == 0b1000):
-        encoder_value -= 1
+        globvar.encoder_value -= 1
 
-    last_encoded = encoded
+    globvar.last_encoded = encoded
     return 0
 
 
