@@ -52,11 +52,14 @@ class AnalogGraphThreads(object):
         self.transmit_is_ready = True
         self.queue_graph = Queue.Queue(maxsize=1)
         self.queue_clean = Queue.Queue(maxsize=1)
+        self.graph_coder_ready = True
+        self.queue_graph_coder = Queue.Queue(maxsize=1)
         self.memory_busy = False
         self.stop = False
         
         self.all_values = [[] for i in range(number_sensors)]
         self.all_add_values = [[] for i in range(number_add_values)]
+        self.coder_values = []
         self.timelist = []
         # Count how many times memory has been cleaned
         self.count_mem_clean = 1
@@ -139,7 +142,7 @@ class AnalogGraphThreads(object):
             #print(value_list_instant)    # affiche dans la console les valeurs
 
             # Thread managing
-            if self.transmit_is_ready == True:
+            if self.transmit_is_ready:
                 self.queue_graph.put(1)  # if ready, 1 in the queue
 
             #LCD displaying every 250ms
@@ -261,7 +264,23 @@ class AnalogGraphThreads(object):
             if coder_counter >= 0.1:
                 speed = coder.coder(circonference)
                 coder_time = time.time()
+                self.coder_values.append(speed)
+                if self.graph_coder_ready:
+                    self.queue_graph_coder.put(True)
                 print(speed)
+    
+    def thread_graph_coder(self, config):
+        '''
+        Thread making a graph for coder only
+        '''
+        interval = 0.1
+        while not self.stop:
+            self.queue_graph_coder.get(True)
+            self.graph_coder_ready = False
+            
+            graph.coder(config, self.coder_values, interval)
+            
+            self.graph_coder_ready = True
     
 
     def startThreads(
