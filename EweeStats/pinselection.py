@@ -43,11 +43,14 @@ def display_selection(number_analog_sensors, number_add_values, lcd, selected_va
                             1 - selected value in the array
     :type selected_values: list of 2 integers
     
-    :returns: what to display
+    :returns: what to display : selected_values
     :rtype: list of 2 integers
+
+    Currently 2 arrays : 0 for analogue values and 1 for calculated ones
     """
     
-    
+    # Number of arrays, to be sure not to display an inexistant one
+    number_arrays = 2 
     # Read buttons activity
     if lcd.buttonPressed(lcd.UP):
         print('--UP PRESSED--')
@@ -60,6 +63,12 @@ def display_selection(number_analog_sensors, number_add_values, lcd, selected_va
     elif lcd.buttonPressed(lcd.LEFT):
         selected_value[0] -= 1
     
+    # Managing if array displayed array exists
+    if selected_value[0] >= number_arrays:
+        selected_value[0] = 0
+    elif selected_value[0] < 0:
+        selected_value[0] = number_arrays - 1 # because arrays begin to 0
+
     # If we go inferior than 0, go back to max, and the opposite
     if selected_value[0] == 0 and selected_value[1] >= number_analog_sensors:
         selected_value[1] = 0
