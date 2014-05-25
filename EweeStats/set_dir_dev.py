@@ -67,8 +67,12 @@ def open_files(config):
                     7 - pins to coder
     :type config: tuple
     
-    :returns: list of opened files
-    :rtype: list
+    :returns: tuple containing :
+                0 - list of files for analogue datas
+                1 - timestamp file
+                2 - list of files for additional values
+                3 - file for coder
+    :rtype: tuple
     """
     
     file_list = []
@@ -94,7 +98,9 @@ def open_files(config):
     filepath_tmp = os.path.join(config[2], 'coder')
     coder_file = open(filepath_tmp, 'w+')
     
-    return file_list, time_file, additional_files, coder_file
+    file_config = (file_list, time_file, additional_files, coder_files)
+    
+    return file_config
     
 def open_dev(encoder_pins):
     '''

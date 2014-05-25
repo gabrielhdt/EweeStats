@@ -66,8 +66,7 @@ class AnalogGraphThreads(object):
         # Boolean used to init timestamp
         self.init_done = False
 
-    def threadAnalogData(
-        self, config, dev, file_list, time_file, additional_files):
+    def threadAnalogData(self, config, dev, file_config):
         """
         Main thread : loop reading and launches others threads to graph
         or clean mem
@@ -88,14 +87,12 @@ class AnalogGraphThreads(object):
                         2 : iter8
         :type dev: tuple
         
-        :param file_list: list of files in which we write
-        :type file_list: list of files
-        
-        :param time_file: file to write timestamp
-        :type time_file: file
-        
-        :param additional_files: files for additional_values
-        :type additional_files: file
+        :param file_config: tuple containing files
+                0 - list of files for analogue datas
+                1 - timestamp file
+                2 - list of files for additional values
+                3 - file for coder
+        :type file_config: tuple
         """
         # Some shortcuts
         lcd = dev[0]
@@ -168,20 +165,20 @@ class AnalogGraphThreads(object):
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
-        for i, file in enumerate(file_list):
+        for i, file in enumerate(file_config[0]):
             for j in self.all_values[i]:
                 file.write(str(j))
                 file.write('\n')
-        for i, elt in enumerate(additional_files):
+        for i, elt in enumerate(file_config[2]):
             for j in self.all_add_values[i]:
                 elt.write(str(j))
                 elt.write('\n')
         # writing timestamp file
         for i in self.timelist:
-            time_file.write(i)
-            time_file.write('\n')
+            file_config[1].write(i)
+            file_config[1].write('\n')
 
-        for i in file_list:
+        for i in file_config[0]:
             i.close()
         time_file.close()
         lcd.clear()
@@ -286,16 +283,38 @@ class AnalogGraphThreads(object):
     
 
     def startThreads(
-        self, config, dev, file_list, time_file, additional_files, coder_file):
-        """
-            Sert à lancer les threads : les crée puis les lance
-        """
+        self, config, dev, file_config):
+        '''
+        Creates and starts threads
+        :param config: tuple containing :
+                0 - number of sensors
+                1 - list id of sensors (indice is pin and name is type)
+                2 - save directory
+                3 - name of the graph
+                4 - pins to be graphed
+                5 - list of additional values id
+                6 - number of additional_values
+                7 - list of two pins for encoder
+        :type config: tuple
+        
+        :param dev: tuple containing dev info:
+                0 - lcd
+                1 - arduino
+                2 - iter8
+        :type dev: tuple
+        
+        :param file_config: tuple containing files
+                0 - list of files for analogue datas
+                1 - timestamp file
+                2 - list of files for additional values
+                3 - file for coder
+        :type file_config: tuple
+        '''
         # Threads creation
 
         self.at = threading.Thread(
             target = self.threadAnalogData,
-            args = (config, dev, file_list, time_file,
-                    additional_files)
+            args = (config, dev, file_config)
             )
         
         self.gt = threading.Thread(
@@ -305,8 +324,7 @@ class AnalogGraphThreads(object):
         
         self.cmt = threading.Thread(
             target = self.thread_clean_mem,
-            args = (config[0], config[6], file_list, time_file,
-                    additional_files, coder_file)
+            args = (config[0], config[6], file_config)
             )
             
         self.ct = threading.Thread(

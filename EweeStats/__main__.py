@@ -35,7 +35,7 @@ def main():
     # Create files
     set_dir_dev.create_files(config[2], config[3])
     # Opens them
-    file_list, time_file, additional_files, coder_file = set_dir_dev.open_files(config)
+    file_config = set_dir_dev.open_files(config)
     # Opens devices
     dev = set_dir_dev.open_dev(config[7])
     # dev contains : lcd, board, iter8
@@ -44,8 +44,7 @@ def main():
     # Create threads
     data2Graph = AnalogGraphThreads.AnalogGraphThreads(config[0],
                                                        config[6])
-    data2Graph.startThreads(
-        config, dev, file_list, time_file, additional_files, coder_file)
+    data2Graph.startThreads(config, dev, file_config)
     
     
     return 0
