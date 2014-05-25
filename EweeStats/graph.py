@@ -122,7 +122,7 @@ def coder(config, coder_values, interval):
     # Add datas to graph
     linechart.add('Vitesse', coder_values)
     
-    linechar.render_to_file(os.path.join(config[2], 'EweeCoder.svg.tmp'))
+    linechart.render_to_file(os.path.join(config[2], 'EweeCoder.svg.tmp'))
     os.rename(os.path.join(config[2], 'EweeCoder.svg.tmp'),
               os.path.join(config[2], 'EweeCoder.svg'))
     
