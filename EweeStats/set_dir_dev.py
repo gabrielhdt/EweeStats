@@ -98,7 +98,7 @@ def open_files(config):
     filepath_tmp = os.path.join(config[2], 'coder')
     coder_file = open(filepath_tmp, 'w+')
     
-    file_config = (file_list, time_file, additional_files, coder_files)
+    file_config = (file_list, time_file, additional_files, coder_file)
     
     return file_config
     

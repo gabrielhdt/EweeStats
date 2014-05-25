@@ -180,7 +180,10 @@ class AnalogGraphThreads(object):
 
         for i in file_config[0]:
             i.close()
-        time_file.close()
+        file_config[1].close()
+        for i in file_config[2]:
+            i.close()
+        file_config[3].close()
         lcd.clear()
         lcd.message('Ecrire ODS ?')
         lcd.clear()
@@ -217,8 +220,7 @@ class AnalogGraphThreads(object):
             self.transmit_is_ready = True
     
     def thread_clean_mem(
-        self, number_sensors, number_add_sensors, file_list, time_file,
-        additional_files, coder_file):
+        self, number_sensors, number_add_sensors, file_config):
         """
         Clean memory if list too big : copy lists into new ones to write
         them into a file then reset lists
@@ -240,8 +242,8 @@ class AnalogGraphThreads(object):
             self.memory_busy = False
             
             clean_list.free_memory(
-                values_temp, time_temp, add_values_temp, coder_values_temp, file_list,
-                time_file, additional_files, coder_file)
+                values_temp, time_temp, add_values_temp, coder_values_temp, file_config[0],
+                file_config[1], file_config[2], file_config[3])
             del time_temp
             del values_temp
             del add_values_temp
