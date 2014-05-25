@@ -26,34 +26,7 @@ from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 from pyfirmata import Arduino, util
 import time
 import RPi.GPIO as GPIO
-import coder
-
-def create_files(save_dir, graph_path):
-    """
-    Creates files and symlinks
-    :param save_dir: dir path where is saved all files
-    :type save_dir: string
-    
-    :param graph_path: path of graph
-    :type graph_path: string
-    
-    :returns: graphname
-    :rtype: string
-    """
-    
-    print(save_dir)
-    print(graph_path)
-
-    # Create directory to save datas
-    if not os.path.isdir(save_dir):
-        os.makedirs(save_dir)
-    
-    # Create graph symlink
-    web_root = '/var/www'
-    #if os.path.isfile(os.path.join(web_root, graph_path)):
-    #            os.remove(os.path.join(web_root, graph_path))
-    #os.symlink(graph_path,
-    #           os.path.join(web_root, graph_path))
+#import coder
 
 def open_files(config):
     """

@@ -34,7 +34,6 @@ def main():
     # config contains : number_sensors, sen_id, save_dir, graph_name
     
     # Create files
-    set_dir_dev.create_files(config[2], config[3])
     script_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'create_files.sh')
     print(script_path)
     subprocess32.call(
