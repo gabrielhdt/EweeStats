@@ -23,7 +23,7 @@ import os
 import sys
 import time
 
-def free_memory(all_values_temp, timelist_temp, add_values_temp, file_list, timefile, additional_files):
+def free_memory(all_values_temp, timelist_temp, add_values_temp, coder_values_temp, file_list, timefile, additional_files, coder_file):
     """
     frees the memory to avoid list to be too big
     :param all_values_temp: copy of list of all values
@@ -52,6 +52,10 @@ def free_memory(all_values_temp, timelist_temp, add_values_temp, file_list, time
         for j in elt:
             fpath.write(str(j))
             fpath.write('\n')
+
+    for i in coder_values_temp:
+        coder_file.write(str(i))
+        coder_file.write('\n')
     
     return 0
 

@@ -221,7 +221,7 @@ class AnalogGraphThreads(object):
     
     def thread_clean_mem(
         self, number_sensors, number_add_sensors, file_list, time_file,
-        additional_files):
+        additional_files, coder_file):
         """
         Clean memory if list too big : copy lists into new ones to write
         them into a file then reset lists
@@ -232,17 +232,19 @@ class AnalogGraphThreads(object):
             time_temp = self.timelist
             values_temp = self.all_values
             add_values_temp = self.all_add_values
+            coder_values_temp = self.coder_values
             self.timelist = []
             self.all_values = [[] for i in range(number_sensors)]
             self.all_add_values = [[] for i in range(number_add_sensors)]
+            self.coder_values = []
             self.count_mem_clean += 1
             #self.init_done = False
             print('Memory cleaned')
             self.memory_busy = False
             
             clean_list.free_memory(
-                values_temp, time_temp, add_values_temp, file_list,
-                time_file, additional_files)
+                values_temp, time_temp, add_values_temp, coder_values_temp, file_list,
+                time_file, additional_files, coder_file)
             del time_temp
             del values_temp
             del add_values_temp
@@ -284,7 +286,7 @@ class AnalogGraphThreads(object):
     
 
     def startThreads(
-        self, config, dev, file_list, time_file, additional_files):
+        self, config, dev, file_list, time_file, additional_files, coder_file):
         """
             Sert à lancer les threads : les crée puis les lance
         """
@@ -304,7 +306,7 @@ class AnalogGraphThreads(object):
         self.cmt = threading.Thread(
             target = self.thread_clean_mem,
             args = (config[0], config[6], file_list, time_file,
-                    additional_files)
+                    additional_files, coder_file)
             )
             
         self.ct = threading.Thread(

@@ -43,8 +43,6 @@ def create_files(save_dir, graph_path):
     
     print(save_dir)
     print(graph_path)
-    print(type(save_dir))
-    print(type(graph_path))
 
     # Create directory to save datas
     if not os.path.isdir(save_dir):
@@ -66,6 +64,7 @@ def open_files(config):
                     4 - datas not graphed
                     5 - list of additionzl values id
                     6 - number of additional values
+                    7 - pins to coder
     :type config: tuple
     
     :returns: list of opened files
@@ -90,8 +89,12 @@ def open_files(config):
         filepath_tmp = os.path.join(config[2], filename_tmp)
         add_file_tmp = open(filepath_tmp, 'w+')
         additional_files.append(add_file_tmp)
+
+    # Coder file
+    filepath_tmp = os.path.join(config[2], 'coder')
+    coder_file = open(filepath_tmp, 'w+')
     
-    return file_list, time_file, additional_files
+    return file_list, time_file, additional_files, coder_file
     
 def open_dev(encoder_pins):
     '''
