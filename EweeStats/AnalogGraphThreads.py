@@ -153,8 +153,8 @@ class AnalogGraphThreads(object):
                     lcd.message(add_values_instant[display_value[1]])
                 time_display = time.time() # for lagging
             
-            # Clean memory every 2 min or if list too big
-            if float(self.timelist[-1]) >= 120*self.count_mem_clean:
+            # Clean memory every min or if list too big
+            if float(self.timelist[-1]) >= 60*self.count_mem_clean:
                 self.queue_clean.put(1)
             while self.memory_busy:
                 continue

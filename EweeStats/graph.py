@@ -120,6 +120,7 @@ def coder(config, coder_values, interval):
     linechart.x_labels_major_count = 20
     linechart.show_minor_x_labels = False
     linechart.x_labels = timelist
+    linechart.interpolate = 'cubic'
     # Add datas to graph
     linechart.add('Vitesse', coder_values)
     
