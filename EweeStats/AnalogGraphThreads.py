@@ -138,7 +138,7 @@ class AnalogGraphThreads(object):
 
             #print(value_list_instant)    # affiche dans la console les valeurs
 
-            # Thread managing
+            # Thread graph managing
             if self.transmit_is_ready:
                 self.queue_graph.put(1)  # if ready, 1 in the queue
 
@@ -268,7 +268,7 @@ class AnalogGraphThreads(object):
                 self.coder_values.append(speed)
                 if self.graph_coder_ready:
                     self.queue_graph_coder.put(True)
-                print(speed)
+                #print(speed)
     
     def thread_graph_coder(self, config):
         '''

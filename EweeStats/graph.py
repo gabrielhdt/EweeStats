@@ -107,7 +107,7 @@ def coder(config, coder_values, interval):
     :type interval: float
     '''
     # Create time axis
-    timelist = [interval*i for i in range(len(coder_values))]
+    timelist = [str(interval*i) for i in range(len(coder_values))]
     
     # Create graph
     linechart = pygal.Line()
@@ -119,6 +119,7 @@ def coder(config, coder_values, interval):
     linechart.y_title = 'Vitesse (km/h)'
     linechart.x_labels_major_count = 20
     linechart.show_minor_x_labels = False
+    linechart.x_labels = timelist
     # Add datas to graph
     linechart.add('Vitesse', coder_values)
     
