@@ -311,10 +311,16 @@ class AnalogGraphThreads(object):
             target = self.thread_coder,
             args = (config[7],)
             )
+        
+        self.gct = threading.Thread(
+            target = self.thread_graph_coder,
+            args = (config,)
+            )
 
         # Threads start
         self.at.start()
         self.gt.start()
         self.cmt.start()
         self.ct.start()
+        self.gct.start()
 
