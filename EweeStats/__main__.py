@@ -25,6 +25,7 @@ import sys
 import set_dir_dev
 import AnalogGraphThreads
 import readconfig
+import subprocess32
 
 
 def main():
@@ -34,7 +35,10 @@ def main():
     
     # Create files
     set_dir_dev.create_files(config[2], config[3])
-    os.execl('create_files.sh', config[2], '/var/www', config[3])
+    create_files_args = ('create_files.sh', config[2], '/var/www', config[3])
+    subprocess32.call(
+            ['/home/pi/workspace/EweeStats/EweeStats/create_files.sh', config[2], '/var/www', config[3]])
+    #os.execv('/home/pi/workspace/EweeStats/EweeStats/create_files.sh', create_files_args)
     # Opens them
     file_config = set_dir_dev.open_files(config)
     # Opens devices

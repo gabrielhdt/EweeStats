@@ -28,21 +28,24 @@ fi
 # Check save dir exists
 if [ -d $1 ]
 then
-    echo 'Directory exist'
+    echo 'Directory exists'
 else
     mkdir $1
 fi
 
 # Removes symlink to recreate a new one
-if [ -L "$2/$3" ]
+if [ -L "$2/EweeGraph.svg" ]
 then
-    rm "$2/$3"
+    rm "$2/EweeGraph.svg"
+    rm "$2/EweeCoder.svg"
 fi
 
 # Create dumb files for symlinks
-touch "$1/$3"
+touch "$3"
 touch "$1/EweeCoder.svg"
 # Create link for graph
-ln -s "$1/$3" "$2/$3"
+ln -s "$3" "$2/EweeGraph.svg"
 # Create coder graph link
 ln -s "$1/EweeCoder.svg" "$2/EweeCoder.svg"
+
+return 0
