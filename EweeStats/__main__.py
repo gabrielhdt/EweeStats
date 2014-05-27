@@ -26,9 +26,13 @@ import set_dir_dev
 import AnalogGraphThreads
 import readconfig
 import subprocess32
+import socket
 
 
 def main():
+    '''
+    Launches all programs and setups
+    '''
     
     config = readconfig.read_config()
     # config contains : number_sensors, sen_id, save_dir, graph_name
@@ -38,11 +42,20 @@ def main():
     print(script_path)
     subprocess32.call(
             [script_path, config[2], '/var/www', config[3]])
-    #os.execv('/home/pi/workspace/EweeStats/EweeStats/create_files.sh', create_files_args)
     # Opens them
     file_config = set_dir_dev.open_files(config)
     # Opens devices
     dev = set_dir_dev.open_dev(config[7])
+    
+    # Prints IP address
+    ip_local = socket.gethostbyname(socket.gethostname())
+    dev[0].clear()
+    dev[0].message('IP address :\n{IP}'.format(IP = ip_local))
+    while not (dev[0].buttonPressed(dev[0].RIGHT) or
+               dev[0].buttonPressed(dev[0].LEFT) or
+               dev[0].buttonPressed(dev[0].UP) or
+               dev[0].buttonPressed(dev[0].DOWN)):
+        pass # Wait for an entry 
     # dev contains : lcd, board, iter8
     set_dir_dev.set_arduino(config[0], dev[1], dev[2])
 
