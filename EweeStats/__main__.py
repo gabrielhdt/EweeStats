@@ -64,6 +64,12 @@ def main():
                                                        config[6])
     data2Graph.startThreads(config, dev, file_config)
     
+    for l in file_config:
+        if type(l) is list:
+            for f in l:
+                f.close()
+        else:
+            l.close()
     
     return 0
 

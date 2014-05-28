@@ -164,28 +164,35 @@ class AnalogGraphThreads(object):
         # Poweroff
         self.stop = True
         board.exit()
+        self.queue_graph.put(True)
+        self.queue_graph_coder.put(True)
+        while not (self.transmit_is_ready and self.graph_coder_ready):
+            pass
+        self.queue_clean.put(True)
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
-        for i, file in enumerate(file_config[0]):
-            for j in self.all_values[i]:
-                file.write(str(j))
-                file.write('\n')
-        for i, elt in enumerate(file_config[2]):
-            for j in self.all_add_values[i]:
-                elt.write(str(j))
-                elt.write('\n')
-        # writing timestamp file
-        for i in self.timelist:
-            file_config[1].write(i)
-            file_config[1].write('\n')
+        #for i, file in enumerate(file_config[0]):
+            #for j in self.all_values[i]:
+                #file.write(str(j))
+                #file.write('\n')
+        #for i, elt in enumerate(file_config[2]):
+            #for j in self.all_add_values[i]:
+                #elt.write(str(j))
+                #elt.write('\n')
+        ## writing timestamp file
+        #for i in self.timelist:
+            #file_config[1].write(i)
+            #file_config[1].write('\n')
 
-        for i in file_config[0]:
-            i.close()
-        file_config[1].close()
-        for i in file_config[2]:
-            i.close()
-        file_config[3].close()
+        #for i in file_config[0]:
+            #i.close()
+        #file_config[1].close()
+        #for i in file_config[2]:
+            #i.close()
+        #file_config[3].close()
+        while self.memory_busy:
+            pass
         lcd.clear()
         lcd.message('Ecrire ODS ?')
         lcd.clear()
@@ -200,6 +207,8 @@ class AnalogGraphThreads(object):
                 config[2], config[0],
                 self.all_values, self.timelist)
         lcd.clear()
+        
+        return 0
 
 
     def threadGraph(self, config):
@@ -220,6 +229,8 @@ class AnalogGraphThreads(object):
 
             # Task finished, now ready
             self.transmit_is_ready = True
+        
+        return 0
     
     def thread_clean_mem(
         self, number_sensors, number_add_sensors, file_config):
@@ -249,6 +260,8 @@ class AnalogGraphThreads(object):
             del time_temp
             del values_temp
             del add_values_temp
+        
+        return 0
     
     def thread_coder(self, encoder_pins):
         '''
@@ -271,6 +284,8 @@ class AnalogGraphThreads(object):
                 if self.graph_coder_ready:
                     self.queue_graph_coder.put(True)
                 #print(speed)
+        
+        return 0
     
     def thread_graph_coder(self, config):
         '''
@@ -284,6 +299,8 @@ class AnalogGraphThreads(object):
             graph.coder(config, self.coder_values, interval)
             
             self.graph_coder_ready = True
+        
+        return 0
     
 
     def startThreads(
