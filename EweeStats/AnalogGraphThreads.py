@@ -164,18 +164,19 @@ class AnalogGraphThreads(object):
         # Poweroff
         self.stop = True
         board.exit()
+        # Do a last time each thread, they'll see the self.stop
         self.queue_graph.put(True)
         self.queue_graph_coder.put(True)
         while not (self.transmit_is_ready and self.graph_coder_ready):
             pass
-        self.queue_clean.put(True)
+        #self.queue_clean.put(True)
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
-        #for i, file in enumerate(file_config[0]):
+        #for i, f in enumerate(file_config[0]):
             #for j in self.all_values[i]:
-                #file.write(str(j))
-                #file.write('\n')
+                #f.write(str(j))
+                #f.write('\n')
         #for i, elt in enumerate(file_config[2]):
             #for j in self.all_add_values[i]:
                 #elt.write(str(j))
@@ -191,8 +192,11 @@ class AnalogGraphThreads(object):
         #for i in file_config[2]:
             #i.close()
         #file_config[3].close()
-        while self.memory_busy:
-            pass
+        #while self.memory_busy:
+            #pass
+        clean_list.write_to_files(
+            self.all_values, self.timelist, self.all_add_values,
+            self.coder_values, file_config)
         lcd.clear()
         lcd.message('Ecrire ODS ?')
         lcd.clear()
@@ -206,7 +210,15 @@ class AnalogGraphThreads(object):
             ods.write_ods(
                 config[2], config[0],
                 self.all_values, self.timelist)
+        
+        # Closing files
         lcd.clear()
+        for l in file_config:
+        if type(l) is list:
+            for f in l:
+                f.close()
+        else:
+            l.close()
         
         return 0
 
@@ -250,13 +262,12 @@ class AnalogGraphThreads(object):
             self.all_add_values = [[] for i in range(number_add_sensors)]
             self.coder_values = []
             self.count_mem_clean += 1
-            #self.init_done = False
             print('Memory cleaned')
             self.memory_busy = False
             
-            clean_list.free_memory(
-                values_temp, time_temp, add_values_temp, coder_values_temp, file_config[0],
-                file_config[1], file_config[2], file_config[3])
+            clean_list.write_to_files(
+                values_temp, time_temp, add_values_temp,
+                coder_values_temp, file_config)
             del time_temp
             del values_temp
             del add_values_temp

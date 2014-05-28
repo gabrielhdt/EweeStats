@@ -21,9 +21,10 @@
 
 import os
 import sys
-import time
 
-def free_memory(all_values_temp, timelist_temp, add_values_temp, coder_values_temp, file_list, timefile, additional_files, coder_file):
+def write_to_files(
+    all_values_temp, timelist_temp, add_values_temp, coder_values_temp,
+    file_config):
     """
     frees the memory to avoid list to be too big
     :param all_values_temp: copy of list of all values
@@ -35,27 +36,35 @@ def free_memory(all_values_temp, timelist_temp, add_values_temp, coder_values_te
     :param file_list: list of files to write datas
     :type timefile: file
     
+    :param file_config: tuple containing :
+                0 - list of files for analogue datas
+                1 - timestamp file
+                2 - list of files for additional values
+                3 - file for coder
+    
     :returns: 0
     """
+    # Shortcuts
+    analogue_files = file_config[0]
+    additional_files = file_config[2]
+    
     for i, elt in enumerate(all_values_temp):
-        fpath = file_list[i]
         for j in elt:
-            fpath.write(str(j))
-            fpath.write('\n')
+            analogue_files[i].write(str(j))
+            analogue_files[i].write('\n')
     
     for i in timelist_temp:
-        timefile.write(str(i))
-        timefile.write('\n')
+        file_config[1].write(str(i))
+        fileconfig[1]('\n')
     
     for i, elt in enumerate(add_values_temp):
-        fpath = additional_files[i]
         for j in elt:
-            fpath.write(str(j))
-            fpath.write('\n')
+            additional_files[i].write(str(j))
+            additional_files[i].write('\n')
 
     for i in coder_values_temp:
-        coder_file.write(str(i))
-        coder_file.write('\n')
+        file_config[3].write(str(i))
+        file_config[3].write('\n')
     
     return 0
 
