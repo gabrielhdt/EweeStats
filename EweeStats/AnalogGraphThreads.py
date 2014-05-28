@@ -151,6 +151,9 @@ class AnalogGraphThreads(object):
                 elif display_value[0] == 1:
                     lcd.message('Calculated : {dp} :\n'.format(dp = str(display_value[1])))
                     lcd.message(add_values_instant[display_value[1]])
+                elif display_value[0] == 2:
+                    lcd.message('Encoder - speed :\n')
+                    lcd.message(self.coder_values[-1])
                 time_display = time.time() # for lagging
             
             # Clean memory every min or if list too big

@@ -46,11 +46,12 @@ def display_selection(number_analog_sensors, number_add_values, lcd, selected_va
     :returns: what to display : selected_values
     :rtype: list of 2 integers
 
-    Currently 2 arrays : 0 for analogue values and 1 for calculated ones
+    Currently 3 arrays : 0 for analogue values, 1 for calculated ones
+    and 2 for encoder
     """
     
     # Number of arrays, to be sure not to display an inexistant one
-    number_arrays = 2 
+    number_arrays = 3 
     # Read buttons activity
     if lcd.buttonPressed(lcd.UP):
         print('--UP PRESSED--')
@@ -78,5 +79,9 @@ def display_selection(number_analog_sensors, number_add_values, lcd, selected_va
         selected_value[1] = 0
     elif selected_value[0] == 1 and selected_value[1] < 0:
         selected_value[1] = number_add_values - 1
+    elif selected_value[0] == 2 and selected_value[1] >= 1:
+        selected_value[1] = 0 # If someone wants to add data with encoder
+    elif selected_value[0] == 2 and selected_value[1] < 0:
+        selected_value[1] = 0
         
     return selected_value
