@@ -67,7 +67,7 @@ def create_graph(config, all_values, all_add_values, timelist):
     # Add values from analogue pins
     for i in config[4]:
         linechart.add(
-            '{ids} {p}'.format(ids = analogue_id[4],
+            '{ids} {p}'.format(ids = analogue_id[i],
             p = i), all_values[i]
             )
     # Add calculated values
@@ -120,7 +120,7 @@ def coder(config, coder_values, interval):
     linechart.x_labels_major_count = 20
     linechart.show_minor_x_labels = False
     linechart.x_labels = timelist
-    linechart.interpolate = 'cubic'
+    #linechart.interpolate = 'cubic'
     # Add datas to graph
     linechart.add('Vitesse', coder_values)
     
