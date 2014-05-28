@@ -97,7 +97,6 @@ class AnalogGraphThreads(object):
         # Some shortcuts
         lcd = dev[0]
         board = dev[1]
-        iter8 = dev[2]
 
         # init some more variables
         display_value = [0, 0] # 1st for type and 2nd for value
