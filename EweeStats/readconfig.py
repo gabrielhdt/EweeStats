@@ -23,7 +23,6 @@ import os
 import sys
 import re
 import shlex
-import math
 
 def read_config():
     """

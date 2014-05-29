@@ -209,7 +209,7 @@ class AnalogGraphThreads(object):
             lcd.message("Ecriture du\nfichier ODS")
             ods.write_ods(
                 config[2], config[0],
-                self.all_values, self.timelist)
+                file_config)
         
         # Closing files
         lcd.clear()

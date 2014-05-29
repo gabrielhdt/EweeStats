@@ -30,7 +30,7 @@ def coder(circonference):
     Calculates speed
     3.2 comes from 3.6 * 4 * 0.22222222222
     3.6 : m/s to km/h
-    4 : one value each quarter of second
+    10 : ten values per second
     0.222222222 : constant found by Adrien
     :returns: ewee's speed in km/h
     :rtype: float
