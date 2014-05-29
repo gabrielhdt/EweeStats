@@ -135,8 +135,6 @@ class AnalogGraphThreads(object):
                 self.all_add_values[i].append(
                     round(add_values_instant[i], 4))
 
-            #print(value_list_instant)    # affiche dans la console les valeurs
-
             # Thread graph managing
             if self.transmit_is_ready:
                 self.queue_graph.put(1)  # if ready, 1 in the queue
@@ -174,28 +172,7 @@ class AnalogGraphThreads(object):
         self.queue_clean.put(True)
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
-        # writing text data files
-        #for i, f in enumerate(file_config[0]):
-            #for j in self.all_values[i]:
-                #f.write(str(j))
-                #f.write('\n')
-        #for i, elt in enumerate(file_config[2]):
-            #for j in self.all_add_values[i]:
-                #elt.write(str(j))
-                #elt.write('\n')
-        ## writing timestamp file
-        #for i in self.timelist:
-            #file_config[1].write(i)
-            #file_config[1].write('\n')
 
-        #for i in file_config[0]:
-            #i.close()
-        #file_config[1].close()
-        #for i in file_config[2]:
-            #i.close()
-        #file_config[3].close()
-        #while self.memory_busy:
-            #pass
         clean_list.write_to_files(
             self.all_values, self.timelist, self.all_add_values,
             self.coder_values, file_config)
@@ -303,7 +280,6 @@ class AnalogGraphThreads(object):
                 self.coder_values.append(speed)
                 if self.graph_coder_ready:
                     self.queue_graph_coder.put(True)
-                #print(speed)
         print('thread_coder return 0')
         
         return 0

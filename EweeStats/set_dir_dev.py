@@ -26,7 +26,6 @@ from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 from pyfirmata import Arduino, util
 import time
 import RPi.GPIO as GPIO
-#import coder
 
 def open_files(config):
     """

@@ -23,7 +23,6 @@
 from Adafruit_CharLCDPlate import Adafruit_CharLCDPlate
 import os
 import sys
-import time
 
 def display_selection(number_analog_sensors, number_add_values, lcd, selected_value):
     """

@@ -50,7 +50,7 @@ def main():
     # Prints IP address
     ip_local = [(s.connect(('8.8.8.8', 80)), s.getsockname()[0], s.close()) for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]][0][1]
     dev[0].clear()
-    dev[0].message('IP address :\n{IP}'.format(IP = ip_local))
+    dev[0].message('Adresse IP :\n{IP}'.format(IP = ip_local))
     while not (dev[0].buttonPressed(dev[0].RIGHT) or
                dev[0].buttonPressed(dev[0].LEFT) or
                dev[0].buttonPressed(dev[0].UP) or
