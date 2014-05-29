@@ -103,7 +103,7 @@ def open_dev(encoder_pins):
     iter8 = util.Iterator(board)
     iter8.start()
     
-    dev = (lcd, board, iter8,)
+    dev = (lcd, board,)
     return dev
 
 def set_arduino(number_sensors, board, iter8):
