@@ -47,6 +47,14 @@ def write_ods(config, file_config):
     '''
     
 
+    # Return to the beginning of all files
+    for l in file_config:
+        if type(l) is list:
+            for f in l:
+                f.seek(0)
+        else:
+            l.seek(0)
+
     filename = os.path.join(config[2], 'ewee_data.ods')
     ods = ezodf2.newdoc(
         doctype = 'ods', filename = '{f}'.format(f = filename))
@@ -54,9 +62,13 @@ def write_ods(config, file_config):
     # Calculating number of columns necessary
     # +1 because number_analogue contains 0
     # +2 for coder and coder time
-    n_columns = config[0] + 1 + config[6] + 1 + 2
-    n_rows = count_lines(file_config[1])
-    sheet = ezodf2.Sheet('SHEET', size = (n_rows, n_columns))
+    n_columns = 1 + config[0] + 1 + config[6] + 1 + 2
+    # Calculating number of lines
+    buf = mmap.mmap(file_config[1].fileno(), 0)
+    n_rows = 0
+    while buf.readline():
+        n_rows += 1
+    sheet = ezodf2.Sheet('SHEET', size = (n_rows + 2, n_columns))
     ods.sheets += sheet
     
     # timestamp writing
@@ -66,7 +78,7 @@ def write_ods(config, file_config):
         sheet['A{line}'.format(line = i + 2)].set_value(timestamp)
     
     # Analogue data writing
-    for f in file_config[0]:
+    for i, f in enumerate(file_config[0]):
         buf = mmap.mmap(f.fileno(), 0)
         for j in range(n_rows):
             val = float(buf.readline().decode('utf-8').rstrip())
@@ -84,13 +96,5 @@ def write_ods(config, file_config):
                 line = j + 2)].set_value(val)
 
     ods.save()
-    
-def count_lines(file_to_read):
-    '''Count lines of a file'''
-    buf = mmap.mmap(file_to_read.fileno(), 0)
-    lines = 0
-    readline = buf.readline
-    while readline():
-        lines += 1
-    return lines
-    
+
+    return 0

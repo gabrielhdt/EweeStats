@@ -100,14 +100,17 @@ def read_config():
         number_add_values += 1
     
     graph_name = os.path.join(save_dir, graph_name)
-    print(number_sensors)
+    #print(number_sensors)
+    print('Sensors id :')
     print(sensors_id)
+    print('Save directory :')
     print(save_dir)
     print(graph_name)
-    print(pin_to_graph)
-    print(add_values_id)
-    print(is_accel)
-    print(number_add_values)
+    #print(pin_to_graph)
+    #print(add_values_id)
+    #print(is_accel)
+    #print(number_add_values)
+    print('Encoder pins :')
     print(encoder_pins)
     
     config = (

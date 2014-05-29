@@ -169,6 +169,8 @@ class AnalogGraphThreads(object):
         self.queue_graph_coder.put(True)
         while not (self.transmit_is_ready and self.graph_coder_ready):
             pass
+        while self.memory_busy:
+            pass
         self.queue_clean.put(True)
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
@@ -207,9 +209,7 @@ class AnalogGraphThreads(object):
         if lcd.buttonPressed(lcd.LEFT):
             lcd.clear()
             lcd.message("Ecriture du\nfichier ODS")
-            ods.write_ods(
-                config[2], config[0],
-                file_config)
+            ods.write_ods(config, file_config)
         
         # Closing files
         lcd.clear()
@@ -253,8 +253,6 @@ class AnalogGraphThreads(object):
         """
         while not self.stop:
             print('Waiting for queue')
-            if self.stop:
-                break
             self.queue_clean.get(True)
             if self.stop:
                 break
@@ -270,7 +268,8 @@ class AnalogGraphThreads(object):
             self.coder_values = []
             self.count_mem_clean += 1
             print('Memory cleaned')
-            self.memory_busy = False
+            if not self.stop:
+                self.memory_busy = False
             
             clean_list.write_to_files(
                 values_temp, time_temp, add_values_temp,
@@ -278,6 +277,8 @@ class AnalogGraphThreads(object):
             del time_temp
             del values_temp
             del add_values_temp
+            if self.stop:
+                self.memory_busy = False
         print('thread_clean_mem return 0')
         
         return 0
