@@ -50,6 +50,7 @@ def read_config():
     add_values_id = [] # List for id of additional values
     number_add_values = 0 # Number of additional values
     encoder_pins = [0, 0] # List for two pins of encoder
+    is_accel = [False, False, False] # Check if three axis accelerometer
     
     # Reads the file
     with open(conf_file, 'r') as c:
@@ -82,10 +83,6 @@ def read_config():
             elif re.search(r'e2', part[0]) is not None:
                 encoder_pins[1] = int(part[2])
     
-    # Check sensors for additional datas
-    for elt in sensors_id:
-        if re.search(r'accel', elt) is not None:
-            is_accel = [False, False, False] # Booleans to check axis
     # When axis is found, it is marked as existant
     for elt in sensors_id:
         if elt == 'accelerometer_x':
