@@ -63,24 +63,36 @@ def display_selection(number_analog_sensors, number_add_values, lcd, selected_va
     elif lcd.buttonPressed(lcd.LEFT):
         selected_value[0] -= 1
     
-    # Managing if array displayed array exists
+    # Managing if array displayed exists
     if selected_value[0] >= number_arrays:
         selected_value[0] = 0
     elif selected_value[0] < 0:
         selected_value[0] = number_arrays - 1 # because arrays begin to 0
 
     # If we go inferior than 0, go back to max, and the opposite
-    if selected_value[0] == 0 and selected_value[1] >= number_analog_sensors:
-        selected_value[1] = 0
-    elif selected_value[0] == 0 and selected_value[1] < 0:
-        selected_value[1] = number_analog_sensors - 1  # -1 because pins start to 0
-    elif selected_value[0] == 1 and selected_value[1] >= number_add_values:
-        selected_value[1] = 0
-    elif selected_value[0] == 1 and selected_value[1] < 0:
-        selected_value[1] = number_add_values - 1
-    elif selected_value[0] == 2 and selected_value[1] >= 1:
-        selected_value[1] = 0 # If someone wants to add data with encoder
-    elif selected_value[0] == 2 and selected_value[1] < 0:
-        selected_value[1] = 0
+    #if selected_value[0] == 0 and selected_value[1] >= number_analog_sensors:
+        #selected_value[1] = 0
+    #elif selected_value[0] == 0 and selected_value[1] < 0:
+        #selected_value[1] = number_analog_sensors - 1  # -1 because pins start to 0
+    #elif selected_value[0] == 1 and selected_value[1] >= number_add_values:
+        #selected_value[1] = 0
+    #elif selected_value[0] == 1 and selected_value[1] < 0:
+        #selected_value[1] = number_add_values - 1
+    #elif selected_value[0] == 2 and selected_value[1] >= 1:
+        #selected_value[1] = 0 # If someone wants to add data with encoder
+    #elif selected_value[0] == 2 and selected_value[1] < 0:
+        #selected_value[1] = 0
+    if selected_value[0] == 0:
+        if selected_value[1] >= number_analog_sensors:
+            selected_value[1] = 0
+        elif selected_value[1] < 0:
+            selected_value[1] = number_analog_sensors - 1
+    elif selected_value[0] == 1:
+        if selected_value[1] >= number_add_values:
+            selected_value[1] = 0
+        elif selected_value[1] < 0:
+            selected_value[1] = number_add_values - 1
+    elif selected_value[0] == 2:
+        selected_value[1] = 0 # Encoder has one value, no need to test
         
     return selected_value
