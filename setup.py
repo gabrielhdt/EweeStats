@@ -34,7 +34,7 @@ with open('CHANGES') as c:
 
 setup(
     name='EweeStats',
-    version='0.0-alpha.2',
+    version='0.1',
     description='Program to read, process, present and broadcast datas from sensors',
     author='Gabriel Hondet',
     author_email="gabrielhondet@gmail.com",
@@ -44,7 +44,7 @@ setup(
     platforms='POSIX',
     packages=['EweeStats'],
     include_package_data=True,
-    install_requires=['pyFirmata', 'pygal', 'pyserial', 'lxml', 'ezodf2'],
+    install_requires=['pyFirmata', 'pygal', 'pyserial', 'lxml', 'ezodf2', 'subprocess32'],
     scripts=['EweeStats.py'],
     data_files=[('/etc/eweestats', ['cfg/eweestats.conf']),
                 ('/etc/init.d', ['eweestats'])],
