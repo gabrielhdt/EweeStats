@@ -57,7 +57,7 @@ def main():
                dev[0].buttonPressed(dev[0].DOWN)):
         pass # Wait for an entry 
     # dev contains : lcd, board, iter8
-    set_dir_dev.set_arduino(config[0], dev[1], dev[2])
+    set_dir_dev.set_arduino(config[0], dev[1])
 
     # Create threads
     data2Graph = AnalogGraphThreads.AnalogGraphThreads(config[0],

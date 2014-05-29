@@ -106,7 +106,7 @@ def open_dev(encoder_pins):
     dev = (lcd, board,)
     return dev
 
-def set_arduino(number_sensors, board, iter8):
+def set_arduino(number_sensors, board):
     """
     Set arduino to use
     :param number_sensors: number of analogue sensors wired
