@@ -4,4 +4,4 @@ recursive-include doc *
 exclude EweeStats.egg-info
 include AUTHORS
 recursive-include cfg *
-include eweestats
+include eweestats.sh

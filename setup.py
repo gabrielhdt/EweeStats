@@ -24,6 +24,7 @@
 
 try:
     from setuptools import setup
+    from setuptools import find_packages
 except ImportError:
     from distutils.core import setup
 
@@ -35,17 +36,23 @@ with open('CHANGES') as c:
 setup(
     name='EweeStats',
     version='0.1',
+    platforms='POSIX',
+    packages=find_packages(),
+    package_data = {
+        # Includes all *.txt and *.md
+        '': ['*.txt', '*.md', '*.rst'],
+    },
+    include_package_data = True,
+    install_requires=['pyFirmata', 'pygal', 'pyserial', 'lxml', 'ezodf2', 'subprocess32'],
+    scripts=['EweeStats.py', 'EweeStats/create_files.sh'],
+    data_files=[('/etc/eweestats', ['cfg/eweestats.conf']),
+                ('/etc/init.d', ['eweestats.sh'])],
+    
+    # Metada for upload to PyPi
     description='Program to read, process, present and broadcast datas from sensors',
     author='Gabriel Hondet',
     author_email="gabrielhondet@gmail.com",
     license='GPL 3',
     url='https://github.com/gabrielhdt/github',
     long_description=long_description + changes,
-    platforms='POSIX',
-    packages=['EweeStats'],
-    include_package_data=True,
-    install_requires=['pyFirmata', 'pygal', 'pyserial', 'lxml', 'ezodf2', 'subprocess32'],
-    scripts=['EweeStats.py'],
-    data_files=[('/etc/eweestats', ['cfg/eweestats.conf']),
-                ('/etc/init.d', ['eweestats'])],
     )
