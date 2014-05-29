@@ -55,7 +55,7 @@ def write_to_files(
     
     for i in timelist_temp:
         file_config[1].write(str(i))
-        fileconfig[1]('\n')
+        file_config[1].write('\n')
     
     for i, elt in enumerate(add_values_temp):
         for j in elt:

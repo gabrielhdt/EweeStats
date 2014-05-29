@@ -169,7 +169,7 @@ class AnalogGraphThreads(object):
         self.queue_graph_coder.put(True)
         while not (self.transmit_is_ready and self.graph_coder_ready):
             pass
-        #self.queue_clean.put(True)
+        self.queue_clean.put(True)
         lcd.clear()
         lcd.message('Ecriture des \nfichiers texte')
         # writing text data files
@@ -214,11 +214,11 @@ class AnalogGraphThreads(object):
         # Closing files
         lcd.clear()
         for l in file_config:
-        if type(l) is list:
-            for f in l:
-                f.close()
-        else:
-            l.close()
+            if type(l) is list:
+                for f in l:
+                    f.close()
+            else:
+                l.close()
         
         return 0
 
@@ -241,6 +241,7 @@ class AnalogGraphThreads(object):
 
             # Task finished, now ready
             self.transmit_is_ready = True
+        print('threadGraph return 0')
         
         return 0
     
@@ -250,8 +251,14 @@ class AnalogGraphThreads(object):
         Clean memory if list too big : copy lists into new ones to write
         them into a file then reset lists
         """
-        while(not self.stop):
+        while not self.stop:
+            print('Waiting for queue')
+            if self.stop:
+                break
             self.queue_clean.get(True)
+            if self.stop:
+                break
+            print('queue emptied')
             self.memory_busy = True
             time_temp = self.timelist
             values_temp = self.all_values
@@ -271,6 +278,7 @@ class AnalogGraphThreads(object):
             del time_temp
             del values_temp
             del add_values_temp
+        print('thread_clean_mem return 0')
         
         return 0
     
@@ -295,6 +303,7 @@ class AnalogGraphThreads(object):
                 if self.graph_coder_ready:
                     self.queue_graph_coder.put(True)
                 #print(speed)
+        print('thread_coder return 0')
         
         return 0
     
@@ -310,6 +319,7 @@ class AnalogGraphThreads(object):
             graph.coder(config, self.coder_values, interval)
             
             self.graph_coder_ready = True
+        print('thread_graph_coder return 0')
         
         return 0
     
