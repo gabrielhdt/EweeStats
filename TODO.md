@@ -5,4 +5,4 @@ TODO
 * Gérer l installation des scripts et autres avec le setup.py
 * écrire la documentation
 * compléter docstrings
-* réparer bogue extinction involontaire
+* daemoniser le système avec 'python-daemonize'
