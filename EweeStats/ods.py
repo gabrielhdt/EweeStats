@@ -58,8 +58,8 @@ def write_ods(config, file_config):
     filename = os.path.join(config[2], 'ewee_data.ods')
     ods = ezodf2.newdoc(
         doctype = 'ods', filename = '{f}'.format(f = filename))
-    
-    # Calculating number of columns necessary
+
+        # Calculating number of columns necessary
     # +1 because number_analogue contains 0
     # +2 for coder and coder time
     n_columns = 1 + config[0] + 1 + config[6] + 1 + 2
@@ -70,7 +70,24 @@ def write_ods(config, file_config):
         n_rows += 1
     sheet = ezodf2.Sheet('SHEET', size = (n_rows + 2, n_columns))
     ods.sheets += sheet
-    
+
+    # Writing sensors id in first row
+    sheet['A1'].set_value('Horodatage')
+    for i in range(config[0]):
+        sheet['{letter}1'.format(
+            letter = string.uppercase[i + 1])].set_value(config[1][i])
+    # Add values id
+    if config[6] > 0:
+        for i in range(config[6]):
+            sheet['{letter}1'.format(
+                letter = string.uppercase[i + config[0] + 1])].set_value(config[5][i])
+    # encoder timestamp
+    sheet['{letter}1'.format(
+        letter = string.uppercase[1 + config[0] + config[6]])].set_value('Horodatage enc')
+    # Coder values
+    sheet['{letter}1'.format(
+        letter = string.uppercase[2 + config[0] + config[6]])].set_value('Encodeur')
+
     # timestamp writing
     buf = mmap.mmap(file_config[1].fileno(), 0)
     for i in range(n_rows):
