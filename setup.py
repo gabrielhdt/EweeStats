@@ -44,9 +44,10 @@ setup(
     },
     include_package_data = True,
     install_requires=['pyFirmata', 'pygal', 'pyserial', 'lxml', 'ezodf2', 'subprocess32'],
-    scripts=['EweeStats.py', 'EweeStats/create_files.sh'],
+    scripts=['eweestats', 'EweeStats/create_files.sh'],
     data_files=[('/etc/eweestats', ['cfg/eweestats.conf']),
-                ('/etc/init.d', ['eweestats.sh'])],
+                ('/etc/init.d', ['startscript/eweestats.sh']),
+                ('/usr/sbin', ['eweestats'])],
     
     # Metada for upload to PyPi
     description='Program to read, process, present and broadcast datas from sensors',
