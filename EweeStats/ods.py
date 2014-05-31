@@ -83,17 +83,37 @@ def write_ods(config, file_config):
         for j in range(n_rows):
             val = float(buf.readline().decode('utf-8').rstrip())
             sheet['{letter}{line}'.format(
-                letter = string.uppercase[i + 1],
+                letter = string.uppercase[i + 1], # +1 for time column
                 line = j + 2)].set_value(val)
     
     # Additional datas writing
-    for f in file_config[2]:
+    for i, f in enumerate(file_config[2]):
         buf = mmap.mmap(f.fileno(), 0)
         for j in range(n_rows):
             val = float(buf.readline().decode('utf-8').rstrip())
             sheet['{letter}{line}'.format(
-                letter = string.uppercase[i + 1],
+                letter = string.uppercase[i + 1 + config[0]],
                 line = j + 2)].set_value(val)
+    
+    # Encoder writing
+    buf = mmap.mmap(file_config[3].fileno(), 0)
+    # Calculating number of lines for encoder:
+    n_rows_encoder = 0
+    while buf.readline():
+        n_rows_encoder += 1
+    # Writing coder timestamp
+    buf.seek(0)
+    for i in range(n_rows_encoder):
+        val = 0.1*i
+        sheet['{letter}{line}'.format(
+            letter = string.uppercase[config[0] + 1 + config[6]],
+            line = i + 2)].set_value(val)
+    # Writing timestamp value
+    for i in range(n_rows_encoder):
+        val = float(buf.readline().decode('utf-8').rstrip())
+        sheet['{letter}{line}'.format(
+            letter = string.uppercase[config[0] + 2 + config[6]],
+            line = i + 2)].set_value(val)
 
     ods.save()
 

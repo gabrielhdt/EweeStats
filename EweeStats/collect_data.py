@@ -68,6 +68,8 @@ def collecting(
             pass
         elif elt == 'voltage':
             values_converted_instant[i] = voltage(value_list_instant[i])
+        elif elt == 'current':
+            values_converted_instant[i] = current(value_list_instant[i])
         elif elt == 'compass':
             values_converted_instant[i] = compass(value_list_instant[i])
         elif elt == 'tilt':
@@ -120,6 +122,12 @@ def voltage(value_instant):
     """
     voltage = 0.0933*pow(value_instant, 0.961)
     return voltage
+
+def current(value_instant):
+    '''
+    '''
+    current = value_instant*228.129 + 393.855
+    return current
 
 def tilt(s1, s2):
     """
